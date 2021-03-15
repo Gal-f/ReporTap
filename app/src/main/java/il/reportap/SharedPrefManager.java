@@ -14,8 +14,7 @@ public class SharedPrefManager {
     private static final String KEY_EMAIL = "keyemail";
     private static final String KEY_ID = "keyid";
     private static final String KEY_EMPNUM = "keyemployeenumber";
-    private static final String KEY_FIRSTNAME = "keyfirstname";
-    private static final String KEY_LASTNAME = "keylastname";
+    private static final String KEY_FULLNAME = "keyfullname";
     private static final String KEY_JOBTITLE = "keyjobtitle";
     private static final String KEY_PHONENUMBER = "keyphonemumber";
 
@@ -42,8 +41,7 @@ public class SharedPrefManager {
         editor.putString(KEY_USERNAME, user.getUsername());
         editor.putString(KEY_EMAIL, user.getEmail());
         editor.putString(KEY_EMPNUM, user.getEmployeeNumber());
-        editor.putString(KEY_FIRSTNAME, user.getFirstName());
-        editor.putString(KEY_LASTNAME, user.getLastName());
+        editor.putString(KEY_FULLNAME, user.getFullName());
         editor.putString(KEY_JOBTITLE, user.getJobTitle());
         editor.putString(KEY_PHONENUMBER, user.getPhoneNumber());
         editor.apply();
@@ -63,8 +61,7 @@ public class SharedPrefManager {
                 sharedPreferences.getString(KEY_USERNAME, null),
                 sharedPreferences.getString(KEY_EMAIL, null),
                 sharedPreferences.getString(KEY_EMPNUM, null),
-                sharedPreferences.getString(KEY_FIRSTNAME, null),
-                sharedPreferences.getString(KEY_LASTNAME, null),
+                sharedPreferences.getString(KEY_FULLNAME, null),
                 sharedPreferences.getString(KEY_JOBTITLE, null),
                 sharedPreferences.getString(KEY_PHONENUMBER, null)
         );

@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
+import com.example.loginregister.R;
+
 public class InboxDoctor extends AppCompatActivity {
 
     @Override

@@ -7,10 +7,12 @@ import android.view.View;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.loginregister.R;
+
 public class ProfileActivity extends AppCompatActivity {
 
     TextView textViewId, textViewUsername, textViewEmail, textViewEmployeeNumber,
-            textViewFirstName, textViewLastName, textViewJobTitle, textViewPhoneNumber;
+            textViewFullName, textViewJobTitle, textViewPhoneNumber;
     //TextView textViewGender;
 
     @Override
@@ -30,8 +32,7 @@ public class ProfileActivity extends AppCompatActivity {
         textViewUsername = (TextView) findViewById(R.id.textViewUsername);
         textViewEmail = (TextView) findViewById(R.id.textViewEmail);
         textViewEmployeeNumber =  (TextView) findViewById(R.id.textViewEmployeeNumber);
-        textViewFirstName = (TextView) findViewById(R.id.textViewFirstName);
-        textViewLastName = (TextView) findViewById(R.id.textViewLastName);
+        textViewFullName = (TextView) findViewById(R.id.textViewFullName);
         textViewJobTitle = (TextView) findViewById(R.id.textViewJobTitle);
         textViewPhoneNumber =  (TextView) findViewById(R.id.textViewPhoneNumber);
 
@@ -43,8 +44,7 @@ public class ProfileActivity extends AppCompatActivity {
         textViewUsername.setText(user.getUsername());
         textViewEmail.setText(user.getEmail());
         textViewEmployeeNumber.setText(user.getEmployeeNumber());
-        textViewFirstName.setText(String.valueOf(user.getFirstName()));
-        textViewLastName.setText(user.getLastName());
+        textViewFullName.setText(user.getFullName());
         textViewJobTitle.setText(user.getJobTitle());
         textViewPhoneNumber.setText(user.getPhoneNumber());
 

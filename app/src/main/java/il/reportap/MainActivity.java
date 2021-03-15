@@ -5,10 +5,15 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.loginregister.R;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.HashMap;
@@ -16,7 +21,8 @@ import java.util.HashMap;
 public class MainActivity extends AppCompatActivity {
 
     EditText editTextUsername, editTextEmail, editTextPassword, editTextEmployeeNumber,
-            editTextFirstName, editTextLastName, editTextJobTitle, editTextPhoneNumber;
+            editTextFullName, editTextJobTitle, editTextPhoneNumber;
+    Spinner spinnerDepartment;
    // RadioGroup radioGroupGender;
 
 
@@ -36,10 +42,13 @@ public class MainActivity extends AppCompatActivity {
         editTextEmail = (EditText) findViewById(R.id.editTextEmail);
         editTextPassword = (EditText) findViewById(R.id.editTextPassword);
         editTextEmployeeNumber = (EditText) findViewById(R.id.editTextEmployeeNumber);
-        editTextFirstName = (EditText) findViewById(R.id.editTextFirstName);
-        editTextLastName = (EditText) findViewById(R.id.editTextLastName);
+        editTextFullName = (EditText) findViewById(R.id.editTextFullName);
         editTextJobTitle = (EditText) findViewById(R.id.editTextJobTitle);
         editTextPhoneNumber = (EditText) findViewById(R.id.editTextPhoneNumber);
+        spinnerDepartment = findViewById(R.id.spinnerDepartment);
+        String[] departments = new String[]{"מעבדה מיקרוביולוגית", "פנימית א"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, departments);
+        spinnerDepartment.setAdapter(adapter);
 
         findViewById(R.id.buttonRegister).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,13 +76,11 @@ public class MainActivity extends AppCompatActivity {
         final String email = editTextEmail.getText().toString().trim();
         final String password = editTextPassword.getText().toString().trim();
         final String employeeNumber = editTextEmployeeNumber.getText().toString().trim();
-        final String firstName = editTextFirstName.getText().toString().trim();
-        final String lastName = editTextLastName.getText().toString().trim();
+        final String fullName = editTextFullName.getText().toString().trim();
         final String jobTitle = editTextJobTitle.getText().toString().trim();
         final String phoneNumber = editTextPhoneNumber.getText().toString().trim();
-        //final String gender = ((RadioButton) findViewById(radioGroupGender.getCheckedRadioButtonId())).getText().toString();
 
-        //first we will do the validations
+        //validations
 
         if (TextUtils.isEmpty(username)) {
             editTextUsername.setError("Please enter username");
@@ -105,26 +112,21 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        if (TextUtils.isEmpty(firstName)) {
-            editTextFirstName.setError("Enter your employee number");
-            editTextFirstName.requestFocus();
+        if (TextUtils.isEmpty(fullName)) {
+            editTextFullName.setError("Enter your full name");
+            editTextFullName.requestFocus();
             return;
         }
 
-        if (TextUtils.isEmpty(lastName)) {
-            editTextLastName.setError("Enter your employee number");
-            editTextLastName.requestFocus();
-            return;
-        }
 
         if (TextUtils.isEmpty(jobTitle)) {
-            editTextJobTitle.setError("Enter your employee number");
+            editTextJobTitle.setError("Enter your job title");
             editTextJobTitle.requestFocus();
             return;
         }
 
         if (TextUtils.isEmpty(phoneNumber)) {
-            editTextPhoneNumber.setError("Enter your employee number");
+            editTextPhoneNumber.setError("Enter your phone number");
             editTextPhoneNumber.requestFocus();
             return;
         }
@@ -145,8 +147,7 @@ public class MainActivity extends AppCompatActivity {
                 params.put("email", email);
                 params.put("password", password);
                 params.put("employeeNumber", employeeNumber);
-                params.put("firstName", firstName);
-                params.put("lastName", lastName);
+                params.put("fullName", fullName);
                 params.put("jobTitle", jobTitle);
                 params.put("phoneNumber", phoneNumber);
 
@@ -186,8 +187,7 @@ public class MainActivity extends AppCompatActivity {
                                 userJson.getString("username"),
                                 userJson.getString("email"),
                                 userJson.getString("employeeNumber"),
-                                userJson.getString("firstName"),
-                                userJson.getString("lastName"),
+                                userJson.getString("fullName"),
                                 userJson.getString("jobTitle"),
                                 userJson.getString("phoneNumber")
 

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context="il.reportap.MainActivity">
 
 
     <LinearLayout
@@ -54,23 +54,13 @@
             android:inputType="text" />
 
         <EditText
-            android:id="@+id/editTextFirstName"
+            android:id="@+id/editTextFullName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
             android:fontFamily="sans-serif"
-            android:hint="First Name"
-            android:inputType="text" />
-
-        <EditText
-            android:id="@+id/editTextLastName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="8dp"
-            android:fontFamily="sans-serif"
-            android:hint="Last Name"
+            android:hint="Full Name"
             android:inputType="text" />
 
         <EditText
@@ -92,6 +82,13 @@
             android:fontFamily="sans-serif"
             android:hint="Phone Number"
             android:inputType="phone" />
+
+        <Spinner
+            android:id="@+id/spinnerDepartment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:drawable/btn_dropdown"
+            android:spinnerMode="dropdown"/>
 
                 <Button
                     android:id="@+id/buttonRegister"

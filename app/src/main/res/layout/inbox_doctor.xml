@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="#E1DCDC"
     android:baselineAligned="false"
-    tools:context=".InboxDoctor">
+    tools:context="il.reportap.InboxDoctor">
 
     <ImageView
         android:id="@+id/imageView2"
@@ -21,9 +21,10 @@
         android:id="@+id/imageView9"
         android:layout_width="83dp"
         android:layout_height="71dp"
-        app:srcCompat="@drawable/ic_setting1_foreground"
         tools:layout_editor_absoluteX="66dp"
-        tools:layout_editor_absoluteY="0dp" />
+        tools:layout_editor_absoluteY="0dp"
+        tools:ignore="MissingConstraints" />
+    <!--app:srcCompat="@drawable/ic_setting1_foreground"-->
 
     <LinearLayout
         android:layout_width="408dp"
@@ -31,7 +32,8 @@
         android:layout_marginTop="68dp"
         android:orientation="horizontal"
         app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="1dp">
+        tools:layout_editor_absoluteX="1dp"
+        tools:ignore="MissingConstraints">
 
         <Button
             android:id="@+id/button7"
