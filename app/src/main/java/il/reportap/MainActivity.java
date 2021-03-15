@@ -187,7 +187,7 @@ public class MainActivity extends AppCompatActivity {
                                 userJson.getString("username"),
                                 userJson.getString("employeeNumber"),
                                 userJson.getString("fullName"),
-                                userJson.getString("jobTitle"),
+                                userJson.getString("role"),
                                 userJson.getString("phoneNumber")
 
                         );
