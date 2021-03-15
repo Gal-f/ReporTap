@@ -384,7 +384,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.39" />
                 <Button
-                    android:layout_width="0"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.2"
                     android:text="נקה טופס"
