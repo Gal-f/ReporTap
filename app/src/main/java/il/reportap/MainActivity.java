@@ -20,9 +20,9 @@ import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
 
-    EditText editTextUsername, editTextEmail, editTextPassword, editTextEmployeeNumber,
-            editTextFullName, editTextJobTitle, editTextPhoneNumber;
-    Spinner spinnerDepartment;
+    EditText editTextUsername, editTextPassword, editTextEmployeeNumber,
+            editTextFullName, editTextPhoneNumber;
+    Spinner spinnerDepartment, spinnerJobTitle;
    // RadioGroup radioGroupGender;
 
 
@@ -39,16 +39,21 @@ public class MainActivity extends AppCompatActivity {
         }
 
         editTextUsername = (EditText) findViewById(R.id.editTextUsername);
-        editTextEmail = (EditText) findViewById(R.id.editTextEmail);
         editTextPassword = (EditText) findViewById(R.id.editTextPassword);
         editTextEmployeeNumber = (EditText) findViewById(R.id.editTextEmployeeNumber);
         editTextFullName = (EditText) findViewById(R.id.editTextFullName);
-        editTextJobTitle = (EditText) findViewById(R.id.editTextJobTitle);
+        spinnerJobTitle = findViewById(R.id.spinnerJobTitle);
         editTextPhoneNumber = (EditText) findViewById(R.id.editTextPhoneNumber);
         spinnerDepartment = findViewById(R.id.spinnerDepartment);
-        String[] departments = new String[]{"מעבדה מיקרוביולוגית", "פנימית א"};
+
+        //define spinners options
+        String[] departments = new String[]{"בחר מחלקה","מעבדה מיקרוביולוגית", "פנימית א"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, departments);
         spinnerDepartment.setAdapter(adapter);
+
+        String[] roles = new String[]{"בחר תפקיד","מנהל.ת מחלקה", "עובד.ת מעבדה","רופא.ה","עובד.ת אדמיניסטרציה","אח.ות"};
+        ArrayAdapter<String> adapter2 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, roles);
+        spinnerJobTitle.setAdapter(adapter2);
 
         findViewById(R.id.buttonRegister).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,60 +78,56 @@ public class MainActivity extends AppCompatActivity {
 
     private void registerUser() {
         final String username = editTextUsername.getText().toString().trim();
-        final String email = editTextEmail.getText().toString().trim();
         final String password = editTextPassword.getText().toString().trim();
         final String employeeNumber = editTextEmployeeNumber.getText().toString().trim();
         final String fullName = editTextFullName.getText().toString().trim();
-        final String jobTitle = editTextJobTitle.getText().toString().trim();
+        final String jobTitle = spinnerJobTitle.getSelectedItem().toString().trim();
         final String phoneNumber = editTextPhoneNumber.getText().toString().trim();
+        final String department = spinnerDepartment.getSelectedItem().toString().trim();
 
         //validations
 
         if (TextUtils.isEmpty(username)) {
-            editTextUsername.setError("Please enter username");
+            editTextUsername.setError("יש להזין שם משתמש");
             editTextUsername.requestFocus();
             return;
         }
 
-        if (TextUtils.isEmpty(email)) {
-            editTextEmail.setError("Please enter your email");
-            editTextEmail.requestFocus();
-            return;
-        }
-
-        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            editTextEmail.setError("Enter a valid email");
-            editTextEmail.requestFocus();
-            return;
-        }
-
         if (TextUtils.isEmpty(password)) {
-            editTextPassword.setError("Enter a password");
+            editTextPassword.setError("יש להזין סיסמה");
             editTextPassword.requestFocus();
             return;
         }
 
         if (TextUtils.isEmpty(employeeNumber)) {
-            editTextEmployeeNumber.setError("Enter your employee number");
+            editTextEmployeeNumber.setError("יש להזין מספר עובד");
             editTextEmployeeNumber.requestFocus();
             return;
         }
 
         if (TextUtils.isEmpty(fullName)) {
-            editTextFullName.setError("Enter your full name");
+            editTextFullName.setError("יש להזין שם מלא");
             editTextFullName.requestFocus();
             return;
         }
 
 
-        if (TextUtils.isEmpty(jobTitle)) {
-            editTextJobTitle.setError("Enter your job title");
-            editTextJobTitle.requestFocus();
+        if (jobTitle.equals("בחר תפקיד")) {
+            Toast.makeText(this,
+                    "יש לבחור תפקיד", Toast.LENGTH_LONG)
+                    .show();
+            return;
+        }
+
+        if (department.equals("בחר מחלקה")) {
+            Toast.makeText(this,
+                    "יש לבחור מחלקה", Toast.LENGTH_LONG)
+                    .show();
             return;
         }
 
         if (TextUtils.isEmpty(phoneNumber)) {
-            editTextPhoneNumber.setError("Enter your phone number");
+            editTextPhoneNumber.setError("יש להזין מספר טלפון");
             editTextPhoneNumber.requestFocus();
             return;
         }
@@ -144,7 +145,6 @@ public class MainActivity extends AppCompatActivity {
                 //creating request parameters
                 HashMap<String, String> params = new HashMap<>();
                 params.put("username", username);
-                params.put("email", email);
                 params.put("password", password);
                 params.put("employeeNumber", employeeNumber);
                 params.put("fullName", fullName);
@@ -152,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
                 params.put("phoneNumber", phoneNumber);
 
 
-                //returing the response
+                //returning the response
                 return requestHandler.sendPostRequest(URLs.URL_REGISTER, params);
             }
 
@@ -185,7 +185,6 @@ public class MainActivity extends AppCompatActivity {
                         User user = new User(
                                 userJson.getInt("id"),
                                 userJson.getString("username"),
-                                userJson.getString("email"),
                                 userJson.getString("employeeNumber"),
                                 userJson.getString("fullName"),
                                 userJson.getString("jobTitle"),

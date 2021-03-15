@@ -11,9 +11,8 @@ import com.example.loginregister.R;
 
 public class ProfileActivity extends AppCompatActivity {
 
-    TextView textViewId, textViewUsername, textViewEmail, textViewEmployeeNumber,
+    TextView textViewId, textViewUsername, textViewEmployeeNumber,
             textViewFullName, textViewJobTitle, textViewPhoneNumber;
-    //TextView textViewGender;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +29,6 @@ public class ProfileActivity extends AppCompatActivity {
 
         textViewId = (TextView) findViewById(R.id.textViewId);
         textViewUsername = (TextView) findViewById(R.id.textViewUsername);
-        textViewEmail = (TextView) findViewById(R.id.textViewEmail);
         textViewEmployeeNumber =  (TextView) findViewById(R.id.textViewEmployeeNumber);
         textViewFullName = (TextView) findViewById(R.id.textViewFullName);
         textViewJobTitle = (TextView) findViewById(R.id.textViewJobTitle);
@@ -42,7 +40,6 @@ public class ProfileActivity extends AppCompatActivity {
         //setting the values to the textviews
         textViewId.setText(String.valueOf(user.getId()));
         textViewUsername.setText(user.getUsername());
-        textViewEmail.setText(user.getEmail());
         textViewEmployeeNumber.setText(user.getEmployeeNumber());
         textViewFullName.setText(user.getFullName());
         textViewJobTitle.setText(user.getJobTitle());

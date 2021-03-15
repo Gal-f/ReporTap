@@ -102,7 +102,6 @@ public class LoginActivity extends AppCompatActivity {
                         User user = new User(
                                 userJson.getInt("id"),
                                 userJson.getString("username"),
-                                userJson.getString("email"),
                                 userJson.getString("employeeNumber"),
                                 userJson.getString("fullName"),
                                 userJson.getString("jobTitle"),
