@@ -11,20 +11,18 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.example.loginregister.R;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.HashMap;
+import java.util.regex.Pattern;
+
 
 public class MainActivity extends AppCompatActivity {
 
     EditText editTextUsername, editTextPassword, editTextEmployeeNumber,
             editTextFullName, editTextPhoneNumber;
     Spinner spinnerDepartment, spinnerJobTitle;
-   // RadioGroup radioGroupGender;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,11 +43,14 @@ public class MainActivity extends AppCompatActivity {
         spinnerJobTitle = findViewById(R.id.spinnerJobTitle);
         editTextPhoneNumber = (EditText) findViewById(R.id.editTextPhoneNumber);
         spinnerDepartment = findViewById(R.id.spinnerDepartment);
+        HashMap<Integer, String> deptData = new HashMap<>();
+        deptData.put(1, "מעבדה מיקרוביולוגית");
+        deptData.put(2, "פנימית א");
 
         //define spinners options
-        String[] departments = new String[]{"בחר מחלקה","מעבדה מיקרוביולוגית", "פנימית א"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, departments);
-        spinnerDepartment.setAdapter(adapter);
+         String[] departments = new String[]{"בחר מחלקה",deptData.get(1), deptData.get(2)};
+         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, departments);
+         spinnerDepartment.setAdapter(adapter);
 
         String[] roles = new String[]{"בחר תפקיד","מנהל.ת מחלקה", "עובד.ת מעבדה","רופא.ה","עובד.ת אדמיניסטרציה","אח.ות"};
         ArrayAdapter<String> adapter2 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, roles);
@@ -86,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
         final String department = spinnerDepartment.getSelectedItem().toString().trim();
 
         //validations
-
+        //TO DO validation function with switch case
         if (TextUtils.isEmpty(username)) {
             editTextUsername.setError("יש להזין שם משתמש");
             editTextUsername.requestFocus();
@@ -105,17 +106,48 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
+        if (!employeeNumber.matches("[0-9]+")) {
+            editTextEmployeeNumber.setError("מספר עובד צריך להכיל ספרות בלבד");
+            editTextEmployeeNumber.requestFocus();
+            return;
+        }
+
+        if (employeeNumber.length() != 6) {
+            editTextEmployeeNumber.setError("מספר עובד צריך להכיל 6 ספרות בדיוק");
+            editTextEmployeeNumber.requestFocus();
+            return;
+        }
+
         if (TextUtils.isEmpty(fullName)) {
             editTextFullName.setError("יש להזין שם מלא");
             editTextFullName.requestFocus();
             return;
         }
 
+        //not allowed: numbers, english letters, signs, less than one space, less than 2 characters in a word
+        if(!fullName.matches("^(([\\u0590-\\u05FF\\uFB1D-\\uFB4F]{2,})*)\\s+([\\u0590-\\u05FF\\uFB1D-\\uFB4F]*)$")){
+            editTextFullName.setError("שם מלא צריך להכיל אותיות בעברית בלבד ורווח בין השם הפרטי לבין שם המשפחה");
+            editTextFullName.requestFocus();
+            return;
+        }
 
-        if (jobTitle.equals("בחר תפקיד")) {
-            Toast.makeText(this,
-                    "יש לבחור תפקיד", Toast.LENGTH_LONG)
-                    .show();
+        if (TextUtils.isEmpty(phoneNumber)) {
+            editTextPhoneNumber.setError("יש להזין מספר טלפון");
+            editTextPhoneNumber.requestFocus();
+            return;
+        }
+
+        if(phoneNumber.length()!=10){
+            editTextPhoneNumber.setError("מספר טלפון צריך להכיל 10 ספרות בדיוק");
+            editTextPhoneNumber.requestFocus();
+            return;
+        }
+
+        String startPhoneNum = phoneNumber.substring(0, 3);
+        if(!(startPhoneNum.equals("050")||startPhoneNum.equals("052")||startPhoneNum.equals("054")
+        ||startPhoneNum.equals("058"))){
+            editTextPhoneNumber.setError("מספר טלפון צריך להתחיל ב: 050/052/054/058 ");
+            editTextPhoneNumber.requestFocus();
             return;
         }
 
@@ -126,11 +158,14 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        if (TextUtils.isEmpty(phoneNumber)) {
-            editTextPhoneNumber.setError("יש להזין מספר טלפון");
-            editTextPhoneNumber.requestFocus();
+        if (jobTitle.equals("בחר תפקיד")) {
+            Toast.makeText(this,
+                    "יש לבחור תפקיד", Toast.LENGTH_LONG)
+                    .show();
             return;
         }
+
+
         //if it passes all the validations
 
         class RegisterUser extends AsyncTask<Void, Void, String> {
@@ -146,9 +181,9 @@ public class MainActivity extends AppCompatActivity {
                 HashMap<String, String> params = new HashMap<>();
                 params.put("username", username);
                 params.put("password", password);
-                params.put("employeeNumber", employeeNumber);
-                params.put("fullName", fullName);
-                params.put("jobTitle", jobTitle);
+                params.put("employee_ID", employeeNumber);
+                params.put("full_name", fullName);
+                params.put("role", jobTitle);
                 params.put("phoneNumber", phoneNumber);
 
 
@@ -187,7 +222,7 @@ public class MainActivity extends AppCompatActivity {
                                 userJson.getString("username"),
                                 userJson.getString("employeeNumber"),
                                 userJson.getString("fullName"),
-                                userJson.getString("role"),
+                                userJson.getString("jobTitle"),
                                 userJson.getString("phoneNumber")
 
                         );
