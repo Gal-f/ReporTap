@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">ReporTap</string>
+    <string name="inboxDesc">מסרים שנשלחו למחלקה שלך וטרם טופלו. בחרו במסר כדי לצפות בפרטים, לסמן "טופל" או כדי לשלוח תגובה או בקשה מהמעבדה</string>
+    <string name="inboxEmerg">להציג רק דחופים?</string>
+    <string name="done">מסרים שטופלו</string>
+    <string name="toDo">מסרים לטיפולי</string>
+    <string name="sent">מסרים שנשלחו</string>
 </resources>
