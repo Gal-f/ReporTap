@@ -14,6 +14,7 @@ public class SharedPrefManager {
     private static final String KEY_FULLNAME = "keyfullname";
     private static final String KEY_JOBTITLE = "keyjobtitle";
     private static final String KEY_PHONENUMBER = "keyphonemumber";
+    private static final String KEY_DEPT = "keydepartment";
 
     private static SharedPrefManager mInstance;
     private static Context mCtx;
@@ -40,6 +41,7 @@ public class SharedPrefManager {
         editor.putString(KEY_FULLNAME, user.getFullName());
         editor.putString(KEY_JOBTITLE, user.getJobTitle());
         editor.putString(KEY_PHONENUMBER, user.getPhoneNumber());
+        editor.putInt(KEY_DEPT, user.getDepartment());
         editor.apply();
     }
 
@@ -58,7 +60,8 @@ public class SharedPrefManager {
                 sharedPreferences.getString(KEY_EMPNUM, null),
                 sharedPreferences.getString(KEY_FULLNAME, null),
                 sharedPreferences.getString(KEY_JOBTITLE, null),
-                sharedPreferences.getString(KEY_PHONENUMBER, null)
+                sharedPreferences.getString(KEY_PHONENUMBER, null),
+                sharedPreferences.getInt(KEY_DEPT, -1)
         );
     }
 

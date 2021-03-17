@@ -118,7 +118,7 @@
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
 
             </TableRow>
-<!--
+
             <TableRow>
 
                 <TextView
@@ -134,7 +134,7 @@
                     android:padding="10dp"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
 
-            </TableRow> -->
+            </TableRow>
 
         </TableLayout>
 

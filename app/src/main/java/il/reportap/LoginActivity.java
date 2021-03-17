@@ -57,13 +57,13 @@ public class LoginActivity extends AppCompatActivity {
 
         //validating inputs
         if (TextUtils.isEmpty(username)) {
-            editTextUsername.setError("Please enter your username");
+            editTextUsername.setError("נא הזן שם משתמש");
             editTextUsername.requestFocus();
             return;
         }
 
         if (TextUtils.isEmpty(password)) {
-            editTextPassword.setError("Please enter your password");
+            editTextPassword.setError("נא הזן סיסמה");
             editTextPassword.requestFocus();
             return;
         }
@@ -98,16 +98,17 @@ public class LoginActivity extends AppCompatActivity {
                         //getting the user from the response
                         JSONObject userJson = obj.getJSONObject("user");
 
-                        //creating a new user object
+                        //creating a new user object - names are identical to the columns in the db
                         User user = new User(
                                 userJson.getInt("id"),
                                 userJson.getString("username"),
-                                userJson.getString("employeeNumber"),
-                                userJson.getString("fullName"),
+                                userJson.getString("employee_ID"),
+                                userJson.getString("full_name"),
                                 userJson.getString("role"),
-                                userJson.getString("phoneNumber")
-                        );
+                                userJson.getString("phone_number"),
+                                userJson.getInt("works_in_dept")
 
+                        );
                         //storing the user in shared preferences
                         SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
 
@@ -115,7 +116,7 @@ public class LoginActivity extends AppCompatActivity {
                         finish();
                         startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
                     } else {
-                        Toast.makeText(getApplicationContext(), "Invalid username or password", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "שם משתמש או סיסמה לא נכונים", Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -128,7 +129,7 @@ public class LoginActivity extends AppCompatActivity {
                 RequestHandler requestHandler = new RequestHandler();
 
                 //creating request parameters
-                HashMap<String, String> params = new HashMap<>();
+                HashMap<String, Object> params = new HashMap<>();
                 params.put("username", username);
                 params.put("password", password);
 
