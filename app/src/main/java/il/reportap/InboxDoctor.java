@@ -3,6 +3,7 @@ package il.reportap;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.widget.LinearLayout;
 
 import com.example.loginregister.R;
 
