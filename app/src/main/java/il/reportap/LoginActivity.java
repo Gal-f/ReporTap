@@ -9,6 +9,9 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.loginregister.R;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -99,11 +102,9 @@ public class LoginActivity extends AppCompatActivity {
                         User user = new User(
                                 userJson.getInt("id"),
                                 userJson.getString("username"),
-                                userJson.getString("email"),
                                 userJson.getString("employeeNumber"),
-                                userJson.getString("firstName"),
-                                userJson.getString("lastName"),
-                                userJson.getString("jobTitle"),
+                                userJson.getString("fullName"),
+                                userJson.getString("role"),
                                 userJson.getString("phoneNumber")
                         );
 
