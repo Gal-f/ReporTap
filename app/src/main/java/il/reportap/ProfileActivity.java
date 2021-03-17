@@ -11,8 +11,8 @@ import com.example.loginregister.R;
 
 public class ProfileActivity extends AppCompatActivity {
 
-    TextView textViewId, textViewUsername, textViewEmployeeNumber,
-            textViewFullName, textViewJobTitle, textViewPhoneNumber;
+    TextView textViewUsername, textViewEmployeeNumber,
+            textViewFullName, textViewJobTitle, textViewPhoneNumber, textViewDepartment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,23 +27,29 @@ public class ProfileActivity extends AppCompatActivity {
         }
 
 
-        textViewId = (TextView) findViewById(R.id.textViewId);
         textViewUsername = (TextView) findViewById(R.id.textViewUsername);
         textViewEmployeeNumber =  (TextView) findViewById(R.id.textViewEmployeeNumber);
         textViewFullName = (TextView) findViewById(R.id.textViewFullName);
         textViewJobTitle = (TextView) findViewById(R.id.textViewJobTitle);
         textViewPhoneNumber =  (TextView) findViewById(R.id.textViewPhoneNumber);
+        textViewDepartment=  (TextView) findViewById(R.id.textViewDepartment);
 
         //getting the current user
         User user = SharedPrefManager.getInstance(this).getUser();
 
         //setting the values to the textviews
-        textViewId.setText(String.valueOf(user.getId()));
-        textViewUsername.setText(user.getUsername());
-        textViewEmployeeNumber.setText(user.getEmployeeNumber());
-        textViewFullName.setText(user.getFullName());
-        textViewJobTitle.setText(user.getJobTitle());
-        textViewPhoneNumber.setText(user.getPhoneNumber());
+        textViewUsername.setText("שם משתמש: " + user.getUsername());
+        textViewEmployeeNumber.setText("מספר עובד: " + user.getEmployeeNumber());
+        textViewFullName.setText("שם מלא: " + user.getFullName());
+        textViewJobTitle.setText("תפקיד: " + user.getJobTitle());
+        textViewPhoneNumber.setText("מספר טלפון: " + user.getPhoneNumber());
+        switch(user.getDepartment()){
+            case 1:
+                textViewDepartment.setText(" מחלקה: מעבדה מיקרוביולוגית");
+                break;
+            case 2:
+                textViewDepartment.setText("מחלקה: פנימית א");
+        }
 
         //when the user presses logout button
         //calling the logout method

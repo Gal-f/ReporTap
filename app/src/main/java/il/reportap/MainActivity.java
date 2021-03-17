@@ -14,6 +14,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.loginregister.R;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.ObjectInputStream;
 import java.util.HashMap;
 import java.util.regex.Pattern;
 
@@ -23,6 +25,10 @@ public class MainActivity extends AppCompatActivity {
     EditText editTextUsername, editTextPassword, editTextEmployeeNumber,
             editTextFullName, editTextPhoneNumber;
     Spinner spinnerDepartment, spinnerJobTitle;
+    HashMap<String, Integer> deptData = new HashMap<String, Integer>(){{
+        put("מעבדה מיקרוביולוגית",1);
+        put("פנימית א",2);
+    }};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,12 +49,9 @@ public class MainActivity extends AppCompatActivity {
         spinnerJobTitle = findViewById(R.id.spinnerJobTitle);
         editTextPhoneNumber = (EditText) findViewById(R.id.editTextPhoneNumber);
         spinnerDepartment = findViewById(R.id.spinnerDepartment);
-        HashMap<Integer, String> deptData = new HashMap<>();
-        deptData.put(1, "מעבדה מיקרוביולוגית");
-        deptData.put(2, "פנימית א");
 
         //define spinners options
-         String[] departments = new String[]{"בחר מחלקה",deptData.get(1), deptData.get(2)};
+         String[] departments = new String[]{"בחר מחלקה","מעבדה מיקרוביולוגית", "פנימית א"};
          ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, departments);
          spinnerDepartment.setAdapter(adapter);
 
@@ -87,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
         final String department = spinnerDepartment.getSelectedItem().toString().trim();
 
         //validations
-        //TO DO validation function with switch case
+        //TODO validation function with switch case
         if (TextUtils.isEmpty(username)) {
             editTextUsername.setError("יש להזין שם משתמש");
             editTextUsername.requestFocus();
@@ -165,26 +168,28 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
+        final Integer deptID = deptData.get(department);
+
 
         //if it passes all the validations
 
         class RegisterUser extends AsyncTask<Void, Void, String> {
 
             private ProgressBar progressBar;
-
             @Override
             protected String doInBackground(Void... voids) {
                 //creating request handler object
                 RequestHandler requestHandler = new RequestHandler();
 
                 //creating request parameters
-                HashMap<String, String> params = new HashMap<>();
+                HashMap<String, Object> params = new HashMap<>();
                 params.put("username", username);
                 params.put("password", password);
                 params.put("employee_ID", employeeNumber);
                 params.put("full_name", fullName);
                 params.put("role", jobTitle);
-                params.put("phoneNumber", phoneNumber);
+                params.put("phone_number", phoneNumber);
+                params.put("works_in_dept", deptID);
 
 
                 //returning the response
@@ -216,17 +221,17 @@ public class MainActivity extends AppCompatActivity {
                         //getting the user from the response
                         JSONObject userJson = obj.getJSONObject("user");
 
-                        //creating a new user object
+                        //creating a new user object - names are identical to the columns in the db
                         User user = new User(
                                 userJson.getInt("id"),
                                 userJson.getString("username"),
-                                userJson.getString("employeeNumber"),
-                                userJson.getString("fullName"),
-                                userJson.getString("jobTitle"),
-                                userJson.getString("phoneNumber")
+                                userJson.getString("employee_ID"),
+                                userJson.getString("full_name"),
+                                userJson.getString("role"),
+                                userJson.getString("phone_number"),
+                                userJson.getInt("works_in_dept")
 
                         );
-
                         //storing the user in shared preferences
                         SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
 
