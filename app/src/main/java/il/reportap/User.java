@@ -3,16 +3,16 @@ package il.reportap;
 public class User {
 
     private int id;
-    private String username;
+   // private String username;
     private String employeeNumber;
     private String fullName;
     private String jobTitle;
     private String phoneNumber;
     private int department;
 
-    public User(int id, String username, String employeeNumber, String fullName, String jobTitle, String phoneNumber, int department) {
+    public User(int id, String employeeNumber, String fullName, String jobTitle, String phoneNumber, int department) {
         this.id = id;
-        this.username = username;
+       // this.username = username;
         this.employeeNumber = employeeNumber;
         this.fullName = fullName;
         this.jobTitle = jobTitle;
@@ -24,9 +24,9 @@ public class User {
         return id;
     }
 
-    public String getUsername() {
+ /*   public String getUsername() {
         return username;
-    }
+    }*/
 
     public String getEmployeeNumber() {
         return employeeNumber;

@@ -19,14 +19,14 @@ import java.util.HashMap;
 
 public class LoginActivity extends AppCompatActivity {
 
-    EditText editTextUsername, editTextPassword;
+    EditText editTextEmployeeNumber, editTextPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        editTextUsername = (EditText) findViewById(R.id.editTextUsername);
+        editTextEmployeeNumber = (EditText) findViewById(R.id.editTextEmployeeNumber);
         editTextPassword = (EditText) findViewById(R.id.editTextPassword);
 
 
@@ -52,13 +52,13 @@ public class LoginActivity extends AppCompatActivity {
 
     private void userLogin() {
         //first getting the values
-        final String username = editTextUsername.getText().toString();
+        final String EmployeeNumber = editTextEmployeeNumber.getText().toString();
         final String password = editTextPassword.getText().toString();
 
         //validating inputs
-        if (TextUtils.isEmpty(username)) {
-            editTextUsername.setError("נא הזן שם משתמש");
-            editTextUsername.requestFocus();
+        if (TextUtils.isEmpty(EmployeeNumber)) {
+            editTextEmployeeNumber.setError("נא הזן מספר עובד");
+            editTextEmployeeNumber.requestFocus();
             return;
         }
 
@@ -101,7 +101,7 @@ public class LoginActivity extends AppCompatActivity {
                         //creating a new user object - names are identical to the columns in the db
                         User user = new User(
                                 userJson.getInt("id"),
-                                userJson.getString("username"),
+                              //  userJson.getString("username"),
                                 userJson.getString("employee_ID"),
                                 userJson.getString("full_name"),
                                 userJson.getString("role"),
@@ -116,7 +116,7 @@ public class LoginActivity extends AppCompatActivity {
                         finish();
                         startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
                     } else {
-                        Toast.makeText(getApplicationContext(), "שם משתמש או סיסמה לא נכונים", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "מספר עובד או סיסמה לא נכונים", Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -130,7 +130,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 //creating request parameters
                 HashMap<String, Object> params = new HashMap<>();
-                params.put("username", username);
+                params.put("employee_ID", EmployeeNumber);
                 params.put("password", password);
 
                 //returing the response

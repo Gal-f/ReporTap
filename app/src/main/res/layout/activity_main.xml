@@ -16,12 +16,13 @@
 
 
         <EditText
-            android:id="@+id/editTextUsername"
+            android:id="@+id/editTextEmployeeNumber"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
-            android:hint="שם משתמש"
+            android:fontFamily="sans-serif"
+            android:hint="מספר עובד"
             android:inputType="text" />
 
         <EditText
@@ -36,15 +37,6 @@
             android:gravity="right"
             android:inputType="textPassword" />
 
-        <EditText
-            android:id="@+id/editTextEmployeeNumber"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="8dp"
-            android:fontFamily="sans-serif"
-            android:hint="מספר עובד"
-            android:inputType="text" />
 
         <EditText
             android:id="@+id/editTextFullName"
