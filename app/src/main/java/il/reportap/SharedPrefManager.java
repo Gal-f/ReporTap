@@ -8,7 +8,7 @@ public class SharedPrefManager {
 
     //the constants
     private static final String SHARED_PREF_NAME = "reporTap";
-    private static final String KEY_USERNAME = "keyusername";
+  //  private static final String KEY_USERNAME = "keyusername";
     private static final String KEY_ID = "keyid";
     private static final String KEY_EMPNUM = "keyemployeenumber";
     private static final String KEY_FULLNAME = "keyfullname";
@@ -36,7 +36,7 @@ public class SharedPrefManager {
         SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt(KEY_ID, user.getId());
-        editor.putString(KEY_USERNAME, user.getUsername());
+      //  editor.putString(KEY_USERNAME, user.getUsername());
         editor.putString(KEY_EMPNUM, user.getEmployeeNumber());
         editor.putString(KEY_FULLNAME, user.getFullName());
         editor.putString(KEY_JOBTITLE, user.getJobTitle());
@@ -48,7 +48,7 @@ public class SharedPrefManager {
     //this method will checker whether user is already logged in or not
     public boolean isLoggedIn() {
         SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
-        return sharedPreferences.getString(KEY_USERNAME, null) != null;
+        return sharedPreferences.getString(KEY_EMPNUM, null) != null;
     }
 
     //this method will give the logged in user
@@ -56,7 +56,7 @@ public class SharedPrefManager {
         SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         return new User(
                 sharedPreferences.getInt(KEY_ID, -1),
-                sharedPreferences.getString(KEY_USERNAME, null),
+              //  sharedPreferences.getString(KEY_USERNAME, null),
                 sharedPreferences.getString(KEY_EMPNUM, null),
                 sharedPreferences.getString(KEY_FULLNAME, null),
                 sharedPreferences.getString(KEY_JOBTITLE, null),

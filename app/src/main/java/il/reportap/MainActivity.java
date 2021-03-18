@@ -22,7 +22,7 @@ import java.util.regex.Pattern;
 
 public class MainActivity extends AppCompatActivity {
 
-    EditText editTextUsername, editTextPassword, editTextEmployeeNumber,
+    EditText editTextPassword, editTextEmployeeNumber,
             editTextFullName, editTextPhoneNumber;
     Spinner spinnerDepartment, spinnerJobTitle;
     HashMap<String, Integer> deptData = new HashMap<String, Integer>(){{
@@ -42,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        editTextUsername = (EditText) findViewById(R.id.editTextUsername);
         editTextPassword = (EditText) findViewById(R.id.editTextPassword);
         editTextEmployeeNumber = (EditText) findViewById(R.id.editTextEmployeeNumber);
         editTextFullName = (EditText) findViewById(R.id.editTextFullName);
@@ -81,7 +80,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void registerUser() {
-        final String username = editTextUsername.getText().toString().trim();
         final String password = editTextPassword.getText().toString().trim();
         final String employeeNumber = editTextEmployeeNumber.getText().toString().trim();
         final String fullName = editTextFullName.getText().toString().trim();
@@ -91,17 +89,6 @@ public class MainActivity extends AppCompatActivity {
 
         //validations
         //TODO validation function with switch case
-        if (TextUtils.isEmpty(username)) {
-            editTextUsername.setError("יש להזין שם משתמש");
-            editTextUsername.requestFocus();
-            return;
-        }
-
-        if (TextUtils.isEmpty(password)) {
-            editTextPassword.setError("יש להזין סיסמה");
-            editTextPassword.requestFocus();
-            return;
-        }
 
         if (TextUtils.isEmpty(employeeNumber)) {
             editTextEmployeeNumber.setError("יש להזין מספר עובד");
@@ -118,6 +105,12 @@ public class MainActivity extends AppCompatActivity {
         if (employeeNumber.length() != 6) {
             editTextEmployeeNumber.setError("מספר עובד צריך להכיל 6 ספרות בדיוק");
             editTextEmployeeNumber.requestFocus();
+            return;
+        }
+
+        if (TextUtils.isEmpty(password)) {
+            editTextPassword.setError("יש להזין סיסמה");
+            editTextPassword.requestFocus();
             return;
         }
 
@@ -168,6 +161,9 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
+
+
+        //for saving the id of the chosen department as a foreign key in the user record
         final Integer deptID = deptData.get(department);
 
 
@@ -183,7 +179,6 @@ public class MainActivity extends AppCompatActivity {
 
                 //creating request parameters
                 HashMap<String, Object> params = new HashMap<>();
-                params.put("username", username);
                 params.put("password", password);
                 params.put("employee_ID", employeeNumber);
                 params.put("full_name", fullName);
@@ -224,7 +219,7 @@ public class MainActivity extends AppCompatActivity {
                         //creating a new user object - names are identical to the columns in the db
                         User user = new User(
                                 userJson.getInt("id"),
-                                userJson.getString("username"),
+                               // userJson.getString("username"),
                                 userJson.getString("employee_ID"),
                                 userJson.getString("full_name"),
                                 userJson.getString("role"),
@@ -239,7 +234,7 @@ public class MainActivity extends AppCompatActivity {
                         finish();
                         startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
                     } else {
-                        Toast.makeText(getApplicationContext(), "Some error occurred", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
