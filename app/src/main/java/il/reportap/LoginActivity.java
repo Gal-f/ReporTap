@@ -114,7 +114,7 @@ public class LoginActivity extends AppCompatActivity {
 
                         //starting the profile activity
                         finish();
-                        startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+                        startActivity(new Intent(getApplicationContext(), InboxDoctor.class));
                     } else {
                         Toast.makeText(getApplicationContext(), "מספר עובד או סיסמה לא נכונים", Toast.LENGTH_SHORT).show();
                     }
