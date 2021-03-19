@@ -27,7 +27,6 @@ public class ProfileActivity extends AppCompatActivity {
         }
 
 
-      //  textViewUsername = (TextView) findViewById(R.id.textViewUsername);
         textViewEmployeeNumber =  (TextView) findViewById(R.id.textViewEmployeeNumber);
         textViewFullName = (TextView) findViewById(R.id.textViewFullName);
         textViewJobTitle = (TextView) findViewById(R.id.textViewJobTitle);
@@ -38,7 +37,6 @@ public class ProfileActivity extends AppCompatActivity {
         User user = SharedPrefManager.getInstance(this).getUser();
 
         //setting the values to the textviews
-       // textViewUsername.setText("שם משתמש: " + user.getUsername());
         textViewEmployeeNumber.setText("מספר עובד: " + user.getEmployeeNumber());
         textViewFullName.setText("שם מלא: " + user.getFullName());
         textViewJobTitle.setText("תפקיד: " + user.getJobTitle());
