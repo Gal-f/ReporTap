@@ -7,14 +7,14 @@
         
         function __construct(){
             require_once 'DbConnect.php';
-            //require_once dirname(__FILE__).'/DbConnect.php';
+            //require_once dirname(__FILE__).'/DbConnect.php'; //Try this if the former doesn't work
             
             $db = new DbConnect();
             $this->conn = $db->connect();
             $this->response = array();
         }
 	
-	
+        //TODO seperate a "case" class (this one) from an implementation class (DbOperations)? [low priority in the backlog]
         if(isset($_GET['apicall'])){
 		
             switch($_GET['apicall']){
@@ -109,8 +109,10 @@
                     break; 
                 
                 case 'newmessage':
-                    if (isTheseParametersAvailable(array('','',''))){
-                        //Call external function from DbOperations.php
+                    if (isTheseParametersAvailable(array('sender','department','patientId','patientName','testName','componentName','measuredAmount','isUrgent','comments'))){
+                        require_once 'DbOperations';
+                        $oper = new DbOperations();
+                        this->$response = $oper->send_message($_POST['sender'],$_POST['department'],$_POST['patientId'],$_POST['patientName'],$_POST['testName'],$_POST['componentName'],$_POST['measuredAmount'],$_POST['isUrgent'],$_POST['comments']);
                     }
                     break;
 			
