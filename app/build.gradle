@@ -36,4 +36,7 @@ dependencies {
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    implementation 'com.android.volley:volley:1.2.0' // Used for networking with PHP serverside files.
+    //Volley is an HTTP library that makes networking for Android apps easier and faster.
+    // Source: https://search.maven.org/artifact/com.android.volley/volley/1.2.0/aar
 }

@@ -5,44 +5,22 @@
     android:id="@+id/linearLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#E1DCDC"
     android:baselineAligned="false"
+    android:background="#E1DCDC"
     tools:context="il.reportap.InboxDoctor">
 
-    <ImageView
-        android:id="@+id/profile"
-        android:layout_width="66dp"
-        android:layout_height="70dp"
-        android:layout_marginStart="64dp"
-        android:contentDescription="profile"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_setting_foreground"
-        tools:srcCompat="@drawable/ic_profile_foreground" />
+    <include
+        layout="@layout/header_layout" />
 
-    <ImageView
+    <!--
+        android:id="@+id/imageView9"
+        android:layout_width="83dp"
+        android:layout_height="71dp"
+        tools:layout_editor_absoluteX="66dp"
+        tools:layout_editor_absoluteY="0dp"
+        tools:ignore="MissingConstraints" />
+    app:srcCompat="@drawable/ic_setting1_foreground" -->
 
-        android:id="@+id/settings"
-        android:layout_width="66dp"
-        android:layout_height="70dp"
-        android:contentDescription="settings"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_setting_foreground" />
-
-    <ImageView
-        android:id="@+id/logo"
-        android:layout_width="66dp"
-        android:layout_height="70dp"
-        android:contentDescription="logo"
-        android:foregroundGravity="right"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.994"
-        app:layout_constraintLeft_toRightOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ReporTapLogo"
-        tools:srcCompat="@drawable/ReporTapLogo" />
 
     <LinearLayout
         android:layout_width="408dp"
@@ -50,11 +28,11 @@
         android:layout_marginTop="68dp"
         android:orientation="horizontal"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="1dp">
+        tools:layout_editor_absoluteX="1dp"
+        tools:ignore="MissingConstraints">
 
         <Button
-            android:id="@+id/sent"
+            android:id="@+id/button7"
             android:layout_width="wrap_content"
             android:layout_height="60dp"
             android:layout_weight="1"
@@ -65,7 +43,7 @@
             app:strokeWidth="2dp" />
 
         <Button
-            android:id="@+id/done"
+            android:id="@+id/button8"
             android:layout_width="wrap_content"
             android:layout_height="60dp"
             android:layout_weight="1"
@@ -76,7 +54,7 @@
             app:strokeWidth="2dp" />
 
         <Button
-            android:id="@+id/toDo"
+            android:id="@+id/button9"
             android:layout_width="wrap_content"
             android:layout_height="60dp"
             android:layout_weight="1"
@@ -88,21 +66,15 @@
 
     </LinearLayout>
 
-    <androidx.constraintlayout.motion.widget.MotionLayout
-        android:id="@+id/constraintLayout2"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="409dp"
-        android:layout_height="603dp"
-        android:layout_marginStart="1dp"
-        android:layout_marginEnd="1dp"
-        android:layout_marginBottom="1dp"
+        android:layout_height="606dp"
+        android:layout_marginTop="125dp"
         android:background="@color/lightBlue"
-        app:layoutDescription="@xml/inbox_doctor_xml_constraintlayout2_scene"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="1dp">
 
         <LinearLayout
-            android:id="@+id/linearLayout3"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
@@ -116,7 +88,6 @@
                     android:id="@+id/imageView3"
                     android:layout_width="24dp"
                     android:layout_height="57dp"
-                    android:layout_gravity="center|center_horizontal"
                     android:layout_weight="1"
                     app:srcCompat="@drawable/urgenticondisabled" />
 
@@ -216,6 +187,7 @@
             </ScrollView>
 
         </LinearLayout>
-    </androidx.constraintlayout.motion.widget.MotionLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
