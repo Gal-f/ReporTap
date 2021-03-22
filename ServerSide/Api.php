@@ -39,7 +39,7 @@ if (isset($_GET['apicall'])) {
             }
             break;
 
-        case 'newmessage':
+        case 'newMessage':
             if (isTheseParametersAvailable(array('sender', 'department', 'patientId', 'patientName', 'testName', 'componentName', 'measuredAmount', 'isUrgent', 'comments'), $response)) {
                 $response = $oper->send_message($_POST['sender'], $_POST['department'], $_POST['patientId'], $_POST['patientName'], $_POST['testName'], $_POST['componentName'], $_POST['measuredAmount'], $_POST['isUrgent'], $_POST['comments']);
             }
