@@ -1,7 +1,9 @@
 package il.reportap;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -10,14 +12,29 @@ import android.widget.AutoCompleteTextView;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.loginregister.R;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class NewMessage extends AppCompatActivity {
 
     private AutoCompleteTextView recipient, testName, componentName;
     private EditText patientId, patientName, measuredAmount, comments;
     private CheckBox isUrgent;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +49,7 @@ public class NewMessage extends AppCompatActivity {
         this.measuredAmount = (EditText) findViewById(R.id.editTextMeasuredAmount);
         this.isUrgent = (CheckBox) findViewById(R.id.checkBoxUrgent);
         this.comments = (EditText) findViewById(R.id.editTextTextMultiLineComments);
+        this.progressDialog = new ProgressDialog(this);
 
         //TODO Create auto-complete for patient ID? (optional)
 
@@ -73,6 +91,67 @@ public class NewMessage extends AppCompatActivity {
     }
 
     public Boolean Send(){
+        final String recipient = this.recipient.toString().trim();
+        final String patientId = this.patientId.toString().trim();
+        final String patientName = this.patientName.toString().trim();
+        final String testName = this.testName.toString().trim();
+        final String componentName = this.componentName.toString().trim();
+        final String measuredAmount = this.measuredAmount.toString().trim();
+        final String isUrgent = this.isUrgent.toString().trim();
+        final String comments = this.comments.toString().trim();
+
+        /* //TODO check if it's OK to use those as strings when sending them to the query using the hashmap
+        final int recipient = Integer.parseInt(this.recipient.toString().trim());
+        final String patientId = this.patientId.toString().trim();
+        final String patientName = this.patientName.toString().trim();
+        final String testName = this.testName.toString().trim();
+        final String componentName = this.componentName.toString().trim();
+        final float measuredAmount = Float.parseFloat(this.measuredAmount.toString().trim());
+        final Boolean isUrgent = Boolean.parseBoolean(this.isUrgent.toString().trim());
+        final String comments = this.comments.toString().trim();
+        */
+
+        progressDialog.setMessage("ההודעה שלך נשלחת. נא להמתין לאישור...");
+        progressDialog.show();
+        //Creating a Volley request to communicate with PHP pages
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URLs.URL_NEWMESSAGE, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                progressDialog.dismiss();
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    Toast.makeText(getApplicationContext(), jsonObject.getString("message"), Toast.LENGTH_LONG).show();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        progressDialog.hide();
+                        Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                })
+        {
+            @Nullable
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String,String> params = new HashMap<>();
+                params.put("recipient", recipient);
+                params.put("patientId",patientId);
+                params.put("patientName",patientName);
+                params.put("testName",testName);
+                params.put("componentName",componentName);
+                params.put("measuredAmount",measuredAmount);
+                params.put("isUrgent",isUrgent);
+                params.put("comments",comments);
+                return params;
+            }
+        };
+        //Queueing the request since the operation will take some time
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
         return true;
     }
 }
