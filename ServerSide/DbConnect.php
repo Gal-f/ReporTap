@@ -10,7 +10,7 @@ class DbConnect
 
     function connect()
     {
-        $servername = "edenpe.mtacloud.co.il";
+        $servername = "localhost";
         $username = "edenpe_eden";
         $password = "edengalyael";
         $database = "edenpe_ReporTapDB";

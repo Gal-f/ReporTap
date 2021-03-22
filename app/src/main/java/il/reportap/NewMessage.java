@@ -138,7 +138,8 @@ public class NewMessage extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String,String> params = new HashMap<>();
-                params.put("recipient", recipient);
+                params.put("sender", SharedPrefManager.getInstance(getApplicationContext()).getUser().getEmployeeNumber());
+                params.put("department", recipient);
                 params.put("patientId",patientId);
                 params.put("patientName",patientName);
                 params.put("testName",testName);

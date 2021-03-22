@@ -7,7 +7,7 @@ $response = array();
 $response['error'] = false;
 $response['message'] = "No action performed yet";
 
-require_once 'DbOperations';
+require_once 'DbOperations.php';
 $oper = new DbOperations(); //All operations with the DB are performed using this object
 
 if (isset($_GET['apicall'])) {
