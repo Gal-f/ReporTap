@@ -35,6 +35,7 @@ public class NewMessage extends AppCompatActivity {
     private EditText patientId, patientName, measuredAmount, comments;
     private CheckBox isUrgent;
     private ProgressDialog progressDialog;
+    private boolean success;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,6 +112,7 @@ public class NewMessage extends AppCompatActivity {
         final String comments = this.comments.toString().trim();
         */
 
+        success = false;
         progressDialog.setMessage("ההודעה שלך נשלחת. נא להמתין לאישור...");
         progressDialog.show();
         //Creating a Volley request to communicate with PHP pages
@@ -120,7 +122,14 @@ public class NewMessage extends AppCompatActivity {
                 progressDialog.dismiss();
                 try {
                     JSONObject jsonObject = new JSONObject(response);
-                    Toast.makeText(getApplicationContext(), jsonObject.getString("message"), Toast.LENGTH_LONG).show();
+                    if(jsonObject.getBoolean("error")){ // If there was any error along the way
+                        Toast.makeText(getApplicationContext(), jsonObject.getString("message"), Toast.LENGTH_LONG).show();
+                    } else {
+                        success = true;
+                        Toast.makeText(getApplicationContext(), jsonObject.getString("message"), Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), jsonObject.getJSONArray("sent_message").toString(), Toast.LENGTH_LONG).show();
+                    }
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -153,6 +162,6 @@ public class NewMessage extends AppCompatActivity {
         //Queueing the request since the operation will take some time
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
-        return true;
+        return success;
     }
 }
