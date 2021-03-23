@@ -4,20 +4,25 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Button;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.loginregister.R;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ObjectInputStream;
 import java.util.HashMap;
-import java.util.regex.Pattern;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -77,6 +82,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+    }
+    public void sendMessage(View view) {
+        // Do something in response to button
     }
 
     private void registerUser() {
@@ -246,5 +255,6 @@ public class MainActivity extends AppCompatActivity {
         RegisterUser ru = new RegisterUser();
         ru.execute();
     }
+
 
 }

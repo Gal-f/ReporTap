@@ -5,4 +5,5 @@
     <string name="done">מסרים שטופלו</string>
     <string name="toDo">מסרים לטיפולי</string>
     <string name="sent">מסרים שנשלחו</string>
+    <string name="popUpString">בקשתך ליצירת פרופיל הועברה. כשהפרופיל שלך יאושר או ידחה ע"י מנהל המערכת, עדכון יתקבל בהודעת אסאמאס.</string>
 </resources>
