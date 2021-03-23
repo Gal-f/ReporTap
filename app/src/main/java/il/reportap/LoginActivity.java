@@ -36,6 +36,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 userLogin();
+                startActivity(new Intent(getApplicationContext(), InboxDoctor.class));
             }
         });
 
@@ -48,6 +49,8 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
             }
         });
+
+
     }
 
     private void userLogin() {
@@ -137,6 +140,7 @@ public class LoginActivity extends AppCompatActivity {
                 return requestHandler.sendPostRequest(URLs.URL_LOGIN, params);
             }
         }
+
 
         UserLogin ul = new UserLogin();
         ul.execute();

@@ -4,6 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginStart="10dp"
+    android:layout_marginTop="50dp"
+    android:layout_marginEnd="10dp"
+    android:layout_marginBottom="100dp"
     tools:context="il.reportap.MainActivity">
 
 
@@ -19,8 +23,8 @@
             android:id="@+id/editTextEmployeeNumber"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
             android:fontFamily="sans-serif"
             android:hint="מספר עובד"
             android:inputType="text" />
@@ -29,21 +33,21 @@
             android:id="@+id/editTextPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
             android:fontFamily="sans-serif"
-            android:hint="סיסמה"
-            android:textDirection="anyRtl"
             android:gravity="right"
-            android:inputType="textPassword" />
+            android:hint="סיסמה"
+            android:inputType="textPassword"
+            android:textDirection="anyRtl" />
 
 
         <EditText
             android:id="@+id/editTextFullName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
             android:fontFamily="sans-serif"
             android:hint="שם מלא"
             android:inputType="text" />
@@ -52,13 +56,13 @@
             android:id="@+id/editTextPhoneNumber"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
             android:fontFamily="sans-serif"
-            android:hint="מספר טלפון"
-            android:textDirection="anyRtl"
             android:gravity="right"
-            android:inputType="phone" />
+            android:hint="מספר טלפון"
+            android:inputType="phone"
+            android:textDirection="anyRtl" />
 
         <Spinner
             android:id="@+id/spinnerDepartment"
@@ -75,31 +79,33 @@
             android:spinnerMode="dropdown" />
 
         <Button
-                    android:id="@+id/buttonRegister"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginTop="8dp"
-                    android:text="הרשם" />
+            android:id="@+id/buttonRegister"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:onClick="sendMessage"
+            android:text="הרשם" />
 
-                <TextView
-                    android:id="@+id/textViewLogin"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginTop="8dp"
-                    android:text="רשום כבר? התחבר "
-                    android:textAlignment="center"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-                    android:gravity="center_horizontal" />
-            </LinearLayout>
+        <TextView
+            android:id="@+id/textViewLogin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:gravity="center_horizontal"
+            android:text="רשום כבר? התחבר "
+            android:textAlignment="center"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
 
-            <ProgressBar
-                android:visibility="gone"
-                android:id="@+id/progressBar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true" />
+    </LinearLayout>
 
-        </RelativeLayout>
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:visibility="gone" />
+
+</RelativeLayout>
