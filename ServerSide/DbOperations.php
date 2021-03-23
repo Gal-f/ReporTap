@@ -11,6 +11,7 @@ class DbOperations
 
         $db = new DbConnect();
         $this->conn = $db->connect();
+        $this->conn->query("SET NAMES 'utf8'");
     }
 
     function signup($password, $employeeNumber, $fullName, $jobTitle, $phoneNumber, $deptID)
@@ -84,18 +85,19 @@ class DbOperations
             $response['message'] = 'Login successfull';
             $response['user'] = $user;
         } else {
-            $response['error'] = false;
+            $response['error'] = true;
             $response['message'] = 'שגיאה בפרטי ההזדהות';
         }
         return $response;
     }
 
-    function send_message($sender, $department, $patientId, $patientName, $testName, $componentName, $measuredAmount, $isUrgent, $comments)
+    function send_message($sender, $department, $patientId, $patientName, $testType, $componentName, $measuredAmount, $isUrgent, $comments)
     {
         $response = array();
-        $message = array($department, $patientId, $patientName, $testName, $componentName, $measuredAmount, $isUrgent, $comments);
-        $stmt = $this->conn->prepare("INSERT INTO `messages`(`patient_ID`, `test_type`, `component`, `value_boolean`, `value_numeric`, `text`, `is_urgent`, `sender_user`, `recipient_dept`) VALUES (?,?,?,?,?,?,?,?,?,?);");
-        $stmt->bind_param("ssssdssii", $patientId, $testName, $componentName, NULL, $measuredAmount, $comments, $isUrgent, $sender, $department); //If there's a problem with sqli query, try changing boolean columns to tinyint and use 'i' instead of 's' in the first parameter for bind_param.
+        $message = array($department, $patientId, $patientName, $testType, $componentName, $measuredAmount, $isUrgent, $comments);
+        $stmt = $this->conn->prepare("INSERT INTO `messages`(`patient_ID`, `test_type`, `component`, `value_boolean`, `value_numeric`, `text`, `is_urgent`, `sender_user`, `recipient_dept`) VALUES (?,?,?,?,?,?,?,?,?);");
+        //TODO Change test_type from simple string to relation with test_types table
+        $stmt->bind_param("sisidsiii", $patientId, $testType, $componentName, NULL, $measuredAmount, $comments, $isUrgent, $sender, $department); //If there's a problem with sqli query, try changing boolean columns to tinyint and use 'i' instead of 's' in the first parameter for bind_param.
         if ($stmt->execute()) {
             $response['error'] = false;
             $response['message'] = 'Message sent successfully';

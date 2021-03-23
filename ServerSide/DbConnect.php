@@ -23,6 +23,7 @@ class DbConnect
         */
 
         //creating a new connection object using mysqli 
+        mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT); //This configures PHP and MySQLi to send full MySQL errors
         $this->conn = new mysqli($servername, $username, $password, $database);
 
         //if there is some error connecting to the database

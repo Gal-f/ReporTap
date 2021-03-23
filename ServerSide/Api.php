@@ -15,7 +15,8 @@ if (isset($_GET['apicall'])) {
     switch ($_GET['apicall']) {
 
         case 'signup':
-            if (isTheseParametersAvailable(array('password', 'employee_ID', 'full_name', 'role', 'phone_number', 'works_in_dept'), $response)) {
+            $response = isTheseParametersAvailable(array('password', 'employee_ID', 'full_name', 'role', 'phone_number', 'works_in_dept'));
+            if (!$response['error']) {
                 //getting the values 
                 $password = md5($_POST['password']);
                 $employeeNumber = $_POST['employee_ID'];
@@ -29,8 +30,8 @@ if (isset($_GET['apicall'])) {
             break;
 
         case 'login':
-
-            if (isTheseParametersAvailable(array('employee_ID', 'password'), $response)) {
+            $response = isTheseParametersAvailable(array('employee_ID', 'password'));
+            if (!$response['error']) {
 
                 $employeeNumber = $_POST['employee_ID'];
                 $password = md5($_POST['password']);
@@ -40,8 +41,10 @@ if (isset($_GET['apicall'])) {
             break;
 
         case 'newMessage':
-            if (isTheseParametersAvailable(array('sender', 'department', 'patientId', 'patientName', 'testName', 'componentName', 'measuredAmount', 'isUrgent', 'comments'), $response)) {
-                $response = $oper->send_message($_POST['sender'], $_POST['department'], $_POST['patientId'], $_POST['patientName'], $_POST['testName'], $_POST['componentName'], $_POST['measuredAmount'], $_POST['isUrgent'], $_POST['comments']);
+            //TODO Don't ask for patientName, as it can be retrieved with patientId. Solve this by somehow presenting the patientName on the new message form, after typing the ID.
+            $response = isTheseParametersAvailable(array('sender', 'department', 'patientId', 'patientName', 'testType', 'componentName', 'measuredAmount', 'isUrgent', 'comments'));
+            if (!$response['error']) {
+                $response = $oper->send_message($_POST['sender'], $_POST['department'], $_POST['patientId'], $_POST['patientName'], $_POST['testType'], $_POST['componentName'], $_POST['measuredAmount'], $_POST['isUrgent'], $_POST['comments']);
             }
             break;
 
@@ -56,8 +59,9 @@ if (isset($_GET['apicall'])) {
 
 echo json_encode($response); //Return all 'response' fields in JSON format
 
-function isTheseParametersAvailable($params, $response) //TODO alter this func to return $response instead of a boolean, in order not to use global variables (and accordingly, the conditions to "if(isTheseParametersAvailable['error'])").
+function isTheseParametersAvailable($params) //TODO alter this func to return $response instead of a boolean, in order not to use global variables (and accordingly, the conditions to "if(isTheseParametersAvailable['error'])").
 {
+    $response = array();
     $error = false;
     foreach ($params as $param) {
         if (!isset($_POST[$param])) { // Whether a parameter is missing
@@ -67,6 +71,10 @@ function isTheseParametersAvailable($params, $response) //TODO alter this func t
     if ($error) {    // If there's an error, set the response to 'missing parameters' error message
         $response['error'] = true;
         $response['message'] = 'Required parameters are not available';
+    } else {
+        $response['error'] = false;
+        $response['message'] = 'All parameters recieved';
     }
-    return !($error); // Return true if all parameters are in order
+    return $response;
+    //return !($error); // Return true if all parameters are in order   //Old, here for backup purpose only, remove when everything works
 }
