@@ -77,7 +77,6 @@ public class NewMessage extends AppCompatActivity {
         findViewById(R.id.buttonClear).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
                 recipient.setText("");
                 patientId.setText("");
                 patientName.setText("");
@@ -92,14 +91,15 @@ public class NewMessage extends AppCompatActivity {
     }
 
     public Boolean Send(){
-        final String recipient = this.recipient.toString().trim();
-        final String patientId = this.patientId.toString().trim();
-        final String patientName = this.patientName.toString().trim();
-        final String testName = this.testName.toString().trim();
-        final String componentName = this.componentName.toString().trim();
-        final String measuredAmount = this.measuredAmount.toString().trim();
-        final String isUrgent = this.isUrgent.toString().trim();
-        final String comments = this.comments.toString().trim();
+        final String recipient = this.recipient.getText().toString().trim();
+        final String patientId = this.patientId.getText().toString().trim();
+        final String patientName = this.patientName.getText().toString().trim();
+        final String testName = this.testName.getText().toString().trim();
+        final String componentName = this.componentName.getText().toString().trim();
+        final String measuredAmount = this.measuredAmount.getText().toString().trim();
+        //final int isUrgent = (this.isUrgent.isChecked()?1:0);
+        final String isUrgent = Boolean.toString(this.isUrgent.isChecked()); //TODO Will sending bool as string be saved in the DB as 0/1 ?
+        final String comments = this.comments.getText().toString().trim();
 
         /* //TODO check if it's OK to use those as strings when sending them to the query using the hashmap
         final int recipient = Integer.parseInt(this.recipient.toString().trim());
@@ -113,7 +113,7 @@ public class NewMessage extends AppCompatActivity {
         */
 
         success = false;
-        progressDialog.setMessage("ההודעה שלך נשלחת. נא להמתין לאישור...");
+        progressDialog.setMessage("ההודעה שלך נשלחת.\nנא להמתין לאישור...");
         progressDialog.show();
         //Creating a Volley request to communicate with PHP pages
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URLs.URL_NEWMESSAGE, new Response.Listener<String>() {
@@ -151,8 +151,9 @@ public class NewMessage extends AppCompatActivity {
                 params.put("department", recipient);
                 params.put("patientId",patientId);
                 params.put("patientName",patientName);
-                params.put("testName",testName);
+                params.put("testType",testName);
                 params.put("componentName",componentName);
+                params.put("boolValue", "false");
                 params.put("measuredAmount",measuredAmount);
                 params.put("isUrgent",isUrgent);
                 params.put("comments",comments);

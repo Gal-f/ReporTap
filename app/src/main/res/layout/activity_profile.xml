@@ -125,5 +125,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Logout" />
+
+        <Button
+            android:id="@+id/buttonNewMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="שליחת מסר חדש" />
     </LinearLayout>
 </RelativeLayout>

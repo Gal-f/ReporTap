@@ -66,6 +66,7 @@ function isTheseParametersAvailable($params) //TODO alter this func to return $r
     foreach ($params as $param) {
         if (!isset($_POST[$param])) { // Whether a parameter is missing
             $error = true;
+            $response['missingParameters'] .= $param . " ";
         }
     }
     if ($error) {    // If there's an error, set the response to 'missing parameters' error message

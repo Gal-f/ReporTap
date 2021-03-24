@@ -102,6 +102,8 @@
                     android:textColor="@color/black"
                     android:textSize="16dp" />
 
+                <!-- TODO implement autocompletion -->
+                <!-- TODO grey text should disappear on click -->
                 <AutoCompleteTextView
                     android:id="@+id/autoCompleteTextViewTo"
                     android:layout_width="0dp"
