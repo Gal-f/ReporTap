@@ -77,6 +77,7 @@
                 android:id="@+id/textView3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
                 android:text="דיווח תוצאת מעבדה חדשה"
                 android:textColor="@color/black"
                 android:textSize="18dp"
@@ -93,17 +94,19 @@
                 android:orientation="horizontal"
                 android:weightSum="1">
 
+                <!-- TODO implement autocompletion -->
+                <!-- TODO grey text should disappear on click -->
+
                 <TextView
                     android:id="@+id/textView4"
-                    android:layout_width="0dp"
+                    android:layout_width="19dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginRight="-30dp"
                     android:layout_weight="0.2"
                     android:text="עבור:"
                     android:textColor="@color/black"
                     android:textSize="16dp" />
 
-                <!-- TODO implement autocompletion -->
-                <!-- TODO grey text should disappear on click -->
                 <AutoCompleteTextView
                     android:id="@+id/autoCompleteTextViewTo"
                     android:layout_width="0dp"
@@ -131,6 +134,7 @@
                 android:id="@+id/textView6"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
                 android:text="לחצו לסריקת ברקוד מבחנה" />
 
             <LinearLayout
@@ -158,6 +162,7 @@
                 android:id="@+id/textView8"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
                 android:layout_weight="0.2"
                 android:text="המטופל/ת:"
                 android:textColor="@color/black"
@@ -218,9 +223,11 @@
                 android:weightSum="1"
                 android:orientation="horizontal"
                 android:gravity="center">
+
                 <View
                     android:layout_width="0dp"
                     android:layout_height="2dp"
+                    android:layout_marginRight="10dp"
                     android:layout_weight="0.8"
                     android:background="#74C043" /><!--TODO: Replace this View with horizontalLine_h2 from class Design -->
             </LinearLayout>
@@ -229,13 +236,16 @@
                 android:id="@+id/textView11"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
                 android:text="הבדיקה:"
-                android:textSize="18dp"
-                android:textColor="@color/black"/>
+                android:textColor="@color/black"
+                android:textSize="18dp" />
+
             <TextView
                 android:id="@+id/textView12"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
                 android:text="נא הקפידו להימנע משגיאות הקלדה."
                 android:textColor="@color/black"
                 android:textSize="11dp" />

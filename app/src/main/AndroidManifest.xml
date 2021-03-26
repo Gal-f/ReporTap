@@ -15,7 +15,7 @@
         <activity android:name="il.reportap.InboxDoctor"/>
         <activity android:name="il.reportap.NewMessage"/>
         <activity android:name="il.reportap.ProfileActivity" />
-        <activity android:name="il.reportap.LoginActivity" />
+        <activity android:name="il.reportap.RegisterActivity" />
         <activity android:name="il.reportap.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
