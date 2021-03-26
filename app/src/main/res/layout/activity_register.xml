@@ -68,14 +68,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:drawable/btn_dropdown"
-            android:spinnerMode="dropdown" />
+            android:spinnerMode="dropdown"
+            android:textAlignment="textEnd"
+            android:layout_gravity="end"/>
 
         <Spinner
             android:id="@+id/spinnerJobTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:drawable/btn_dropdown"
-            android:spinnerMode="dropdown" />
+            android:spinnerMode="dropdown"
+            android:textAlignment="textEnd"
+            android:layout_gravity="end"/>
 
         <Button
             android:id="@+id/buttonRegister"

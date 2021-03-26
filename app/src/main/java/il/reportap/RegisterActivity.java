@@ -56,11 +56,11 @@ public class RegisterActivity extends AppCompatActivity {
 
         //define spinners options
         String[] departments = new String[]{"בחר מחלקה","מעבדה מיקרוביולוגית", "פנימית א"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, departments);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, departments);
         spinnerDepartment.setAdapter(adapter);
 
         String[] roles = new String[]{"בחר תפקיד","מנהל.ת מחלקה", "עובד.ת מעבדה","רופא.ה","עובד.ת אדמיניסטרציה","אח.ות"};
-        ArrayAdapter<String> adapter2 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, roles);
+        ArrayAdapter<String> adapter2 = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, roles);
         spinnerJobTitle.setAdapter(adapter2);
 
         findViewById(R.id.buttonRegister).setOnClickListener(new View.OnClickListener() {
