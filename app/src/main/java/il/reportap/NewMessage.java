@@ -71,6 +71,7 @@ public class NewMessage extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Send();
+                //TODO show a message if Send() succeeded or not
             }
         });
 
@@ -153,7 +154,7 @@ public class NewMessage extends AppCompatActivity {
                 params.put("patientName",patientName);
                 params.put("testType",testName);
                 params.put("componentName",componentName);
-                params.put("boolValue", "false");
+                params.put("boolValue", "false");   //TODO implement option to make a boolean test result value
                 params.put("measuredAmount",measuredAmount);
                 params.put("isUrgent",isUrgent);
                 params.put("comments",comments);
