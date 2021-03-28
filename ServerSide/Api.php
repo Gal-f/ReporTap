@@ -47,6 +47,12 @@ if (isset($_GET['apicall'])) {
                 $response = $oper->send_message($_POST['sender'], $_POST['department'], $_POST['patientId'], $_POST['patientName'], $_POST['testType'], $_POST['componentName'], $_POST['boolValue'], $_POST['measuredAmount'], $_POST['isUrgent'], $_POST['comments']);
             }
             break;
+        case 'inboxdr':
+            $response = isTheseParametersAvailable(array('department'));
+            if (!$response['error']){
+                $response=$oper->inboxdr($_POST['department']);
+            }
+            break;
 
         default:
             $response['error'] = true;

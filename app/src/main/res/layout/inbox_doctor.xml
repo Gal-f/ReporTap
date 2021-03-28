@@ -65,7 +65,8 @@
 
     </LinearLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swiperefresh"
         android:layout_width="409dp"
         android:layout_height="606dp"
         android:layout_marginTop="125dp"
@@ -115,79 +116,28 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:baselineAligned="false"
                     android:orientation="vertical"
-                    android:rotationX="0">
+                    tools:context="il.reportap.InboxDoctor">
 
-                    <androidx.cardview.widget.CardView
+                    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                        xmlns:tools="http://schemas.android.com/tools"
+                        android:id="@+id/relativeLayout"
                         android:layout_width="match_parent"
-                        android:layout_height="92dp"
-                        app:cardBackgroundColor="@color/lightBlue">
+                        android:layout_height="match_parent"
+                        tools:context="il.reportap.InboxDoctor">
 
-                    </androidx.cardview.widget.CardView>
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/recyclerView"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+                    </RelativeLayout>
 
-                    <View
-                        android:id="@+id/view7"
-                        android:layout_width="364dp"
-                        android:layout_height="2dp"
-                        android:layout_marginLeft="15dp"
-                        android:layout_marginRight="15dp"
-                        android:layout_weight="0.8"
-                        android:background="#74C043" />
-
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="90dp"
-                        app:cardBackgroundColor="@color/lightBlue">
-
-                    </androidx.cardview.widget.CardView>
-
-                    <View
-                        android:id="@+id/view10"
-                        android:layout_width="364dp"
-                        android:layout_height="2dp"
-                        android:layout_marginLeft="15dp"
-                        android:layout_marginRight="15dp"
-                        android:layout_weight="0.8"
-                        android:background="#74C043" />
-
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="91dp"
-                        app:cardBackgroundColor="@color/lightBlue">
-
-                    </androidx.cardview.widget.CardView>
-
-                    <View
-                        android:id="@+id/view8"
-                        android:layout_width="364dp"
-                        android:layout_height="2dp"
-                        android:layout_marginLeft="15dp"
-                        android:layout_marginRight="15dp"
-                        android:layout_weight="0.8"
-                        android:background="#74C043" />
-
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="88dp"
-                        app:cardBackgroundColor="@color/lightBlue">
-
-                    </androidx.cardview.widget.CardView>
-
-                    <View
-                        android:id="@+id/view9"
-                        android:layout_width="364dp"
-                        android:layout_height="2dp"
-                        android:layout_marginLeft="15dp"
-                        android:layout_marginRight="15dp"
-                        android:layout_weight="0.8"
-                        android:background="#74C043" />
                 </LinearLayout>
 
             </ScrollView>
 
         </LinearLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
