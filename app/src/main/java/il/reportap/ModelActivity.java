@@ -1,7 +1,7 @@
 package il.reportap;
 
 public class ModelActivity {
-    private String sentTime,messageId,patientId,testName;
+    private String sentTime,patientId,testName;
     private Boolean isUrgent;
 
     public ModelActivity(String sentTime, String patientId, String testName, Boolean isUrgent) {

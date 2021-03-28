@@ -46,7 +46,7 @@ public class RegisterActivity extends AppCompatActivity {
             startActivity(new Intent(this, ProfileActivity.class));
             return;
         }
-
+//TODO change ProfileActivity to InboxDoctor in startActivity
         editTextPassword = (EditText) findViewById(R.id.editTextPassword);
         editTextEmployeeNumber = (EditText) findViewById(R.id.editTextEmployeeNumber);
         editTextFullName = (EditText) findViewById(R.id.editTextFullName);
