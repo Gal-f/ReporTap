@@ -55,7 +55,7 @@ public class InboxDoctor extends AppCompatActivity {
 
         private void loadData() {
 
-            StringRequest stringRequest = new StringRequest(Request.Method.GET,
+            StringRequest stringRequest = new StringRequest(Request.Method.POST,
                     url.URL_INBOXDR,
                     new Response.Listener<String>() {
                         @Override
@@ -101,7 +101,7 @@ public class InboxDoctor extends AppCompatActivity {
                 protected Map<String,String> getParams() throws AuthFailureError {
                     Map<String,String> params = new HashMap<>();
                     params.put("department", String.valueOf(SharedPrefManager.getInstance(getApplicationContext()).getUser().getDepartment()));
-
+                    System.out.println(params.get("department"));
                     return params;
                 }
             };
