@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Pair;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -23,10 +24,12 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.loginregister.R;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class NewMessage extends AppCompatActivity {
@@ -36,6 +39,9 @@ public class NewMessage extends AppCompatActivity {
     private CheckBox isUrgent;
     private ProgressDialog progressDialog;
     private boolean success;
+
+    private HashMap<Integer, String> deptMap;                     //Translates department ID to department name
+    private HashMap<Integer, Pair<String, String>> testTypeMap;   //Translates test type ID to it's corresponding name + result type (in this form: [ID, [name, resultType]] ).
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,12 +60,14 @@ public class NewMessage extends AppCompatActivity {
 
         //TODO Create auto-complete for patient ID? (optional)
 
-        //Define autocomplete fields options //TODO Populate recipient, testName, componentName with choices from the DB tables.
-        String[] departments = new String[]{"בחר מחלקה","מעבדה מיקרוביולוגית", "פנימית א"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_single_choice, departments);
+        this.populateHashmaps();
+        //Define autocomplete fields options //TODO Populate recipient, testName with choices from the DB tables.
+        String[] departments = new String[]{"בחר מחלקה","מעבדה מיקרוביולוגית", "פנימית א"}; //TODO change to use the list from the DB with deptMap
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.select_dialog_item, departments);
         recipient.setAdapter(adapter);
+        recipient.setThreshold(1); //Start autocompletion from the 1st character
 
-        String[] tests = new String[]{"תרבית דם","תרבית שתן", "PCR קורונה"};
+        String[] tests = new String[]{"תרבית דם","תרבית שתן", "PCR קורונה"};                 //TODO change to use the list from the DB with testTypeMap
         ArrayAdapter<String> adapter2 = new ArrayAdapter<>(this, android.R.layout.simple_list_item_single_choice, tests);
         testName.setAdapter(adapter2);
 
@@ -165,5 +173,38 @@ public class NewMessage extends AppCompatActivity {
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
         return success;
+    }
+
+    public void populateHashmaps(){
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URLs.URL_GET_DEPTS_N_TESTS, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try{
+                    JSONArray jsonArray = new JSONArray(response);
+                    for (int i=0; i<jsonArray.length(); i++){
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        deptMap.put(jsonObject.getInt("deptID"), jsonObject.getString("deptName"));
+                        testTypeMap.put(jsonObject.getInt("testID"), new Pair<>(jsonObject.getString("testName"), jsonObject.getString("resultType")));
+                    }
+                }
+                catch (JSONException e){
+                    e.printStackTrace();
+                }
+            }
+        },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                })
+        {
+          @Nullable
+          @Override
+          protected Map<String, String> getParams() throws AuthFailureError {   //TODO is this necessary for a query that only returns with no parameters?
+              Map<String, String> params = new HashMap<>();
+              return params;
+          }
+        };
     }
 }

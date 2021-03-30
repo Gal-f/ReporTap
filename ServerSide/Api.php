@@ -53,6 +53,9 @@ if (isset($_GET['apicall'])) {
                 $response=$oper->inboxdr($_POST['department']);
             }
             break;
+        case 'getDeptsAndTests':
+            $response = $oper->getDeptsAndTests();
+            break;
 
         default:
             $response['error'] = true;
