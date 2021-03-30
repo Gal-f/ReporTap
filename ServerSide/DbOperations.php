@@ -123,17 +123,17 @@ class DbOperations
         if ($stmt->num_rows > 0) {
 
             while ($rows>0){
-            $stmt->bind_result($sentTime, $patientId, $testName, $isUrgent);
-            $stmt->fetch();
+                $stmt->bind_result($sentTime, $patientId, $testName, $isUrgent);
+                $stmt->fetch();
             
-            $report[$stmt->num_rows-$rows] = array(
-                'sent_time' => $sentTime,
-                'patient_id' => $patientId,
-                'name' => $testName,
-                'is_urgent' => $isUrgent,
-            );
-            $rows--;
-        }
+                $report[$stmt->num_rows-$rows] = array(
+                    'sent_time' => $sentTime,
+                    'patient_id' => $patientId,
+                    'name' => $testName,
+                    'is_urgent' => $isUrgent,
+                );
+                $rows--;
+            }
             $response['error'] = false;
             $response['message'] = 'new report for you';
             $response['report'] = $report;
@@ -143,5 +143,56 @@ class DbOperations
         }
         return $response;
         
+    }
+
+    function getDeptsAndTests()
+    {
+        $response = array();
+        $response['message'] = '';
+        //1st part - Get Departments
+        $query = "SELECT ID, departments.name FROM departments";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        $stmt->store_result();
+
+        $rows = $stmt->num_rows;
+        if ($rows == 0){
+            $response['error'] = true;
+            $response['message'] = 'Unable to retrieve departments from the server';
+        } else {
+            while ($rows > 0){
+                $stmt->bind_result($deptID, $deptName);
+                $stmt->fetch();
+
+                $depts[$stmt->num_rows-$rows] = array('deptID' => $deptID, 'deptName' => $deptName);
+                $rows--;
+            }
+            $response['error'] = false;
+            $response['message'] = 'Departments pulled successfully';
+            $response['departments'] = $depts;
+            //2nd part - Get test types
+            $query = "SELECT ID, name, result_type FROM test_types";
+            $stmt2 = $this->conn->prepare($query);
+            $stmt2->execute();
+            $stmt2->store_result();
+
+            $rows = $stmt2->num_rows;
+            if ($rows == 0){
+                $response['error'] = true;
+                $response['message'] .= ', Unable to retrieve test types from the server';
+            } else {
+                while ($rows > 0){
+                    $stmt2->bind_result($testID, $testName, $resultType);
+                    $stmt2->fetch();
+
+                    $testsTypes[$stmt2->num_rows()-$rows] = array('testID' => $testID, 'testName' => $testName, 'resultType' => $resultType);
+                    $rows--;
+                }
+                $response['error'] = false;
+                $response['message'] .= ', Test types pulled successfully';
+                $response['testTypes'] = $testsTypes;
+            }
+        }
+        return $response;
     }
 }
