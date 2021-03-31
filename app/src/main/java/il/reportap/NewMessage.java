@@ -28,6 +28,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -60,20 +61,7 @@ public class NewMessage extends AppCompatActivity {
 
         //TODO Create auto-complete for patient ID? (optional)
 
-        this.populateHashmaps();
-        //Define autocomplete fields options //TODO Populate recipient, testName with choices from the DB tables.
-        String[] departments = new String[]{"בחר מחלקה","מעבדה מיקרוביולוגית", "פנימית א"}; //TODO change to use the list from the DB with deptMap
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.select_dialog_item, departments);
-        recipient.setAdapter(adapter);
-        recipient.setThreshold(1); //Start autocompletion from the 1st character
-
-        String[] tests = new String[]{"תרבית דם","תרבית שתן", "PCR קורונה"};                 //TODO change to use the list from the DB with testTypeMap
-        ArrayAdapter<String> adapter2 = new ArrayAdapter<>(this, android.R.layout.simple_list_item_single_choice, tests);
-        testName.setAdapter(adapter2);
-
-        String[] components = new String[]{"חיידק","בקטריה", "שניבוריג"};
-        ArrayAdapter<String> adapter3 = new ArrayAdapter<>(this, android.R.layout.simple_list_item_single_choice, components);
-        testName.setAdapter(adapter3);
+        populateHashmaps(); // This populates the departments and test types from the DB and then adds them as options to the form.
 
         findViewById(R.id.buttonSendMessage).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -176,16 +164,26 @@ public class NewMessage extends AppCompatActivity {
     }
 
     public void populateHashmaps(){
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, URLs.URL_GET_DEPTS_N_TESTS, new Response.Listener<String>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, URLs.URL_GET_DEPTS_N_TESTS, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                deptMap = new HashMap<Integer, String>();
+                testTypeMap = new HashMap<Integer, Pair<String, String>>();
+
                 try{
-                    JSONArray jsonArray = new JSONArray(response);
-                    for (int i=0; i<jsonArray.length(); i++){
-                        JSONObject jsonObject = jsonArray.getJSONObject(i);
-                        deptMap.put(jsonObject.getInt("deptID"), jsonObject.getString("deptName"));
-                        testTypeMap.put(jsonObject.getInt("testID"), new Pair<>(jsonObject.getString("testName"), jsonObject.getString("resultType")));
+                    JSONObject entireResponse = new JSONObject(response);
+                    JSONArray deptsArray = entireResponse.getJSONArray("departments");
+                    JSONArray testTypesArray = entireResponse.getJSONArray("testTypes");
+                    for (int i=0; i<deptsArray.length(); i++) {
+                        JSONObject dept = deptsArray.getJSONObject(i);
+                        deptMap.put(dept.getInt("deptID"), dept.getString("deptName"));
                     }
+                    for (int i=0; i<testTypesArray.length(); i++){
+                        JSONObject testType = testTypesArray.getJSONObject(i);
+                        testTypeMap.put(testType.getInt("testID"), new Pair<>(testType.getString("testName"), testType.getString("resultType")));
+                    }
+                    inflateAutocompleteOptions(); //Use the freshly populated hashmaps as options to select from in the form fields.
+                    // The inflate call is done here in order to make sure the response for PopulateHashmaps() returned before calling inflateAutocompleteOptions().
                 }
                 catch (JSONException e){
                     e.printStackTrace();
@@ -197,14 +195,34 @@ public class NewMessage extends AppCompatActivity {
                     public void onErrorResponse(VolleyError error) {
 
                     }
-                })
-        {
-          @Nullable
-          @Override
-          protected Map<String, String> getParams() throws AuthFailureError {   //TODO is this necessary for a query that only returns with no parameters?
-              Map<String, String> params = new HashMap<>();
-              return params;
-          }
-        };
+                });
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
+    }
+
+    public void inflateAutocompleteOptions(){
+        //Define autocomplete fields options
+
+        //String[] departments = (String[]) this.deptMap.values().toArray(); //casting doesn't work
+        ArrayList<String> departments = new ArrayList<>();
+        for (String dept : this.deptMap.values())
+            departments.add(dept);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.select_dialog_item, departments);
+        recipient.setAdapter(adapter);
+        recipient.setThreshold(1); //Start autocompletion from the 1st character
+
+        ArrayList<String> tests = new ArrayList<>();
+        for (int i=0; i<this.testTypeMap.size(); i++){
+            tests.add((String)((Pair)this.testTypeMap.values().toArray()[i]).first);
+        }
+        ArrayAdapter<String> adapter2 = new ArrayAdapter<>(this, android.R.layout.select_dialog_item, tests);
+        testName.setAdapter(adapter2);
+        testName.setThreshold(1);
+
+        String[] components = new String[]{"חיידק","בקטריה", "שניבוריג"};
+        ArrayAdapter<String> adapter3 = new ArrayAdapter<>(this, android.R.layout.select_dialog_item, components);
+        componentName.setAdapter(adapter3);
+        componentName.setThreshold(1);
     }
 }
