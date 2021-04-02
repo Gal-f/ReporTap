@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.view.Display;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -31,12 +32,12 @@ import java.util.Map;
 
 public class InboxDoctor extends AppCompatActivity {
 
-       // private static final String URL = "http://androidcodefinder.com/RecyclerViewJson.json";
-    private URLs url;
+       // private static final String URL = "http://androidcodefinder.com/RecyclerViewJson.json"/
         private RecyclerView recyclerView;
-        private RecyclerView.Adapter adapter;
+        private AdapterActivity adapter;
         private List<ModelActivity> modelActivityList;
         private RelativeLayout relativeLayout;
+        private HashMap<Integer,String> repMap;
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
@@ -49,37 +50,34 @@ public class InboxDoctor extends AppCompatActivity {
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
             modelActivityList = new ArrayList<>();
-
-            loadData();
-        }
-
-        private void loadData() {
-
             StringRequest stringRequest = new StringRequest(Request.Method.POST,
-                    url.URL_INBOXDR,
+                    URLs.URL_INBOXDR,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
 
                             relativeLayout.setVisibility(View.GONE);
+                            repMap = new HashMap<Integer,String>();
 
                             try {
-                                //JSONObject jsonObject = new JSONObject(response);
-                                JSONArray jsonArray = new JSONArray(response);
+                                JSONObject repObj = new JSONObject(response);
+                                JSONArray repArray = repObj.getJSONArray("report");
+                                JSONObject jObg = new JSONObject();
+                                ModelActivity modelActivity = new ModelActivity();
 
-                                for(int i=0; i<jsonArray.length(); i++){
+                                for(int i=0; i<repArray.length(); i++){
 
-                                    JSONObject o = jsonArray.getJSONObject(i);
-                                    ModelActivity modelActivity = new ModelActivity(
-                                            o.getString("sentTime"),
-                                            o.getString("patientId"),
-                                            o.getString("testName"),
-                                            o.getBoolean("date")
-                                    );
+                                    jObg = repArray.getJSONObject(i);
+                                    modelActivity.setId(jObg.getInt("id"));
+                                    modelActivity.setSentTime(jObg.getString("sent_time"));
+                                    modelActivity.setPatientId(jObg.getString("patient_id"));
+                                    modelActivity.setTestName(jObg.getString("name"));
+                                    modelActivity.setUrgent(jObg.getInt("is_urgent"));
                                     modelActivityList.add(modelActivity);
+                                    System.out.println(modelActivityList.get(i).getId());
                                 }
 
-                                adapter = new AdapterActivity(modelActivityList, getApplicationContext());
+                                adapter = new AdapterActivity(modelActivityList,getApplicationContext());
                                 recyclerView.setAdapter(adapter);
 
 
@@ -107,6 +105,11 @@ public class InboxDoctor extends AppCompatActivity {
             };
             RequestQueue requestQueue = Volley.newRequestQueue(this);
             requestQueue.add(stringRequest);
+        }
 
-}
+
+
+
+
+
 }
