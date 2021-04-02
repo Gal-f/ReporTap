@@ -111,7 +111,7 @@ class DbOperations
     function inboxdr($department)
     {
         $response = array();
-        $query="SELECT M.sent_time, M.patient_ID, T.name, M.is_urgent FROM messages as M JOIN test_types as T ON M.test_type=T.ID WHERE M.recipient_dept = ? AND M.confirm_time IS NULL";
+        $query="SELECT M.ID, M.sent_time, M.patient_ID, T.name, M.is_urgent FROM messages as M JOIN test_types as T ON M.test_type=T.ID WHERE M.recipient_dept = ? AND M.confirm_time IS NULL";
         $stmt = $this->conn->prepare($query);
         $stmt->bind_param("i", $department);
 
@@ -123,10 +123,10 @@ class DbOperations
         if ($stmt->num_rows > 0) {
 
             while ($rows>0){
-                $stmt->bind_result($sentTime, $patientId, $testName, $isUrgent);
+                $stmt->bind_result($id, $sentTime, $patientId, $testName, $isUrgent);
                 $stmt->fetch();
             
-                $report[$stmt->num_rows-$rows] = array(
+                $report[$stmt->num_rows-$rows] = array('id' =>$id,
                     'sent_time' => $sentTime,
                     'patient_id' => $patientId,
                     'name' => $testName,
