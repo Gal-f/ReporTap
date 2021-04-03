@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+
 import android.os.Bundle;
 import android.view.Display;
 import android.view.View;
@@ -32,7 +33,6 @@ import java.util.Map;
 
 public class InboxDoctor extends AppCompatActivity {
 
-       // private static final String URL = "http://androidcodefinder.com/RecyclerViewJson.json"/
         private RecyclerView recyclerView;
         private AdapterActivity adapter;
         private List<ModelActivity> modelActivityList;
@@ -56,7 +56,7 @@ public class InboxDoctor extends AppCompatActivity {
                     response -> {
 
                         relativeLayout.setVisibility(View.GONE);
-                        repMap = new HashMap<Integer,String>();
+                        //repMap = new HashMap<Integer,String>();
 
                         try {
                             JSONObject repObj = new JSONObject(response);
@@ -64,7 +64,7 @@ public class InboxDoctor extends AppCompatActivity {
                             JSONObject jObg = new JSONObject();
                             ModelActivity modelActivity = new ModelActivity();
 
-                            for(int i=0; i<repArray.length(); i++){
+                            for(int i=0; i<=repArray.length(); i++){
 
                                 jObg = repArray.getJSONObject(i);
                                 modelActivity.setId(jObg.getInt("id"));

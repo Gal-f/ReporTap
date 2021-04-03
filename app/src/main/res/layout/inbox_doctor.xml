@@ -119,17 +119,17 @@
                     android:orientation="vertical"
                     tools:context="il.reportap.InboxDoctor">
 
-                    <RelativeLayout
-                        android:id="@+id/relativeLayout"
+                    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                        xmlns:tools="http://schemas.android.com/tools"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        tools:context="il.reportap.InboxDoctor">
+                        android:id="@+id/relativeLayout"
+                        tools:context="abhiandroid.com.jsonparsingexample.MainActivity">
 
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/recyclerView"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent" />
-
                     </RelativeLayout>
 
                 </LinearLayout>
