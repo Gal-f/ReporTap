@@ -95,7 +95,6 @@ public class MainActivity extends AppCompatActivity {
 
                     //if no error in response
                     if (!obj.getBoolean("error")) {
-                        Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
 
                         //getting the user from the response
                         JSONObject userJson = obj.getJSONObject("user");
@@ -118,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
                         finish();
                         startActivity(new Intent(getApplicationContext(), InboxDoctor.class));
                     } else {
-                        Toast.makeText(getApplicationContext(), "מספר עובד או סיסמה לא נכונים", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
