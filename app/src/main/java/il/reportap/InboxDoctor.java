@@ -52,47 +52,41 @@ public class InboxDoctor extends AppCompatActivity {
             modelActivityList = new ArrayList<>();
             StringRequest stringRequest = new StringRequest(Request.Method.POST,
                     URLs.URL_INBOXDR,
-                    new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
+                    //lambda expression
+                    response -> {
 
-                            relativeLayout.setVisibility(View.GONE);
-                            repMap = new HashMap<Integer,String>();
+                        relativeLayout.setVisibility(View.GONE);
+                        repMap = new HashMap<Integer,String>();
 
-                            try {
-                                JSONObject repObj = new JSONObject(response);
-                                JSONArray repArray = repObj.getJSONArray("report");
-                                JSONObject jObg = new JSONObject();
-                                ModelActivity modelActivity = new ModelActivity();
+                        try {
+                            JSONObject repObj = new JSONObject(response);
+                            JSONArray repArray = repObj.getJSONArray("report");
+                            JSONObject jObg = new JSONObject();
+                            ModelActivity modelActivity = new ModelActivity();
 
-                                for(int i=0; i<repArray.length(); i++){
+                            for(int i=0; i<repArray.length(); i++){
 
-                                    jObg = repArray.getJSONObject(i);
-                                    modelActivity.setId(jObg.getInt("id"));
-                                    modelActivity.setSentTime(jObg.getString("sent_time"));
-                                    modelActivity.setPatientId(jObg.getString("patient_id"));
-                                    modelActivity.setTestName(jObg.getString("name"));
-                                    modelActivity.setUrgent(jObg.getInt("is_urgent"));
-                                    modelActivityList.add(modelActivity);
-                                    System.out.println(modelActivityList.get(i).getId());
-                                }
-
-                                adapter = new AdapterActivity(modelActivityList,getApplicationContext());
-                                recyclerView.setAdapter(adapter);
-
-
-                            } catch (JSONException e) {
-                                e.printStackTrace();
+                                jObg = repArray.getJSONObject(i);
+                                modelActivity.setId(jObg.getInt("id"));
+                                modelActivity.setSentTime(jObg.getString("sent_time"));
+                                modelActivity.setPatientId(jObg.getString("patient_id"));
+                                modelActivity.setTestName(jObg.getString("name"));
+                                modelActivity.setUrgent(jObg.getInt("is_urgent"));
+                                modelActivityList.add(modelActivity);
+                                System.out.println(modelActivityList.get(i).getId());
                             }
 
+                            adapter = new AdapterActivity(modelActivityList,getApplicationContext());
+                            recyclerView.setAdapter(adapter);
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
+
                     },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
-                        }
-                    })
+                    //lambda expression
+                    error -> Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show())
             {
                 @Nullable
                 @Override
