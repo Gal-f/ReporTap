@@ -41,8 +41,8 @@ public class NewMessage extends AppCompatActivity {
     private ProgressDialog progressDialog;
     private boolean success;
 
-    private HashMap<Integer, String> deptMap;                     //Translates department ID to department name
-    private HashMap<Integer, Pair<String, String>> testTypeMap;   //Translates test type ID to it's corresponding name + result type (in this form: [ID, [name, resultType]] ).
+    private HashMap<String, Integer> deptMap;                     //Translates department name to it's corresponding ID
+    private HashMap<String, Pair<Integer, String>> testTypeMap;   //Translates test type ID to it's corresponding name + result type (in this form: [name, [ID, resultType]] )
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,13 +85,21 @@ public class NewMessage extends AppCompatActivity {
                 //startActivity(new Intent(NewMessage.this, NewMessage.class)); //Another option, simply refreshing the page
             }
         });
+
+        findViewById(R.id.buttonAutofill).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fillTestValues();
+            }
+        });
     }
 
     public Boolean Send(){
-        final String recipient = this.recipient.getText().toString().trim();
+        // All values are sent as Strings and interpreted by the server side logic to the correct types (due to limitation of the parameters-sending process using a Map<String, String>)
+        final String recipient = this.deptMap.get(this.recipient.getText().toString().trim()).toString();   // Convert the department name in the form to department ID
         final String patientId = this.patientId.getText().toString().trim();
         final String patientName = this.patientName.getText().toString().trim();
-        final String testName = this.testName.getText().toString().trim();
+        final String testName = ((Pair)(this.testTypeMap.get(this.testName.getText().toString().trim()))).first.toString(); // Convert the test-type name in the form to the test-type ID
         final String componentName = this.componentName.getText().toString().trim();
         final String measuredAmount = this.measuredAmount.getText().toString().trim();
         //final int isUrgent = (this.isUrgent.isChecked()?1:0);
@@ -117,18 +125,24 @@ public class NewMessage extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 progressDialog.dismiss();
+                String errorMessage = "";
                 try {
                     JSONObject jsonObject = new JSONObject(response);
-                    if(jsonObject.getBoolean("error")){ // If there was any error along the way
-                        Toast.makeText(getApplicationContext(), jsonObject.getString("message"), Toast.LENGTH_LONG).show();
+                    errorMessage = jsonObject.getString("message");
+                    if(jsonObject.getBoolean("error")){ // If there was any error along the way //TODO add validations for correct inputs
+                        Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
                     } else {
                         success = true;
-                        Toast.makeText(getApplicationContext(), jsonObject.getString("message"), Toast.LENGTH_LONG).show();
-                        Toast.makeText(getApplicationContext(), jsonObject.getJSONArray("sent_message").toString(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
                     }
 
                 } catch (JSONException e) {
                     e.printStackTrace();
+                }
+                finally {
+                    finish();
+                    Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
+                    startActivity(new Intent(NewMessage.this, InboxDoctor.class));  // Redirect after the message is sent
                 }
             }
         },
@@ -152,7 +166,7 @@ public class NewMessage extends AppCompatActivity {
                 params.put("componentName",componentName);
                 params.put("boolValue", "false");   //TODO implement option to make a boolean test result value
                 params.put("measuredAmount",measuredAmount);
-                params.put("isUrgent",isUrgent);
+                params.put("isUrgent",isUrgent);    //TODO FIX this, 0/1 value doesn't enter the DB table
                 params.put("comments",comments);
                 return params;
             }
@@ -160,15 +174,15 @@ public class NewMessage extends AppCompatActivity {
         //Queueing the request since the operation will take some time
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
-        return success;
+        return success; //Currently unused (error messages being handled within the function), returns bool for future use
     }
 
     public void populateHashmaps(){
         StringRequest stringRequest = new StringRequest(Request.Method.GET, URLs.URL_GET_DEPTS_N_TESTS, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                deptMap = new HashMap<Integer, String>();
-                testTypeMap = new HashMap<Integer, Pair<String, String>>();
+                deptMap = new HashMap<String, Integer>();
+                testTypeMap = new HashMap<String, Pair<Integer, String>>();
 
                 try{
                     JSONObject entireResponse = new JSONObject(response);
@@ -176,11 +190,11 @@ public class NewMessage extends AppCompatActivity {
                     JSONArray testTypesArray = entireResponse.getJSONArray("testTypes");
                     for (int i=0; i<deptsArray.length(); i++) {
                         JSONObject dept = deptsArray.getJSONObject(i);
-                        deptMap.put(dept.getInt("deptID"), dept.getString("deptName"));
+                        deptMap.put(dept.getString("deptName"), dept.getInt("deptID"));
                     }
                     for (int i=0; i<testTypesArray.length(); i++){
                         JSONObject testType = testTypesArray.getJSONObject(i);
-                        testTypeMap.put(testType.getInt("testID"), new Pair<>(testType.getString("testName"), testType.getString("resultType")));
+                        testTypeMap.put(testType.getString("testName"), new Pair<>(testType.getInt("testID"), testType.getString("resultType")));
                     }
                     inflateAutocompleteOptions(); //Use the freshly populated hashmaps as options to select from in the form fields.
                     // The inflate call is done here in order to make sure the response for PopulateHashmaps() returned before calling inflateAutocompleteOptions().
@@ -205,7 +219,7 @@ public class NewMessage extends AppCompatActivity {
 
         //String[] departments = (String[]) this.deptMap.values().toArray(); //casting doesn't work
         ArrayList<String> departments = new ArrayList<>();
-        for (String dept : this.deptMap.values())
+        for (String dept : this.deptMap.keySet())
             departments.add(dept);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.select_dialog_item, departments);
@@ -214,7 +228,8 @@ public class NewMessage extends AppCompatActivity {
 
         ArrayList<String> tests = new ArrayList<>();
         for (int i=0; i<this.testTypeMap.size(); i++){
-            tests.add((String)((Pair)this.testTypeMap.values().toArray()[i]).first);
+            tests.add((String) (this.testTypeMap.keySet().toArray()[i]));
+            //tests.add((String)((Pair)this.testTypeMap.values().toArray()[i]).first);  //obsolete
         }
         ArrayAdapter<String> adapter2 = new ArrayAdapter<>(this, android.R.layout.select_dialog_item, tests);
         testName.setAdapter(adapter2);
@@ -224,5 +239,18 @@ public class NewMessage extends AppCompatActivity {
         ArrayAdapter<String> adapter3 = new ArrayAdapter<>(this, android.R.layout.select_dialog_item, components);
         componentName.setAdapter(adapter3);
         componentName.setThreshold(1);
+
+        //TODO enforce only valid options from the list are selectable
+    }
+
+    public void fillTestValues(){
+        recipient.setText("פנימית א");
+        patientId.setText("123456789");
+        patientName.setText("ישראל ישראלי");
+        testName.setText("תרבית דם");
+        componentName.setText("חיידק");
+        measuredAmount.setText("10");
+        isUrgent.setChecked(true);
+        comments.setText("בדיקה אוטומטית");
     }
 }
