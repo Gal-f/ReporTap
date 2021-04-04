@@ -71,4 +71,5 @@ public class SharedPrefManager {
         mCtx.startActivity(new Intent(mCtx, MainActivity.class));
     }
 }
+
  

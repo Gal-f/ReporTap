@@ -4,16 +4,12 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -40,13 +36,14 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+        //TODO change to inbox doctor/inbox lab based on the job title. check why this is not working right now.
         //if the user is already logged in we will directly start the profile activity
         if (SharedPrefManager.getInstance(this).isLoggedIn()) {
             finish();
             startActivity(new Intent(this, ProfileActivity.class));
             return;
         }
-//TODO change ProfileActivity to InboxDoctor in startActivity
+
         editTextPassword = (EditText) findViewById(R.id.editTextPassword);
         editTextEmployeeNumber = (EditText) findViewById(R.id.editTextEmployeeNumber);
         editTextFullName = (EditText) findViewById(R.id.editTextFullName);

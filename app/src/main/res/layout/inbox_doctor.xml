@@ -9,7 +9,7 @@
     android:baselineAligned="false"
     tools:context="il.reportap.InboxDoctor">
 
-    <include layout="@layout/header_layout" />
+    <include layout="@layout/activity_header" />
 
     <!--
         android:id="@+id/imageView9"
