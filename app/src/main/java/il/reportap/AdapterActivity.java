@@ -36,7 +36,7 @@ public class AdapterActivity extends RecyclerView.Adapter<AdapterActivity.ViewHo
         holder.sentTime.setText(modelActivity.getSentTime());
         holder.patientId.setText(modelActivity.getPatientId());
         holder.testName.setText(modelActivity.getTestName());
-        holder.isUrgent.setText(modelActivity.getIsUrgent());
+        holder.isUrgent.setText(String.valueOf(modelActivity.getIsUrgent()));
     }
 
     @Override
