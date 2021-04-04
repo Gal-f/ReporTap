@@ -302,9 +302,10 @@
                 android:layout_height="match_parent"
                 android:weightSum="1"
                 android:orientation="horizontal"
-                android:gravity="center">
+                android:gravity="center"
+                android:visibility="visible">
                 <TextView
-                    android:id="@+id/textView14"
+                    android:id="@+id/textViewMeasuredAmount"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.2"
@@ -318,9 +319,54 @@
                     android:inputType="textPersonName"
                     android:gravity="right" />
                 <Space
+                    android:id="@+id/spacerMeasuredAmount"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.45" />
+            </LinearLayout>
+            <LinearLayout
+                    android:id="@+id/linearLayoutBoolResult"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:weightSum="1"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:visibility="gone">
+                <TextView
+                    android:id="@+id/textViewBoolResult"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.2"
+                    android:text="תוצאה:" />
+                <RadioGroup
+                    android:id="@+id/radioGroupBoolResult"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.3"
+                    android:ems="10"
+                    android:inputType="textPersonName"
+                    android:gravity="right"
+                    android:padding="0dp">
+                    <RadioButton
+                        android:id="@+id/radioButtonBoolResult_Positive"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="0dp"
+                        android:minHeight="0dp"
+                        android:text="חיובית" />
+                    <RadioButton
+                        android:id="@+id/radioButtonBoolResult_Negative"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="0dp"
+                        android:minHeight="0dp"
+                        android:text="שלילית" />
+                </RadioGroup>
+                <Space
+                    android:id="@+id/spacerBoolResult"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.3" />
             </LinearLayout>
 
             <LinearLayout

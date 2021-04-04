@@ -3,15 +3,19 @@ package il.reportap;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Pair;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,14 +36,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class NewMessage extends AppCompatActivity {
 
     private AutoCompleteTextView recipient, testName, componentName;
     private EditText patientId, patientName, measuredAmount, comments;
+    private RadioGroup boolResult;
     private CheckBox isUrgent;
     private ProgressDialog progressDialog;
-    private boolean success;
+    private boolean success, isTestValueBool;
 
     private HashMap<String, Integer> deptMap;                     //Translates department name to it's corresponding ID
     private HashMap<String, Pair<Integer, String>> testTypeMap;   //Translates test type ID to it's corresponding name + result type (in this form: [name, [ID, resultType]] )
@@ -86,6 +92,27 @@ public class NewMessage extends AppCompatActivity {
             }
         });
 
+        @SuppressLint("WrongViewCast")
+        AutoCompleteTextView deptSelect = findViewById(R.id.autoCompleteTextViewTestName);
+        deptSelect.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String selectedTest = parent.getItemAtPosition(position).toString();
+                if (((Pair)testTypeMap.get(selectedTest)).second.equals("boolean")){
+                    isTestValueBool = true;
+                    findViewById(R.id.linearLayoutBoolResult).setVisibility(View.VISIBLE);
+                    findViewById(R.id.linearLayoutMeasuredAmount).setVisibility(View.GONE);
+                }
+                else
+                {
+                    isTestValueBool = false;
+                    findViewById(R.id.linearLayoutBoolResult).setVisibility(View.GONE);
+                    findViewById(R.id.linearLayoutMeasuredAmount).setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        // THE FOLLOWING BUTTON IS FOR TESTING PURPOSES ONLY
         findViewById(R.id.buttonAutofill).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -101,21 +128,13 @@ public class NewMessage extends AppCompatActivity {
         final String patientName = this.patientName.getText().toString().trim();
         final String testName = ((Pair)(this.testTypeMap.get(this.testName.getText().toString().trim()))).first.toString(); // Convert the test-type name in the form to the test-type ID
         final String componentName = this.componentName.getText().toString().trim();
-        final String measuredAmount = this.measuredAmount.getText().toString().trim();
-        //final int isUrgent = (this.isUrgent.isChecked()?1:0);
-        final String isUrgent = Boolean.toString(this.isUrgent.isChecked()); //TODO Will sending bool as string be saved in the DB as 0/1 ?
+        final String isUrgent = (this.isUrgent.isChecked()?"1":"0");
         final String comments = this.comments.getText().toString().trim();
-
-        /* //TODO check if it's OK to use those as strings when sending them to the query using the hashmap
-        final int recipient = Integer.parseInt(this.recipient.toString().trim());
-        final String patientId = this.patientId.toString().trim();
-        final String patientName = this.patientName.toString().trim();
-        final String testName = this.testName.toString().trim();
-        final String componentName = this.componentName.toString().trim();
-        final float measuredAmount = Float.parseFloat(this.measuredAmount.toString().trim());
-        final Boolean isUrgent = Boolean.parseBoolean(this.isUrgent.toString().trim());
-        final String comments = this.comments.toString().trim();
-        */
+        // Set both numeric and boolean test results (as we can't define constants inside a condition) and use only one of them down the road
+        final String measuredAmount = this.measuredAmount.getText().toString().trim();
+        int selectedRadio = ((RadioGroup) findViewById(R.id.radioGroupBoolResult)).getCheckedRadioButtonId();
+        RadioButton rb = findViewById(selectedRadio);
+        final String booleanResult = (rb != null ? (rb.getText().equals("חיובית")?"1":"0") : "");
 
         success = false;
         progressDialog.setMessage("ההודעה שלך נשלחת.\nנא להמתין לאישור...");
@@ -135,7 +154,6 @@ public class NewMessage extends AppCompatActivity {
                         success = true;
                         Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
                     }
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -164,9 +182,15 @@ public class NewMessage extends AppCompatActivity {
                 params.put("patientName",patientName);
                 params.put("testType",testName);
                 params.put("componentName",componentName);
-                params.put("boolValue", "false");   //TODO implement option to make a boolean test result value
-                params.put("measuredAmount",measuredAmount);
-                params.put("isUrgent",isUrgent);    //TODO FIX this, 0/1 value doesn't enter the DB table
+                params.put("boolValue", "false");
+                if (isTestValueBool) {     // Use either a numeric or boolean result, depending on the test type
+                    params.put("isValueBool", Boolean.toString(isTestValueBool));
+                    params.put("testResultValue", booleanResult);
+                } else {
+                    params.put("isValueBool", Boolean.toString(isTestValueBool));
+                    params.put("testResultValue", measuredAmount);
+                }
+                params.put("isUrgent",isUrgent);
                 params.put("comments",comments);
                 return params;
             }

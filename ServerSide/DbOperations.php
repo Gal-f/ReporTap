@@ -91,13 +91,13 @@ class DbOperations
         return $response;
     }
 
-    function send_message($sender, $department, $patientId, $patientName, $testType, $componentName, $boolValue, $measuredAmount, $isUrgent, $comments)
+    function send_message($sender, $department, $patientId, $patientName, $testType, $componentName, $isValueBool, $testResultValue, $isUrgent, $comments)
     {
         $response = array();
-        $message = array($department, $patientId, $patientName, $testType, $componentName, $measuredAmount, $isUrgent, $comments);
-        $stmt = $this->conn->prepare("INSERT INTO `messages`(`patient_ID`, `test_type`, `component`, `value_boolean`, `value_numeric`, `text`, `is_urgent`, `sender_user`, `recipient_dept`) VALUES (?,?,?,?,?,?,?,?,?);");
+        $message = array($department, $patientId, $patientName, $testType, $componentName, $isValueBool, $testResultValue, $isUrgent, $comments);
+        $stmt = $this->conn->prepare("INSERT INTO `messages`(`patient_ID`, `test_type`, `component`, `is_value_boolean`, `test_result_value`, `text`, `is_urgent`, `sender_user`, `recipient_dept`) VALUES (?,?,?,?,?,?,?,?,?);");
         //TODO Change test_type from simple string to relation with test_types table
-        $stmt->bind_param("sisidsiii", $patientId, $testType, $componentName, $boolValue, $measuredAmount, $comments, $isUrgent, $sender, $department); //If there's a problem with sqli query, try changing boolean columns to tinyint and use 'i' instead of 's' in the first parameter for bind_param.
+        $stmt->bind_param("sisidsiii", $patientId, $testType, $componentName, $isValueBool, $testResultValue, $comments, $isUrgent, $sender, $department); //If there's a problem with sqli query, try changing boolean columns to tinyint and use 'i' instead of 's' in the first parameter for bind_param.
         if ($stmt->execute()) {
             $response['error'] = false;
             $response['message'] = 'Message sent successfully';
@@ -108,6 +108,7 @@ class DbOperations
         }
         return $response;
     }
+
     function inboxdr($department)
     {
         $response = array();
@@ -143,6 +144,11 @@ class DbOperations
         }
         return $response;
         
+    }
+
+    function getMessage($messageID){
+        //TODO Join Messages & Test-types tables on testType field, in order to get boolean or numeric value.
+        // If this works, remove field is_value_bool from table Messages and change function send_message accordingly.
     }
 
     function getDeptsAndTests()
