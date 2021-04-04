@@ -8,40 +8,64 @@
     android:background="#E1DCDC"
     android:baselineAligned="false">
 
-    <ImageView
-        android:id="@+id/profile"
-        android:layout_width="40dp"
-        android:layout_height="75dp"
-        android:contentDescription="profile"
-        app:layout_constraintEnd_toStartOf="@+id/settings"
-        app:srcCompat="@drawable/profile"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteY="0dp" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:visibility="visible"
+        android:layoutDirection="rtl"
+        android:orientation="horizontal" >
 
-    <ImageView
+        <ImageView
 
-        android:id="@+id/settings"
-        android:layout_width="66dp"
-        android:layout_height="70dp"
-        android:layout_marginTop="4dp"
-        android:contentDescription="settings"
-        app:layout_constraintEnd_toStartOf="@+id/logo"
-        app:layout_constraintHorizontal_bias="0.61"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_setting_foreground" />
+            android:id="@+id/logo"
+            android:layout_width="66dp"
+            android:layout_height="70dp"
+            android:layout_marginEnd="14dp"
+            android:contentDescription="logo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.993"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/logo" />
 
-    <ImageView
+        <ImageView
+            android:id="@+id/profile"
+            android:layout_width="40dp"
+            android:layout_height="75dp"
+            android:layout_gravity="left"
+            android:layout_marginRight="135dp"
+            android:contentDescription="profile"
+            app:layout_constraintEnd_toStartOf="@+id/settings"
+            app:srcCompat="@drawable/profile"
+            tools:ignore="MissingConstraints"
+            tools:layout_editor_absoluteY="0dp" />
 
-        android:id="@+id/logo"
-        android:layout_width="66dp"
-        android:layout_height="70dp"
-        android:layout_marginEnd="14dp"
-        android:contentDescription="logo"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.993"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/logo" />
+        <ImageView
+
+            android:id="@+id/settings"
+            android:layout_width="66dp"
+            android:layout_height="70dp"
+            android:layout_gravity="right|left"
+            android:layout_marginTop="4dp"
+            android:contentDescription="settings"
+            app:layout_constraintEnd_toStartOf="@+id/logo"
+            app:layout_constraintHorizontal_bias="0.61"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_setting_foreground" />
+
+
+        <TextView
+            android:id="@+id/textViewRegister"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:layout_marginBottom="8dp"
+            android:gravity="center_horizontal"
+            android:text="התנתק "
+            android:textAlignment="center"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

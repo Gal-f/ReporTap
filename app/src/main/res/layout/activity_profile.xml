@@ -130,6 +130,7 @@
             android:id="@+id/buttonNewMessage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="שליחת מסר חדש" />
+            android:text="שליחת מסר חדש"
+            android:textColorHighlight="#A61A1A" />
     </LinearLayout>
 </RelativeLayout>
