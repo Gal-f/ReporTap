@@ -90,7 +90,7 @@
                     android:layout_width="24dp"
                     android:layout_height="57dp"
                     android:layout_weight="1"
-                    app:srcCompat="@drawable/urgenticondisabled" />
+                    app:srcCompat="@drawable/greyexclamation_trans" />
 
                 <CheckBox
                     android:id="@+id/checkBox"

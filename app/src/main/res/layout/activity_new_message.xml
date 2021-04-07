@@ -392,9 +392,9 @@
                 <ImageView
                     android:id="@+id/imageViewUrgent"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="90px"
                     android:layout_weight="0.1"
-                    app:srcCompat="@drawable/urgenticondisabled" />
+                    app:srcCompat="@drawable/greyexclamation_trans" />
                 <Space
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"

@@ -12,7 +12,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ReporTap"
         android:usesCleartextTraffic="true">
-        <activity android:name="il.reportap.HeaderActivity"></activity>
+        <activity android:name="il.reportap.ViewMessage" />
+        <activity android:name="il.reportap.HeaderActivity" />
         <activity android:name="il.reportap.InboxDoctor" />
         <activity android:name="il.reportap.NewMessage" />
         <activity android:name="il.reportap.ProfileActivity" />
