@@ -150,14 +150,15 @@ class DbOperations
         //TODO Join Messages & Test-types tables on testType field, in order to get boolean or numeric value.
         // If this works, remove field is_value_bool from table Messages and change function send_message accordingly.
         $response = array();
-        $stmt = $this->conn->prepare("SELECT M.ID, M.sent_time, M.patient_ID, T.test_type, T.name, M.is_value_boolean, M.test_result_value, M.text, M.component, M.is_urgent, M.sender_user FROM messages as M JOIN test_types as T ON M.test_type=T.ID WHERE M.ID = ?");
+        $stmt = $this->conn->prepare("SELECT M.ID, M.sent_time, M.patient_ID, T.test_type, T.name, T.measurement_unit M.is_value_boolean, M.test_result_value, M.text, M.component, M.is_urgent, M.sender_user FROM messages as M JOIN test_types as T ON M.test_type=T.ID WHERE M.ID = ?");
         //TODO Join users on message.sender_user=users.ID and add to SELECT the user name and department, to be displayed in the message screen
+        //TODO perform the last TODO again for patient name
         $stmt->bind_param("s", $messageID);
         $stmt->execute();
         $stmt->store_result();
         if ($stmt->num_rows > 0){
             if ($stmt->num_rows < 2){
-                $stmt->bind_result($messageID, $sentTime, $patientId, $testID, $testName, $isValueBool, $testResultValue, $comments, $componentName, $isUrgent, $sender);
+                $stmt->bind_result($messageID, $sentTime, $patientId, $testID, $testName, $measurementUnit, $isValueBool, $testResultValue, $comments, $componentName, $isUrgent, $sender);
                 $stmt->fetch();
                 $requestedMessage = array(
                     'messageID' => $messageID,
@@ -165,6 +166,7 @@ class DbOperations
                     'patientId' => $patientId,
                     'testID' => $testID,
                     'testName' => $testName,
+                    'measurementUnit' => $measurementUnit,
                     'isValueBool' => $isValueBool,
                     'testResultValue' => $testResultValue,
                     'comments' => $comments,
@@ -230,6 +232,21 @@ class DbOperations
                 $response['message'] .= ', Test types pulled successfully';
                 $response['testTypes'] = $testsTypes;
             }
+        }
+        return $response;
+    }
+
+    function markAsRead($messageID, $userID){
+        $response = array();
+        $stmt = $this->conn->prepare("INSERT INTO messages (confirm_date, confirm_user) VALUES (?,?) WHERE messages.ID = ?;");
+        $now = date_timestamp_get(); //TODO find how to address DATETIME.NOW in PHP.
+        $stmt->bind_param("sss", $now, $userID, $messageID);
+        if ($stmt->execute()) {
+            $response['error'] = false;
+            $response['message'] = 'Message marked as read successfully';
+        } else {
+            $response['error'] = true;
+            $response['message'] = 'Error while trying to mark the message as read';
         }
         return $response;
     }
