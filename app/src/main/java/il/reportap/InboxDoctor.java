@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import android.view.Display;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -61,12 +62,11 @@ public class InboxDoctor extends AppCompatActivity {
                     try {
                         JSONObject repObj = new JSONObject(response);
                         JSONArray repArray = repObj.getJSONArray("report");
-                        JSONObject jObg = new JSONObject();
-                        ModelActivity modelActivity = new ModelActivity();
 
-                        for(int i=0; i<=2; i++){
-
-                            jObg = repArray.getJSONObject(i);
+                        for(int i=0; i<repArray.length(); i++){
+                            ModelActivity modelActivity = new ModelActivity();
+                            JSONObject jObg = new JSONObject();
+                            jObg= repArray.getJSONObject(i);
                             modelActivity.setId(jObg.getInt("id"));
                             modelActivity.setSentTime(jObg.getString("sent_time"));
                             modelActivity.setPatientId(jObg.getString("patient_id"));
@@ -82,6 +82,7 @@ public class InboxDoctor extends AppCompatActivity {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+
                     adapter = new AdapterActivity(modelActivityList,getApplicationContext());
                     recyclerView.setAdapter(adapter);
 
@@ -102,7 +103,6 @@ public class InboxDoctor extends AppCompatActivity {
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
     }
-
 
 
 

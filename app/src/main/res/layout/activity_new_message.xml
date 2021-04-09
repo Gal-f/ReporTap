@@ -127,7 +127,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="0.8"
                 android:layout_height="2dp"
-                android:background="#74C043" /><!--TODO: Replace this View with horizontalLine_h2 from class Design -->
+                android:background="@color/divider" /><!--TODO: Replace this View with horizontalLine_h2 from class Design -->
             </LinearLayout>
 
             <TextView
@@ -229,7 +229,7 @@
                     android:layout_height="2dp"
                     android:layout_marginRight="10dp"
                     android:layout_weight="0.8"
-                    android:background="#74C043" /><!--TODO: Replace this View with horizontalLine_h2 from class Design -->
+                    android:background="@color/divider" /><!--TODO: Replace this View with horizontalLine_h2 from class Design -->
             </LinearLayout>
 
             <TextView

@@ -1,4 +1,5 @@
 package il.reportap;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
@@ -6,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.loginregister.R;
@@ -29,14 +31,17 @@ public class AdapterActivity extends RecyclerView.Adapter<AdapterActivity.ViewHo
         return new ViewHolder(v);
     }
 
+    @SuppressLint("ResourceAsColor")
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        ModelActivity modelActivity = modelActivityList.get(position);
+            ModelActivity modelActivity = modelActivityList.get(position);
 
-        holder.sentTime.setText(modelActivity.getSentTime());
-        holder.patientId.setText(modelActivity.getPatientId());
-        holder.testName.setText(modelActivity.getTestName());
-        holder.isUrgent.setText(String.valueOf(modelActivity.getIsUrgent()));
+            holder.sentTime.setText(modelActivity.getSentTime());
+            holder.patientId.setText(modelActivity.getPatientId());
+            holder.testName.setText(modelActivity.getTestName());
+            if (Integer.valueOf(modelActivity.getIsUrgent())==1) {
+                holder.isUrgent.setImageResource(R.drawable.redurgenticon);
+            }
     }
 
     @Override
@@ -46,7 +51,8 @@ public class AdapterActivity extends RecyclerView.Adapter<AdapterActivity.ViewHo
 
     public class ViewHolder extends RecyclerView.ViewHolder{
 
-        public TextView sentTime, patientId,testName,isUrgent;
+        public TextView sentTime, patientId,testName;
+        public ImageView isUrgent;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -54,7 +60,7 @@ public class AdapterActivity extends RecyclerView.Adapter<AdapterActivity.ViewHo
             sentTime = (TextView)itemView.findViewById(R.id.sentTime);
             patientId = (TextView)itemView.findViewById(R.id.patientId);
             testName = (TextView)itemView.findViewById(R.id.testName);
-            isUrgent = (TextView)itemView.findViewById(R.id.isUrgent);
+            isUrgent = (ImageView) itemView.findViewById(R.id.isUrgent);
         }
     }
 }
