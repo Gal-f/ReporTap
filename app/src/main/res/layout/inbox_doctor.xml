@@ -9,16 +9,16 @@
     android:baselineAligned="false"
     tools:context="il.reportap.InboxDoctor">
 
-    <include layout="@layout/activity_header" />
+    <!-- <include layout="@layout/activity_header" />
 
-    <!--
-        android:id="@+id/imageView9"
-        android:layout_width="83dp"
-        android:layout_height="71dp"
-        tools:layout_editor_absoluteX="66dp"
-        tools:layout_editor_absoluteY="0dp"
-        tools:ignore="MissingConstraints" />
-    app:srcCompat="@drawable/ic_setting1_foreground" -->
+
+         android:id="@+id/imageView9"
+         android:layout_width="83dp"
+         android:layout_height="71dp"
+         tools:layout_editor_absoluteX="66dp"
+         tools:layout_editor_absoluteY="0dp"
+         tools:ignore="MissingConstraints" />
+     app:srcCompat="@drawable/ic_setting1_foreground" -->
 
 
     <LinearLayout

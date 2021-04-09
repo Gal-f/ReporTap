@@ -1,22 +1,15 @@
 package il.reportap;
 
+import android.os.Bundle;
+import android.widget.Toast;
+
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-
-import android.os.Bundle;
-import android.view.Display;
-import android.view.View;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.loginregister.R;
@@ -25,13 +18,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.time.Clock;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class InboxDoctor extends AppCompatActivity {
+public class InboxDoctor extends OptionsMenu {
 
     private RecyclerView recyclerView;
     private AdapterActivity adapter;
@@ -102,10 +94,5 @@ public class InboxDoctor extends AppCompatActivity {
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
     }
-
-
-
-
-
 
 }
