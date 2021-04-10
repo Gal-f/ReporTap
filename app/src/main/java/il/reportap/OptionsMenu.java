@@ -30,9 +30,9 @@ public class OptionsMenu extends AppCompatActivity {
             case R.id.logout:
                 SharedPrefManager.getInstance(getApplicationContext()).logout();
                 break;
-                case R.id.send_message:
-                            startActivity(new Intent(getApplicationContext(), NewMessage.class));
-                            break;
+            case R.id.send_message:
+                startActivity(new Intent(getApplicationContext(), NewMessage.class));
+                break;
 
             default:
                 throw new IllegalStateException("Unexpected value: " + (item.getItemId()));
