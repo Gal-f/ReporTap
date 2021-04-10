@@ -1,8 +1,12 @@
 package il.reportap;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.GradientDrawable;
+
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,7 +44,8 @@ public class AdapterActivity extends RecyclerView.Adapter<AdapterActivity.ViewHo
             holder.patientId.setText(modelActivity.getPatientId());
             holder.testName.setText(modelActivity.getTestName());
             if (Integer.valueOf(modelActivity.getIsUrgent())==1) {
-                holder.isUrgent.setImageResource(R.drawable.redurgenticon);
+               holder.isUrgent.setColorFilter(ContextCompat.getColor(context, R.color.red),
+                       PorterDuff.Mode.MULTIPLY);
             }
     }
 

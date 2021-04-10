@@ -69,7 +69,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 card_view:layout_constraintEnd_toEndOf="parent"
-                card_view:srcCompat="@drawable/urgenticondisabled"
+                card_view:srcCompat="@drawable/ic_urgent"
                 tools:layout_editor_absoluteY="5dp" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
