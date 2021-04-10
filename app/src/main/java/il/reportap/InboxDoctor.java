@@ -4,8 +4,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-
 import android.os.Bundle;
 import android.view.Display;
 import android.view.View;
@@ -37,7 +35,7 @@ public class InboxDoctor extends AppCompatActivity {
     private RecyclerView recyclerView;
     private AdapterActivity adapter;
     private List<ModelActivity> modelActivityList;
-
+    private List<ModelActivity> urgentList;
     private HashMap<Integer,String> repMap;
 
     @Override
@@ -102,8 +100,32 @@ public class InboxDoctor extends AppCompatActivity {
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
-    }
 
+        CheckBox chkBx = (CheckBox)findViewById(R.id.checkBox);
+        chkBx.setOnClickListener(new View.OnClickListener(){
+
+
+            @Override
+            public void onClick(View v) {
+                if(chkBx.isChecked()){
+                    urgentList= new ArrayList<>();
+                    for (int i=0; i<modelActivityList.size(); i++)
+                    {
+                        if (modelActivityList.get(i).getIsUrgent()==1)
+                        {
+                            urgentList.add(modelActivityList.get(i));
+                        }
+                    }
+                    adapter = new AdapterActivity(urgentList,getApplicationContext());
+                }
+                else {
+                    adapter = new AdapterActivity(modelActivityList,getApplicationContext());
+                }
+                recyclerView.setAdapter(adapter);
+
+            }
+        });
+    }
 
 
 
