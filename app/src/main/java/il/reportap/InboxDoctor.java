@@ -4,8 +4,19 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.graphics.PorterDuff;
+import android.os.Bundle;
+import android.view.Display;
+import android.view.View;
+import android.widget.CheckBox;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -28,7 +39,7 @@ public class InboxDoctor extends OptionsMenu {
     private RecyclerView recyclerView;
     private AdapterActivity adapter;
     private List<ModelActivity> modelActivityList;
-
+    private List<ModelActivity> urgentList;
     private HashMap<Integer,String> repMap;
 
     @Override
@@ -53,12 +64,11 @@ public class InboxDoctor extends OptionsMenu {
                     try {
                         JSONObject repObj = new JSONObject(response);
                         JSONArray repArray = repObj.getJSONArray("report");
-                        JSONObject jObg = new JSONObject();
-                        ModelActivity modelActivity = new ModelActivity();
 
-                        for(int i=0; i<=2; i++){
-
-                            jObg = repArray.getJSONObject(i);
+                        for(int i=0; i<repArray.length(); i++){
+                            ModelActivity modelActivity = new ModelActivity();
+                            JSONObject jObg = new JSONObject();
+                            jObg= repArray.getJSONObject(i);
                             modelActivity.setId(jObg.getInt("id"));
                             modelActivity.setSentTime(jObg.getString("sent_time"));
                             modelActivity.setPatientId(jObg.getString("patient_id"));
@@ -74,6 +84,7 @@ public class InboxDoctor extends OptionsMenu {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+
                     adapter = new AdapterActivity(modelActivityList,getApplicationContext());
                     recyclerView.setAdapter(adapter);
 
@@ -93,6 +104,41 @@ public class InboxDoctor extends OptionsMenu {
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
+
+        CheckBox chkBx = (CheckBox)findViewById(R.id.checkBox);
+        chkBx.setOnClickListener(new View.OnClickListener(){
+
+
+            @Override
+            public void onClick(View v) {
+                if(chkBx.isChecked()){
+                    urgentList= new ArrayList<>();
+                    for (int i=0; i<modelActivityList.size(); i++)
+                    {
+                        if (modelActivityList.get(i).getIsUrgent()==1)
+                        {
+                            urgentList.add(modelActivityList.get(i));
+                        }
+                    }
+                    adapter = new AdapterActivity(urgentList,getApplicationContext());
+                    ImageView img = (ImageView)findViewById(R.id.imageView3);
+                    img.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.red),
+                            PorterDuff.Mode.MULTIPLY);
+                }
+                else {
+                    adapter = new AdapterActivity(modelActivityList,getApplicationContext());
+                    ImageView img = (ImageView)findViewById(R.id.imageView3);
+                    img.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.gray),
+                            PorterDuff.Mode.MULTIPLY);
+
+                }
+                recyclerView.setAdapter(adapter);
+
+            }
+        });
     }
+
+
+
 
 }

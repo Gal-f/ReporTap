@@ -9,16 +9,10 @@
     tools:context="il.reportap.InboxDoctor"
     android:background="#E1DCDC">
 
-    <!-- <include layout="@layout/activity_header" />
 
 
-         android:id="@+id/imageView9"
-         android:layout_width="83dp"
-         android:layout_height="71dp"
-         tools:layout_editor_absoluteX="66dp"
-         tools:layout_editor_absoluteY="0dp"
-         tools:ignore="MissingConstraints" />
-     app:srcCompat="@drawable/ic_setting1_foreground" -->
+
+
 
 
     <LinearLayout
@@ -70,7 +64,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="55dp"
         android:layout_marginEnd="1dp"
-        android:background="@color/lightBlue"
+        android:background="@color/background"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -89,7 +83,8 @@
                     android:layout_width="24dp"
                     android:layout_height="57dp"
                     android:layout_weight="1"
-                    app:srcCompat="@drawable/urgenticondisabled" />
+                    app:srcCompat="@drawable/ic_urgent"
+                    />
 
                 <CheckBox
                     android:id="@+id/checkBox"
@@ -97,7 +92,8 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:paddingRight="5dp"
-                    android:text="@string/inboxEmerg" />
+                    android:text="@string/inboxEmerg"
+                   />
 
                 <TextView
                     android:id="@+id/textView"
@@ -112,9 +108,8 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:divider="#FFB74D"
-                android:dividerHeight="1dp" />
+                android:layout_height="wrap_content"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 
         </LinearLayout>
