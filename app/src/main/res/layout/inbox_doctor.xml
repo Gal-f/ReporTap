@@ -90,7 +90,8 @@
                     android:layout_width="24dp"
                     android:layout_height="57dp"
                     android:layout_weight="1"
-                    app:srcCompat="@drawable/urgenticondisabled" />
+                    app:srcCompat="@drawable/ic_urgent"
+                    />
 
                 <CheckBox
                     android:id="@+id/checkBox"
@@ -114,9 +115,8 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:divider="#FFB74D"
-                android:dividerHeight="3dp"/>
+                android:layout_height="wrap_content"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
 
         </LinearLayout>

@@ -11,4 +11,5 @@
     <color name="red">#A54646</color>
     <color name="headercolor">#E1DCDC</color>
     <color name="divider">#74C043</color>
+    <color name="gray">#474545</color>
 </resources>
