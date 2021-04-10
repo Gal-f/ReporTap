@@ -30,6 +30,14 @@ public class MainActivity extends AppCompatActivity {
         editTextPassword = (EditText) findViewById(R.id.editTextPassword);
 
 
+        //TODO change to inbox doctor/inbox lab based on the job title.
+        if (SharedPrefManager.getInstance(this).isLoggedIn()) {
+            finish();
+            startActivity(new Intent(this, InboxDoctor.class));
+            return;
+        }
+
+
         //if user presses on login
         //calling the method login
         findViewById(R.id.buttonLogin).setOnClickListener(new View.OnClickListener() {

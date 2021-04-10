@@ -3,14 +3,11 @@ package il.reportap;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.TextView;
-import androidx.appcompat.app.AppCompatActivity;
-
 
 import com.example.loginregister.R;
 
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileActivity extends OptionsMenu {
 
     TextView textViewEmployeeNumber,
             textViewFullName, textViewJobTitle, textViewPhoneNumber, textViewDepartment;
@@ -49,25 +46,6 @@ public class ProfileActivity extends AppCompatActivity {
             case 2:
                 textViewDepartment.setText("מחלקה: פנימית א");
         }
-
-        //when the user presses logout button
-        //calling the logout method
-        findViewById(R.id.buttonLogout).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-                SharedPrefManager.getInstance(getApplicationContext()).logout();
-            }
-        });
-
-        findViewById(R.id.buttonNewMessage).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-                startActivity(new Intent(getApplicationContext(), NewMessage.class));
-            }
-        });
-
 
     }
 }

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layoutDirection="rtl"
+    >
+
+
+    <item
+        android:title="profile"
+        android:id="@+id/profile"
+        android:contentDescription="logo"
+        android:icon="@drawable/profile"
+        app:showAsAction="always"
+        />
+
+    <item
+        android:title="settings"
+        android:id="@+id/settings"
+        android:contentDescription="logo"
+        android:icon="@drawable/settings"
+        app:showAsAction="always" />
+
+    <item
+        android:title="התנתק"
+        android:id="@+id/logout"
+        android:contentDescription="logout"
+        app:showAsAction="always"
+        />
+
+    <item
+        android:title="שלח מסר"
+        android:id="@+id/send_message"
+        android:contentDescription="logout"
+        app:showAsAction="always"
+        />
+
+
+</menu>
+
