@@ -2,12 +2,16 @@ package il.reportap;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.Display;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -117,9 +121,16 @@ public class InboxDoctor extends AppCompatActivity {
                         }
                     }
                     adapter = new AdapterActivity(urgentList,getApplicationContext());
+                    ImageView img = (ImageView)findViewById(R.id.imageView3);
+                    img.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.red),
+                            PorterDuff.Mode.MULTIPLY);
                 }
                 else {
                     adapter = new AdapterActivity(modelActivityList,getApplicationContext());
+                    ImageView img = (ImageView)findViewById(R.id.imageView3);
+                    img.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.gray),
+                            PorterDuff.Mode.MULTIPLY);
+
                 }
                 recyclerView.setAdapter(adapter);
 
