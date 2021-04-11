@@ -8,6 +8,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Pair;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -29,7 +31,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ViewMessage extends AppCompatActivity {
+public class ViewMessage extends OptionsMenu {
 
     private String messageID; //TODO get this from the previous screen somehow
     private TextView sentTime, senderName, patientId, patientName, testName, componentName, measuredAmountValue, measurementUnit, boolValue, comments;
@@ -58,42 +60,22 @@ public class ViewMessage extends AppCompatActivity {
         this.comments = findViewById(R.id.textViewComments);
         this.isUrgent = findViewById(R.id.imageViewUrgent);
 
-        getMessage(this.messageID);
+        // FOR TESTING ONLY. REMOVE THIS WHEN DONE.
+        Button button =findViewById(R.id.ButtonTestMessageIDBox);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                messageID = ((EditText)findViewById(R.id.testMessageIDBox)).getText().toString();
+                getMessage(messageID);
+            }
+        });
+
+        //END TESTING ONLY
+        //getMessage(this.messageID);
+
         //TODO add other test results for the same patient (nice to have for version #1)
 
         // this.isTestValueBool = ((Pair)testTypeMap.get(this.testName.getText())).second.equals("boolean"); //TODO skip the hashmaps? isTestValueBool gets value in getMessage() already
-        if (this.isTestValueBool){
-            findViewById(R.id.linearLayoutBoolResult).setVisibility(View.VISIBLE);
-            findViewById(R.id.linearLayoutMeasuredAmount).setVisibility(View.GONE);
-        } else {
-            findViewById(R.id.linearLayoutBoolResult).setVisibility(View.GONE);
-            findViewById(R.id.linearLayoutMeasuredAmount).setVisibility(View.VISIBLE);
-        }
-
-        this.wasRead =  findViewById(R.id.imageButtonRead);
-        this.reply = findViewById(R.id.imageButtonReply);
-        this.forward = findViewById(R.id.imageButtonForward);
-
-        this.wasRead.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                markAsRead(messageID, SharedPrefManager.getInstance(getApplicationContext()).getUser().getEmployeeNumber());
-            }
-        });
-        this.reply.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                reply(messageID);
-
-            }
-        });
-        this.forward.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                forward(messageID);
-            }
-        });
-
         this.progressDialog = new ProgressDialog(this);
     }
 
@@ -125,7 +107,7 @@ public class ViewMessage extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
+                        //TODO Handle error response
                     }
                 });
         RequestQueue requestQueue = Volley.newRequestQueue(this);
@@ -144,24 +126,31 @@ public class ViewMessage extends AppCompatActivity {
                         JSONObject requestedMessage = jsonObject.getJSONObject("requestedMessage");
                         //patientName.setText(requestedMessage.getString("patientName"));
                         sentTime.setText(requestedMessage.getString("sentTime"));
-                        patientId.setText(requestedMessage.getString("patientID"));
+                        patientId.setText(requestedMessage.getString("patientId"));
                         testName.setText(requestedMessage.getString("testName"));
                         componentName.setText(requestedMessage.getString("componentName"));
-                        isTestValueBool = requestedMessage.getBoolean("isValueBool"); //TODO check if this should be getString() instead
+                        isTestValueBool = requestedMessage.getString("isValueBool").equals("1");
                         if (isTestValueBool){
                             boolValue.setText((requestedMessage.getString("testResultValue")).equals("1") ? "חיובית" : "שלילית");
                         } else {
                             measuredAmountValue.setText(requestedMessage.getString("testResultValue"));
                             measurementUnit.setText(requestedMessage.getString("measurementUnit"));
                         }
-                        comments.setText(requestedMessage.getString("comments"));
-                        if (requestedMessage.getBoolean("isUrgent")){
-                            isUrgent.setImageResource(R.drawable.redexclamation_trans); //TODO find how to change the image src
+                        comments.setText(requestedMessage.getString("comments")); //TODO resize the textview to fit all the text
+                        if (requestedMessage.getString("isUrgent").equals("1")){
+                            isUrgent.setImageResource(R.drawable.redexclamation_trans);
                             ((TextView)findViewById(R.id.textViewUrgent)).setText("דחוף");
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                                 isUrgent.setTooltipText("דחוף");
                             }
+                        } else {
+                            isUrgent.setImageResource(R.drawable.greyexclamation_trans);    //TODO resize grey and red triangles to same width
+                            ((TextView)findViewById(R.id.textViewUrgent)).setText("לא דחוף");
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                isUrgent.setTooltipText("לא דחוף");
+                            }
                         }
+                        updateFields();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -170,7 +159,7 @@ public class ViewMessage extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                //TODO Handle error response
             }
         }) {
             @Nullable
@@ -183,6 +172,40 @@ public class ViewMessage extends AppCompatActivity {
         };
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
+    }
+
+    public void updateFields(){
+        if (isTestValueBool){
+            findViewById(R.id.linearLayoutBoolResult).setVisibility(View.VISIBLE);
+            findViewById(R.id.linearLayoutMeasuredAmount).setVisibility(View.GONE);
+        } else {
+            findViewById(R.id.linearLayoutBoolResult).setVisibility(View.GONE);
+            findViewById(R.id.linearLayoutMeasuredAmount).setVisibility(View.VISIBLE);
+        }
+
+        wasRead =  findViewById(R.id.imageButtonRead);
+        reply = findViewById(R.id.imageButtonReply);
+        forward = findViewById(R.id.imageButtonForward);
+
+        wasRead.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                markAsRead(messageID, SharedPrefManager.getInstance(getApplicationContext()).getUser().getEmployeeNumber());
+            }
+        });
+        reply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                reply(messageID);
+
+            }
+        });
+        forward.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                forward(messageID);
+            }
+        });
     }
 
     public void markAsRead(String messageID, String userID){
