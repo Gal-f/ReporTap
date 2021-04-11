@@ -1,10 +1,7 @@
 package il.reportap;
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.graphics.drawable.GradientDrawable;
 
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,33 +14,32 @@ import android.widget.TextView;
 import com.example.loginregister.R;
 
 import java.util.List;
-import java.util.Random;
 
 public class AdapterActivity extends RecyclerView.Adapter<AdapterActivity.ViewHolder>{
-    private List<ModelActivity> modelActivityList ;
+    private List<ModelActivityInboxDr> modelActivityInboxDrList;
     private Context context;
 
-    public AdapterActivity(List<ModelActivity> modelActivityList, Context context) {
-        this.modelActivityList = modelActivityList;
+    public AdapterActivity(List<ModelActivityInboxDr> modelActivityInboxDrList, Context context) {
+        this.modelActivityInboxDrList = modelActivityInboxDrList;
         this.context = context;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.row_layout,parent,false);
+                .inflate(R.layout.row_layout_inbox,parent,false);
         return new ViewHolder(v);
     }
 
     @SuppressLint("ResourceAsColor")
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-            ModelActivity modelActivity = modelActivityList.get(position);
+            ModelActivityInboxDr modelActivityInboxDr = modelActivityInboxDrList.get(position);
 
-            holder.sentTime.setText(modelActivity.getSentTime());
-            holder.patientId.setText(modelActivity.getPatientId());
-            holder.testName.setText(modelActivity.getTestName());
-            if (Integer.valueOf(modelActivity.getIsUrgent())==1) {
+            holder.sentTime.setText(modelActivityInboxDr.getSentTime());
+            holder.patientId.setText(modelActivityInboxDr.getPatientId());
+            holder.testName.setText(modelActivityInboxDr.getTestName());
+            if (Integer.valueOf(modelActivityInboxDr.getIsUrgent())==1) {
                holder.isUrgent.setColorFilter(ContextCompat.getColor(context, R.color.red),
                        PorterDuff.Mode.MULTIPLY);
             }
@@ -51,7 +47,7 @@ public class AdapterActivity extends RecyclerView.Adapter<AdapterActivity.ViewHo
 
     @Override
     public int getItemCount() {
-        return modelActivityList.size();
+        return modelActivityInboxDrList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{

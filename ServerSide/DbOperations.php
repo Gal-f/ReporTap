@@ -145,6 +145,42 @@ class DbOperations
         return $response;
         
     }
+    function sentdr($works_in_dept){
+        $response = array();
+        $query="SELECT M.ID, M.sent_time, M.text, U.full_name, M.patient_ID, T.name, (CASE WHEN M.confirm_time IS NULL THEN 0 ELSE M.confirm_time END) AS confirm_time FROM messages as M JOIN test_types as T ON M.test_type=T.ID JOIN users as U ON M.sender_user=U.employee_ID WHERE U.works_in_dept = ? order by M.sent_time desc ";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("i", $works_in_dept);
+
+        $stmt->execute();
+
+        $stmt->store_result();
+        $rows=$stmt->num_rows;
+
+        if ($stmt->num_rows > 0) {
+
+            while ($rows>0){
+                $stmt->bind_result($id, $sentTime, $text,$fullNameU, $patientId, $testName, $confirmTime);
+                $stmt->fetch();
+            
+                $report[$stmt->num_rows-$rows] = array('id' =>$id,
+                    'sent_time' => $sentTime,
+                    'text' =>$text,
+                    'sender_name' => $fullNameU,
+                    'patient_id' => $patientId,
+                    'name' => $testName,
+                    'confirm_time' => $confirmTime,
+                );
+                $rows--;
+            }
+            $response['error'] = false;
+            $response['message'] = 'new report for you';
+            $response['report'] = $report;
+        } else {
+            $response['error'] = true;
+            $response['message'] = 'שגיאה בהצגת הדיווח';
+        }
+        return $response;
+    }
 
     function getMessage($messageID){
         //TODO Join Messages & Test-types tables on testType field, in order to get boolean or numeric value.

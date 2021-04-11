@@ -53,6 +53,12 @@ if (isset($_GET['apicall'])) {
                 $response=$oper->inboxdr($_POST['department']);
             }
             break;
+        case 'sentdr':
+            $response = isTheseParametersAvailable(array('works_in_dept'));
+            if (!$response['error']){
+                $response=$oper->sentdr($_POST['works_in_dept']);
+            }
+            break;
         case 'getDeptsAndTests':
             $response = $oper->getDeptsAndTests();
             break;

@@ -4,21 +4,16 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.graphics.PorterDuff;
-import android.os.Bundle;
-import android.view.Display;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -40,9 +35,8 @@ public class InboxDoctor extends OptionsMenu {
 
     private RecyclerView recyclerView;
     private AdapterActivity adapter;
-    private List<ModelActivity> modelActivityList;
-    private List<ModelActivity> urgentList;
-    private Button btn;
+    private List<ModelActivityInboxDr> modelActivityInboxDrList;
+    private List<ModelActivityInboxDr> urgentList;
 
     @SuppressLint("ResourceAsColor")
     @Override
@@ -57,7 +51,7 @@ public class InboxDoctor extends OptionsMenu {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        modelActivityList = new ArrayList<>();
+        modelActivityInboxDrList = new ArrayList<>();
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
                 URLs.URL_INBOXDR,
                 //lambda expression
@@ -69,16 +63,16 @@ public class InboxDoctor extends OptionsMenu {
                         JSONArray repArray = repObj.getJSONArray("report");
 
                         for(int i=0; i<repArray.length(); i++){
-                            ModelActivity modelActivity = new ModelActivity();
+                            ModelActivityInboxDr modelActivityInboxDr = new ModelActivityInboxDr();
                             JSONObject jObg = new JSONObject();
                             jObg= repArray.getJSONObject(i);
-                            modelActivity.setId(jObg.getInt("id"));
-                            modelActivity.setSentTime(jObg.getString("sent_time"));
-                            modelActivity.setPatientId(jObg.getString("patient_id"));
-                            modelActivity.setTestName(jObg.getString("name"));
-                            modelActivity.setUrgent(jObg.getInt("is_urgent"));
-                            modelActivityList.add(modelActivity);
-                            System.out.println(modelActivityList.get(i).getId());
+                            modelActivityInboxDr.setId(jObg.getInt("id"));
+                            modelActivityInboxDr.setSentTime(jObg.getString("sent_time"));
+                            modelActivityInboxDr.setPatientId(jObg.getString("patient_id"));
+                            modelActivityInboxDr.setTestName(jObg.getString("name"));
+                            modelActivityInboxDr.setUrgent(jObg.getInt("is_urgent"));
+                            modelActivityInboxDrList.add(modelActivityInboxDr);
+                            System.out.println(modelActivityInboxDrList.get(i).getId());
                         }
 
 
@@ -88,7 +82,7 @@ public class InboxDoctor extends OptionsMenu {
                         e.printStackTrace();
                     }
 
-                    adapter = new AdapterActivity(modelActivityList,getApplicationContext());
+                    adapter = new AdapterActivity(modelActivityInboxDrList,getApplicationContext());
                     recyclerView.setAdapter(adapter);
 
                 },
@@ -116,11 +110,11 @@ public class InboxDoctor extends OptionsMenu {
             public void onClick(View v) {
                 if(chkBx.isChecked()){
                     urgentList= new ArrayList<>();
-                    for (int i=0; i<modelActivityList.size(); i++)
+                    for (int i = 0; i< modelActivityInboxDrList.size(); i++)
                     {
-                        if (modelActivityList.get(i).getIsUrgent()==1)
+                        if (modelActivityInboxDrList.get(i).getIsUrgent()==1)
                         {
-                            urgentList.add(modelActivityList.get(i));
+                            urgentList.add(modelActivityInboxDrList.get(i));
                         }
                     }
                     adapter = new AdapterActivity(urgentList,getApplicationContext());
@@ -129,7 +123,7 @@ public class InboxDoctor extends OptionsMenu {
                             PorterDuff.Mode.MULTIPLY);
                 }
                 else {
-                    adapter = new AdapterActivity(modelActivityList,getApplicationContext());
+                    adapter = new AdapterActivity(modelActivityInboxDrList,getApplicationContext());
                     ImageView img = (ImageView)findViewById(R.id.imageView3);
                     img.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.gray),
                             PorterDuff.Mode.MULTIPLY);
