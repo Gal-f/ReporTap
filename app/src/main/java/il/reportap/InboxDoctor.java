@@ -9,10 +9,12 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.Display;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -40,13 +42,16 @@ public class InboxDoctor extends OptionsMenu {
     private AdapterActivity adapter;
     private List<ModelActivity> modelActivityList;
     private List<ModelActivity> urgentList;
-    private HashMap<Integer,String> repMap;
+    private Button btn;
 
+    @SuppressLint("ResourceAsColor")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.inbox_doctor);
-
+        Button btn = (Button)findViewById(R.id.toDoB);
+        btn.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.stroke));
+        btn.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
 
         recyclerView = (RecyclerView)findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
@@ -58,8 +63,6 @@ public class InboxDoctor extends OptionsMenu {
                 //lambda expression
                 response -> {
 
-
-                    //repMap = new HashMap<Integer,String>();
 
                     try {
                         JSONObject repObj = new JSONObject(response);
@@ -135,6 +138,7 @@ public class InboxDoctor extends OptionsMenu {
                 recyclerView.setAdapter(adapter);
 
             }
+
         });
     }
 

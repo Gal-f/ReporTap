@@ -31,7 +31,7 @@
             android:text="@string/sent"
             android:textColor="#020202"
             app:backgroundTint="#FFFFFF"
-            app:strokeColor="#00BCD4"
+            app:strokeColor="@color/stroke"
             app:strokeWidth="2dp" />
 
         <Button
@@ -42,7 +42,7 @@
             android:text="@string/done"
             android:textColor="#020202"
             app:backgroundTint="#FFFFFF"
-            app:strokeColor="#00BCD4"
+            app:strokeColor="@color/stroke"
             app:strokeWidth="2dp" />
 
         <Button
@@ -53,7 +53,7 @@
             android:text="@string/toDo"
             android:textColor="#020202"
             app:backgroundTint="#FFFFFF"
-            app:strokeColor="#00BCD4"
+            app:strokeColor="@color/stroke"
             app:strokeWidth="2dp" />
 
     </LinearLayout>
