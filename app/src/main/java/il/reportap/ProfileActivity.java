@@ -36,8 +36,8 @@ public class ProfileActivity extends OptionsMenu {
 
         //setting the values to the textviews
         textViewEmployeeNumber.setText("מספר עובד: " + user.getEmployeeNumber());
-        textViewFullName.setText("שם מלא: " + user.getFullName());
-        textViewJobTitle.setText("תפקיד: " + user.getJobTitle());
+        textViewFullName.setText(user.getFullName());
+        textViewJobTitle.setText(user.getJobTitle());
         textViewPhoneNumber.setText("מספר טלפון: " + user.getPhoneNumber());
         switch(user.getDepartment()){
             case 1:

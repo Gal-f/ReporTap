@@ -25,7 +25,7 @@ public class OptionsMenu extends AppCompatActivity {
                 startActivity(new Intent(this, ProfileActivity.class));
                 break;
             case R.id.settings:
-                startActivity(new Intent(this, Settings.class));
+                startActivity(new Intent(this, SettingsActivity.class));
                 break;
             case R.id.logout:
                 SharedPrefManager.getInstance(getApplicationContext()).logout();
