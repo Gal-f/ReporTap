@@ -27,7 +27,7 @@ if (isset($_GET['apicall'])) {
 
                 $response = $oper->signup($password, $employeeNumber, $fullName, $jobTitle, $phoneNumber, $deptID);
             }
-            break;
+        break;
 
         case 'login':
             $response = isTheseParametersAvailable(array('employee_ID', 'password'));
@@ -38,7 +38,7 @@ if (isset($_GET['apicall'])) {
 
                 $response = $oper->login($employeeNumber, $password);
             }
-            break;
+        break;
 
         case 'newMessage':
             //TODO Don't ask for patientName, as it can be retrieved with patientId. Solve this by somehow presenting the patientName on the new message form, after typing the ID.
@@ -46,26 +46,33 @@ if (isset($_GET['apicall'])) {
             if (!$response['error']) {
                 $response = $oper->send_message($_POST['sender'], $_POST['department'], $_POST['patientId'], $_POST['patientName'], $_POST['testType'], $_POST['componentName'], $_POST['isValueBool'], $_POST['testResultValue'], $_POST['isUrgent'], $_POST['comments']);
             }
-            break;
+        break;
 
         case 'getMessage':
             $response = isTheseParametersAvailable(array('messageID'));
             if (!$response['error']){
                 $response = $oper->getMessage($_POST['messageID']);
             }
-            break;
+        break;
 
         case 'inboxdr':
             $response = isTheseParametersAvailable(array('department'));
             if (!$response['error']){
                 $response=$oper->inboxdr($_POST['department']);
             }
-            break;
+        break;
             
         case 'getDeptsAndTests':
             $response = $oper->getDeptsAndTests();
-            break;
+        break;
 
+        case 'markAsRead':
+            $response = isTheseParametersAvailable(array($messageID, $userID));
+            if (!$response['error']){
+               $response = $oper->markAsRead($_POST['messageID'], $_POST['userID']);
+            }
+        break;
+        
         default:
             $response['error'] = true;
             $response['message'] = 'Invalid Operation Called';
