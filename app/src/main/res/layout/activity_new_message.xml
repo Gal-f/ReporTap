@@ -7,10 +7,6 @@
     android:background="#E1DCDC"
     tools:context="il.reportap.NewMessage">
 
-    <include
-        android:id="@+id/include"
-        layout="@layout/activity_header" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -112,7 +108,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.6"
-                    android:text="התחילו להקליד שם מחלקה"
+                    android:hint="התחילו להקליד שם מחלקה"
                     android:textColor="@color/material_on_background_disabled"
                     android:textSize="16dp" />
                     android:textColor="@color/material_on_background_disabled"/>
@@ -127,7 +123,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="0.8"
                 android:layout_height="2dp"
-                android:background="#74C043" /><!--TODO: Replace this View with horizontalLine_h2 from class Design -->
+                android:background="@color/divider" /><!--TODO: Replace this View with horizontalLine_h2 from class Design -->
             </LinearLayout>
 
             <TextView
@@ -135,7 +131,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="10dp"
-                android:text="לחצו לסריקת ברקוד מבחנה" />
+                android:hint="לחצו לסריקת ברקוד מבחנה" />
 
             <LinearLayout
                 android:id="@+id/linearLayoutBarcode"
@@ -189,7 +185,7 @@
                     android:layout_weight="0.6"
                     android:ems="10"
                     android:inputType="textPersonName"
-                    android:text="הקלידו מספר זהות"
+                    android:hint="הקלידו מספר זהות"
                     android:textSize="16dp"
                     android:textColor="@color/material_on_background_disabled" />
             </LinearLayout>
@@ -229,7 +225,7 @@
                     android:layout_height="2dp"
                     android:layout_marginRight="10dp"
                     android:layout_weight="0.8"
-                    android:background="#74C043" /><!--TODO: Replace this View with horizontalLine_h2 from class Design -->
+                    android:background="@color/divider" /><!--TODO: Replace this View with horizontalLine_h2 from class Design -->
             </LinearLayout>
 
             <TextView
@@ -262,13 +258,13 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.2"
-                    android:text="סוג הבדיקה:" />
+                    android:hint="סוג הבדיקה:" />
                 <AutoCompleteTextView
                     android:id="@+id/autoCompleteTextViewTestName"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.6"
-                    android:text="התחילו להקליד שם בדיקה"
+                    android:hint="התחילו להקליד שם בדיקה"
                     android:textColor="@color/material_on_background_disabled"
                     android:textSize="16dp" />
             </LinearLayout>
@@ -291,7 +287,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.6"
-                    android:text="התחילו להקליד רכיב"
+                    android:hint="התחילו להקליד רכיב"
                     android:textColor="@color/material_on_background_disabled"
                     android:textSize="16dp" />
             </LinearLayout>
@@ -392,9 +388,9 @@
                 <ImageView
                     android:id="@+id/imageViewUrgent"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="90px"
                     android:layout_weight="0.1"
-                    app:srcCompat="@drawable/urgenticondisabled" />
+                    app:srcCompat="@drawable/greyexclamation_trans" />
                 <Space
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"

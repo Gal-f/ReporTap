@@ -112,7 +112,7 @@ class DbOperations
     function inboxdr($department)
     {
         $response = array();
-        $query="SELECT M.ID, M.sent_time, M.patient_ID, T.name, M.is_urgent FROM messages as M JOIN test_types as T ON M.test_type=T.ID WHERE M.recipient_dept = ? AND M.confirm_time IS NULL";
+        $query="SELECT M.ID, M.sent_time, M.patient_ID, T.name, M.is_urgent FROM messages as M JOIN test_types as T ON M.test_type=T.ID WHERE M.recipient_dept = ? AND M.confirm_time IS NULL order by M.sent_time desc ";
         $stmt = $this->conn->prepare($query);
         $stmt->bind_param("i", $department);
 

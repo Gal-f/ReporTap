@@ -12,7 +12,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ReporTap"
         android:usesCleartextTraffic="true">
-        <activity android:name="il.reportap.HeaderActivity"></activity>
+        <activity android:name="il.reportap.ViewMessage" />
+        <activity android:name="il.reportap.HeaderActivity" />
+        <activity
+            android:name="il.reportap.SettingsActivity"
+            android:label="@string/title_activity_settings"></activity>
         <activity android:name="il.reportap.InboxDoctor" />
         <activity android:name="il.reportap.NewMessage" />
         <activity android:name="il.reportap.ProfileActivity" />
@@ -24,6 +28,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>

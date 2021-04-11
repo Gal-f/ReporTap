@@ -1,0 +1,370 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#E1DCDC"
+    tools:context="il.reportap.NewMessage">
+
+    <include
+        android:id="@+id/include"
+        layout="@layout/activity_header" />
+
+    <LinearLayout
+        android:id="@+id/mainLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:textDirection="rtl"
+        android:layoutDirection="rtl"
+        app:layout_constraintTop_toBottomOf="@+id/include"
+        tools:ignore="MissingConstraints">
+
+        <!-- Navigation bar -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            android:layoutDirection="rtl"
+            android:orientation="horizontal"
+            android:textDirection="rtl"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="MissingConstraints"
+            tools:layout_editor_absoluteX="1dp">
+            <Button
+                android:id="@+id/sentB"
+                android:layout_width="wrap_content"
+                android:layout_height="60dp"
+                android:layout_weight="1"
+                android:text="מסרים לטיפולי"
+                android:textColor="#020202"
+                app:backgroundTint="#FFFFFF"
+                app:strokeColor="#00BCD4"
+                app:strokeWidth="2dp" />
+
+            <Button
+                android:id="@+id/doneB"
+                android:layout_width="wrap_content"
+                android:layout_height="60dp"
+                android:layout_weight="1"
+                android:text="מסרים שטופלו"
+                android:textColor="#020202"
+                app:backgroundTint="#FFFFFF"
+                app:strokeColor="#00BCD4"
+                app:strokeWidth="2dp" />
+
+            <Button
+                android:id="@+id/toDoB"
+                android:layout_width="wrap_content"
+                android:layout_height="60dp"
+                android:layout_weight="1"
+                android:text="מסרים שנשלחו"
+                android:textColor="#020202"
+                app:backgroundTint="#FFFFFF"
+                app:strokeColor="#00BCD4"
+                app:strokeWidth="2dp" />
+        </LinearLayout>
+
+        <!-- Page title -->
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:text="דיווח תוצאת מעבדה"
+                android:textColor="@color/black"
+                android:textSize="18dp"
+                android:textStyle="bold" /><!--TODO: Replace 3 last lines with font_Title1 from class Design -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:background="#0F2D6C" /><!--TODO: Replace this View with horizontalLine_h1 from class Design -->
+            <TextView
+                android:id="@+id/textViewDateTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:textStyle="bold" />
+
+        <!-- Patient details -->
+        <TextView
+            android:id="@+id/textView8"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_weight="0.2"
+            android:text="המטופל/ת:"
+            android:textColor="@color/black"
+            android:textSize="16dp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingRight="10dp"
+            android:textDirection="rtl"
+            android:weightSum="1"
+            android:gravity="center">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.2"
+                android:text="שם:" />
+            <TextView
+                android:id="@+id/textViewPatientName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.6" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingRight="10dp"
+            android:textDirection="rtl"
+            android:weightSum="1"
+            android:gravity="center">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.2"
+                android:text="מספר זהות:" />
+            <TextView
+                android:id="@+id/textViewPatientID"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.6" />
+        </LinearLayout>
+            <LinearLayout
+                android:id="@+id/horizontalLine1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="1"
+                android:orientation="horizontal"
+                android:gravity="center">
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="2dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="0.8"
+                    android:background="#74C043" /><!--TODO: Replace this View with horizontalLine_h2 from class Design -->
+            </LinearLayout>
+        <!-- Test details -->
+        <TextView
+            android:id="@+id/textView11"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:text="הבדיקה:"
+            android:textColor="@color/black"
+            android:textSize="16dp" />
+        <LinearLayout
+            android:id="@+id/linearLayoutTestName"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:weightSum="1"
+            android:orientation="horizontal"
+            android:gravity="center">
+            <TextView
+                android:id="@+id/textView13"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.2"
+                android:text="סוג הבדיקה:" />
+            <TextView
+                android:id="@+id/textViewTestName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.6" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/linearLayoutComponentName"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:weightSum="1"
+            android:orientation="horizontal"
+            android:gravity="center">
+            <TextView
+                android:id="@+id/textView15"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.2"
+                android:text="רכיב:" />
+            <TextView
+                android:id="@+id/textViewComponentName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.6" />
+        </LinearLayout>
+
+        <!-- Numeric results alternative -->
+        <LinearLayout
+            android:id="@+id/linearLayoutMeasuredAmount"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:weightSum="1"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:visibility="visible">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.2"
+                android:text="כמות נמדדת:" />
+            <TextView
+                android:id="@+id/textViewMeasuredAmount"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.15"
+                android:ems="10"
+                android:gravity="right" />
+            <TextView
+                android:id="@+id/textViewMeasurementUnit"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.1"
+                android:gravity="right" />
+            <Space
+                android:id="@+id/spacerMeasuredAmount"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.35" />
+        </LinearLayout>
+
+        <!-- Boolean results alternative -->
+        <LinearLayout
+            android:id="@+id/linearLayoutBoolResult"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="1"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:visibility="gone">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.2"
+                android:text="תוצאה:" />
+            <TextView
+                android:id="@+id/textViewBoolResult"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3" />
+            <Space
+                android:id="@+id/spacerBoolResult"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:weightSum="1">
+            <TextView
+                android:id="@+id/textViewComments"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.2"
+                android:text="הערות:"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.6" />
+        </LinearLayout>
+
+        <!-- Actions & symbols -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="1"
+            android:gravity="center"
+            android:orientation="horizontal">
+        <TableLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_weight="0.8">
+            <TableRow>
+                <ImageView
+                    android:id="@+id/imageViewUrgent"
+                    android:layout_width="100px"
+                    android:layout_height="100px"
+                    android:src="@drawable/greyexclamation_trans"
+                    android:tooltipText="לא דחוף"
+                    android:layout_marginHorizontal="5dp"/>
+                <ImageView
+                    android:id="@+id/imageButtonRead"
+                    android:layout_width="100px"
+                    android:layout_height="100px"
+                    android:src="@drawable/eye"
+                    android:tooltipText="לא נקרא"
+                    android:layout_marginHorizontal="5dp"
+                    android:hapticFeedbackEnabled="true" />
+                <ImageView
+                    android:id="@+id/imageButtonReply"
+                    android:layout_width="100px"
+                    android:layout_height="100px"
+                    android:src="@drawable/replyicon"
+                    android:tooltipText="שליחת תגובה לדיווח"
+                    android:layout_marginHorizontal="5dp"/>
+                <ImageView
+                    android:id="@+id/imageButtonForward"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:src="@drawable/forwardicon"
+                    android:layout_gravity="center"
+                    android:tooltipText="העברה למחלקה אחרת"
+                    android:layout_marginHorizontal="5dp"/>
+            </TableRow>
+            <TableRow>
+                <TextView
+                    android:id="@+id/textViewUrgent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="12dp"
+                    android:text="לא דחוף"
+                    android:layout_marginHorizontal="5dp"/>
+                <TextView
+                    android:id="@+id/textViewRead"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="12dp"
+                    android:text="סימון כ'נקרא'"
+                    android:layout_marginHorizontal="5dp"/>
+                <TextView
+                    android:id="@+id/textViewReply"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="12dp"
+                    android:text="שליחת תגובה"
+                    android:layout_marginHorizontal="5dp"/>
+                <TextView
+                    android:id="@+id/textViewForward"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="12dp"
+                    android:text="העברה למחלקה אחרת"
+                    android:layout_marginHorizontal="5dp"/>
+            </TableRow>
+        </TableLayout>>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/horizontalLine2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="1"
+            android:orientation="horizontal"
+            android:gravity="center">
+            <View
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:layout_marginRight="10dp"
+                android:layout_weight="0.8"
+                android:background="#74C043" /><!--TODO: Replace this View with horizontalLine_h2 from class Design -->
+        </LinearLayout>
+    </LinearLayout>
+    <!-- Last layout closer -->
+
+</androidx.constraintlayout.widget.ConstraintLayout>

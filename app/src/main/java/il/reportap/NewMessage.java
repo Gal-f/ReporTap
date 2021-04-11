@@ -1,8 +1,5 @@
 package il.reportap;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -16,8 +13,9 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -34,11 +32,9 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
-public class NewMessage extends AppCompatActivity {
+public class NewMessage extends OptionsMenu {
 
     private AutoCompleteTextView recipient, testName, componentName;
     private EditText patientId, patientName, measuredAmount, comments;
@@ -49,6 +45,7 @@ public class NewMessage extends AppCompatActivity {
 
     private HashMap<String, Integer> deptMap;                     //Translates department name to it's corresponding ID
     private HashMap<String, Pair<Integer, String>> testTypeMap;   //Translates test type ID to it's corresponding name + result type (in this form: [name, [ID, resultType]] )
+    //TODO add a 'measurement unit' to testTypeMap and show it next to the measuredAmount EditText field
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +65,7 @@ public class NewMessage extends AppCompatActivity {
         //TODO Create auto-complete for patient ID? (optional)
 
         populateHashmaps(); // This populates the departments and test types from the DB and then adds them as options to the form.
+        //TODO extract function (populateHashmaps)
 
         findViewById(R.id.buttonSendMessage).setOnClickListener(new View.OnClickListener() {
             @Override
