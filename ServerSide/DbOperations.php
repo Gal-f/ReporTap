@@ -149,6 +149,38 @@ class DbOperations
     function getMessage($messageID){
         //TODO Join Messages & Test-types tables on testType field, in order to get boolean or numeric value.
         // If this works, remove field is_value_bool from table Messages and change function send_message accordingly.
+        $response = array();
+        $stmt = $this->conn->prepare("SELECT M.ID, M.sent_time, M.patient_ID, T.test_type, T.name, M.is_value_boolean, M.test_result_value, M.text, M.component, M.is_urgent, M.sender_user FROM messages as M JOIN test_types as T ON M.test_type=T.ID WHERE M.ID = ?");
+        //TODO Join users on message.sender_user=users.ID and add to SELECT the user name and department, to be displayed in the message screen
+        $stmt->bind_param("s", $messageID);
+        $stmt->execute();
+        $stmt->store_result();
+        if ($stmt->num_rows > 0){
+            if ($stmt->num_rows < 2){
+                $stmt->bind_result($messageID, $sentTime, $patientId, $testID, $testName, $isValueBool, $testResultValue, $comments, $componentName, $isUrgent, $sender);
+                $stmt->fetch();
+                $requestedMessage = array(
+                    'messageID' => $messageID,
+                    'sentTime' => $sentTime,
+                    'patientId' => $patientId,
+                    'testID' => $testID,
+                    'testName' => $testName,
+                    'isValueBool' => $isValueBool,
+                    'testResultValue' => $testResultValue,
+                    'comments' => $comments,
+                    'componentName' => $componentName,
+                    'isUrgent' => $isUrgent,
+                    'sender' => $sender
+                );
+                $response['requestedMessage'] = $requestedMessage;
+            } else {
+                $response['error'] = true;
+                $response['message'] = 'נמצאה יותר מהודעה אחת במזהה המבוקש';
+            }
+        } else {
+            $response['error'] = true;
+            $response['message'] = 'לא נמצאה הודעה במזהה המבוקש';
+        }
     }
 
     function getDeptsAndTests()

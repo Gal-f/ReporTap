@@ -47,12 +47,21 @@ if (isset($_GET['apicall'])) {
                 $response = $oper->send_message($_POST['sender'], $_POST['department'], $_POST['patientId'], $_POST['patientName'], $_POST['testType'], $_POST['componentName'], $_POST['isValueBool'], $_POST['testResultValue'], $_POST['isUrgent'], $_POST['comments']);
             }
             break;
+
+        case 'getMessage':
+            $response = isTheseParametersAvailable(array('messageID'));
+            if (!$response['error']){
+                $response = $oper->getMessage($_POST['messageID']);
+            }
+            break;
+
         case 'inboxdr':
             $response = isTheseParametersAvailable(array('department'));
             if (!$response['error']){
                 $response=$oper->inboxdr($_POST['department']);
             }
             break;
+            
         case 'getDeptsAndTests':
             $response = $oper->getDeptsAndTests();
             break;

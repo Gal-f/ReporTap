@@ -12,6 +12,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ReporTap"
         android:usesCleartextTraffic="true">
+        <activity android:name="il.reportap.ViewMessage" />
+        <activity android:name="il.reportap.HeaderActivity" />
         <activity
             android:name="il.reportap.SettingsActivity"
             android:label="@string/title_activity_settings"></activity>
