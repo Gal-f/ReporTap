@@ -72,6 +72,13 @@ if (isset($_GET['apicall'])) {
                $response = $oper->markAsRead($_POST['messageID'], $_POST['userID']);
             }
         break;
+
+        case 'newReply':
+            $response = isTheseParametersAvailable(array('sender', 'department', 'messageId', 'text'));
+            if (!$response['error']){
+                $response = $oper->send_reply($_POST['sender'], $_POST['department'], $_POST['messageId'], $_POST['text']);
+            }
+        break;
         
         default:
             $response['error'] = true;

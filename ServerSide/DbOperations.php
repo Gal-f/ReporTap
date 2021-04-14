@@ -134,6 +134,7 @@ class DbOperations
                     'is_urgent' => $isUrgent,
                 );
                 $rows--;
+                //TODO add a 'recieve_time' to each message only the first time it is presented in the inboxdr
             }
             $response['error'] = false;
             $response['message'] = 'new report for you';
@@ -249,6 +250,20 @@ class DbOperations
         } else {
             $response['error'] = true;
             $response['message'] = 'Error while trying to mark the message as read';
+        }
+        return $response;
+    }
+
+    function send_reply($sender, $department, $messageID, $text){
+        $response = array();
+        $stmt = $this->conn->prepare("INSERT INTO responses(response_to_messageID, responses.text, sender_user, recipient_dept) VALUES (?,?,?,?);");
+        $stmt->bind_param("ssss", $messageID, $text, $sender, $department);
+        if ($stmt->execute()) {
+            $response['error'] = false;
+            $response['message'] = 'Response sent successfully';
+        } else {
+            $response['error'] = true;
+            $response['message'] = 'Error while sending the response';
         }
         return $response;
     }
