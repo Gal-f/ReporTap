@@ -241,9 +241,8 @@ class DbOperations
 
     function markAsRead($messageID, $userID){
         $response = array();
-        $stmt = $this->conn->prepare("INSERT INTO messages (confirm_date, confirm_user) VALUES (?,?) WHERE messages.ID = ?;");
-        $now = date_timestamp_get(); //TODO find how to address DATETIME.NOW in PHP.
-        $stmt->bind_param("sss", $now, $userID, $messageID);
+        $stmt = $this->conn->prepare("UPDATE messages SET confirm_time = CURRENT_TIMESTAMP, confirm_user = ? WHERE messages.ID = ?;");
+        $stmt->bind_param("ss", $userID, $messageID);
         if ($stmt->execute()) {
             $response['error'] = false;
             $response['message'] = 'Message marked as read successfully';

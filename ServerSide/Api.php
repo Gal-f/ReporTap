@@ -67,7 +67,7 @@ if (isset($_GET['apicall'])) {
         break;
 
         case 'markAsRead':
-            $response = isTheseParametersAvailable(array($messageID, $userID));
+            $response = isTheseParametersAvailable(array('messageID', 'userID'));
             if (!$response['error']){
                $response = $oper->markAsRead($_POST['messageID'], $_POST['userID']);
             }
@@ -102,5 +102,4 @@ function isTheseParametersAvailable($params) //TODO alter this func to return $r
         $response['message'] = 'All parameters recieved';
     }
     return $response;
-    //return !($error); // Return true if all parameters are in order   //Old, here for backup purpose only, remove when everything works
 }
