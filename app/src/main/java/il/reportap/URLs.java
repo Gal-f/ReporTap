@@ -14,4 +14,6 @@ public class URLs {
     public static final String URL_INBOXDR = ROOT_URL + "inboxdr";
     public static final String URL_MARK_AS_READ = ROOT_URL + "markAsRead";
     public static final String URL_NEWRESPONSE = ROOT_URL + "newReply";
+    public static final String URL_FORWARDMESSAGE = ROOT_URL + "forwardMessage";
+
 }
