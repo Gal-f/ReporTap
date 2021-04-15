@@ -67,10 +67,24 @@ if (isset($_GET['apicall'])) {
         break;
 
         case 'markAsRead':
-            $response = isTheseParametersAvailable(array($messageID, $userID));
+            $response = isTheseParametersAvailable(array('messageID', 'userID'));
             if (!$response['error']){
                $response = $oper->markAsRead($_POST['messageID'], $_POST['userID']);
             }
+        break;
+
+        case 'newReply':
+            $response = isTheseParametersAvailable(array('sender', 'department', 'messageId', 'text'));
+            if (!$response['error']){
+                $response = $oper->send_reply($_POST['sender'], $_POST['department'], $_POST['messageId'], $_POST['text']);
+            }
+        break;
+
+        case 'forwardMessage':
+            $response = isTheseParametersAvailable(array('messageID', 'department', 'sender'));
+            if (!$response['error']){
+                $response = $oper->forward_message($_POST['messageID'], $_POST['department'], $_POST['sender']);
+             }
         break;
         
         default:
@@ -102,5 +116,4 @@ function isTheseParametersAvailable($params) //TODO alter this func to return $r
         $response['message'] = 'All parameters recieved';
     }
     return $response;
-    //return !($error); // Return true if all parameters are in order   //Old, here for backup purpose only, remove when everything works
 }
