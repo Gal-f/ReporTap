@@ -7,7 +7,6 @@ class DbOperations
     function __construct()
     {
         require_once 'DbConnect.php';
-        //require_once dirname(__FILE__).'/DbConnect.php';
 
         $db = new DbConnect();
         $this->conn = $db->connect();
@@ -264,6 +263,23 @@ class DbOperations
         } else {
             $response['error'] = true;
             $response['message'] = 'Error while sending the response';
+        }
+        return $response;
+    }
+
+    function forward_message($messageID, $department, $userID){
+        $response = array();
+        //TODO validate that the message wasn't approved before allowing forward
+        $stmtMessages = $this->conn->prepare("UPDATE messages SET sent_time = CURRENT_TIMESTAMP, recipient_dept = ?, sender_user = ? WHERE messages.ID = ?;");
+        // To be added in phase B: save history of forwarded messages in DB table 'forwarded_messages', while only the most recent sender and time will be saved in messages table. Currently irrelevant as interrogation interface isn't being developed in current development phase.
+
+        $stmtMessages->bind_param("sss", $department, $userID, $messageID);
+        if ($stmtMessages->execute()) {
+            $response['error'] = false;
+            $response['message'] = 'Message forwarded successfully';
+        } else {
+            $response['error'] = true;
+            $response['message'] = 'Error while trying to forward message';
         }
         return $response;
     }

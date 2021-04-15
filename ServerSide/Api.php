@@ -79,6 +79,13 @@ if (isset($_GET['apicall'])) {
                 $response = $oper->send_reply($_POST['sender'], $_POST['department'], $_POST['messageId'], $_POST['text']);
             }
         break;
+
+        case 'forwardMessage':
+            $response = isTheseParametersAvailable(array('messageID', 'department', 'sender'));
+            if (!$response['error']){
+                $response = $oper->forward_message($_POST['messageID'], $_POST['department'], $_POST['sender']);
+             }
+        break;
         
         default:
             $response['error'] = true;
