@@ -24,14 +24,17 @@ public class OptionsMenu extends AppCompatActivity {
             case R.id.profile:
                 startActivity(new Intent(this, ProfileActivity.class));
                 break;
-            case R.id.settings:
-                startActivity(new Intent(this, Settings.class));
-                break;
+          //  case R.id.settings:
+            //    startActivity(new Intent(this, SettingsActivity.class));
+              //  break;
             case R.id.logout:
                 SharedPrefManager.getInstance(getApplicationContext()).logout();
                 break;
             case R.id.send_message:
                 startActivity(new Intent(getApplicationContext(), NewMessage.class));
+                break;
+            case R.id.view_message:
+                startActivity(new Intent(this, ViewMessage.class));
                 break;
 
             default:

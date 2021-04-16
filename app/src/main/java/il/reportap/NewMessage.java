@@ -45,6 +45,7 @@ public class NewMessage extends OptionsMenu {
 
     private HashMap<String, Integer> deptMap;                     //Translates department name to it's corresponding ID
     private HashMap<String, Pair<Integer, String>> testTypeMap;   //Translates test type ID to it's corresponding name + result type (in this form: [name, [ID, resultType]] )
+    //TODO add a 'measurement unit' to testTypeMap and show it next to the measuredAmount EditText field
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +65,7 @@ public class NewMessage extends OptionsMenu {
         //TODO Create auto-complete for patient ID? (optional)
 
         populateHashmaps(); // This populates the departments and test types from the DB and then adds them as options to the form.
+        //TODO extract function (populateHashmaps)
 
         findViewById(R.id.buttonSendMessage).setOnClickListener(new View.OnClickListener() {
             @Override

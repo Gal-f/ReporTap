@@ -34,6 +34,12 @@
         app:showAsAction="always"
         />
 
+    <item
+        android:title="הצג מסר"
+        android:id="@+id/view_message"
+        android:contentDescription="logout"
+        app:showAsAction="always"
+        />
 
 </menu>
 

@@ -27,7 +27,7 @@ if (isset($_GET['apicall'])) {
 
                 $response = $oper->signup($password, $employeeNumber, $fullName, $jobTitle, $phoneNumber, $deptID);
             }
-            break;
+        break;
 
         case 'login':
             $response = isTheseParametersAvailable(array('employee_ID', 'password'));
@@ -38,7 +38,7 @@ if (isset($_GET['apicall'])) {
 
                 $response = $oper->login($employeeNumber, $password);
             }
-            break;
+        break;
 
         case 'newMessage':
             //TODO Don't ask for patientName, as it can be retrieved with patientId. Solve this by somehow presenting the patientName on the new message form, after typing the ID.
@@ -46,22 +46,52 @@ if (isset($_GET['apicall'])) {
             if (!$response['error']) {
                 $response = $oper->send_message($_POST['sender'], $_POST['department'], $_POST['patientId'], $_POST['patientName'], $_POST['testType'], $_POST['componentName'], $_POST['isValueBool'], $_POST['testResultValue'], $_POST['isUrgent'], $_POST['comments']);
             }
-            break;
+        break;
+
+        case 'getMessage':
+            $response = isTheseParametersAvailable(array('messageID'));
+            if (!$response['error']){
+                $response = $oper->getMessage($_POST['messageID']);
+            }
+        break;
+
         case 'inboxdr':
             $response = isTheseParametersAvailable(array('department'));
             if (!$response['error']){
                 $response=$oper->inboxdr($_POST['department']);
             }
-            break;
+        break;
+
         case 'sentdr':
             $response = isTheseParametersAvailable(array('works_in_dept'));
             if (!$response['error']){
                 $response=$oper->sentdr($_POST['works_in_dept']);
             }
-            break;
+        break;
         case 'getDeptsAndTests':
             $response = $oper->getDeptsAndTests();
-            break;
+        break;
+
+        case 'markAsRead':
+            $response = isTheseParametersAvailable(array('messageID', 'userID'));
+            if (!$response['error']){
+               $response = $oper->markAsRead($_POST['messageID'], $_POST['userID']);
+            }
+        break;
+
+        case 'newReply':
+            $response = isTheseParametersAvailable(array('sender', 'department', 'messageId', 'text'));
+            if (!$response['error']){
+                $response = $oper->send_reply($_POST['sender'], $_POST['department'], $_POST['messageId'], $_POST['text']);
+            }
+        break;
+
+        case 'forwardMessage':
+            $response = isTheseParametersAvailable(array('messageID', 'department', 'sender'));
+            if (!$response['error']){
+                $response = $oper->forward_message($_POST['messageID'], $_POST['department'], $_POST['sender']);
+             }
+        break;
 
         default:
             $response['error'] = true;
@@ -92,5 +122,4 @@ function isTheseParametersAvailable($params) //TODO alter this func to return $r
         $response['message'] = 'All parameters recieved';
     }
     return $response;
-    //return !($error); // Return true if all parameters are in order   //Old, here for backup purpose only, remove when everything works
 }
