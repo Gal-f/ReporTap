@@ -10,7 +10,7 @@ import com.example.loginregister.R;
 public class ProfileActivity extends OptionsMenu {
 
     TextView textViewEmployeeNumber,
-            textViewFullName, textViewJobTitle, textViewPhoneNumber, textViewDepartment;
+            textViewFullName, textViewEmail, textViewJobTitle, textViewPhoneNumber, textViewDepartment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +27,7 @@ public class ProfileActivity extends OptionsMenu {
 
         textViewEmployeeNumber =  (TextView) findViewById(R.id.textViewEmployeeNumber);
         textViewFullName = (TextView) findViewById(R.id.textViewFullName);
+        textViewEmail = (TextView) findViewById(R.id.textViewEmail);
         textViewJobTitle = (TextView) findViewById(R.id.textViewJobTitle);
         textViewPhoneNumber =  (TextView) findViewById(R.id.textViewPhoneNumber);
         textViewDepartment=  (TextView) findViewById(R.id.textViewDepartment);
@@ -37,6 +38,7 @@ public class ProfileActivity extends OptionsMenu {
         //setting the values to the textviews
         textViewEmployeeNumber.setText("מספר עובד: " + user.getEmployeeNumber());
         textViewFullName.setText(user.getFullName());
+        textViewEmail.setText("אימייל: " + user.getEmail());
         textViewJobTitle.setText(user.getJobTitle());
         textViewPhoneNumber.setText("מספר טלפון: " + user.getPhoneNumber());
         switch(user.getDepartment()){
