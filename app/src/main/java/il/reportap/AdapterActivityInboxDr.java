@@ -15,11 +15,11 @@ import com.example.loginregister.R;
 
 import java.util.List;
 
-public class AdapterActivity extends RecyclerView.Adapter<AdapterActivity.ViewHolder>{
+public class AdapterActivityInboxDr extends RecyclerView.Adapter<AdapterActivityInboxDr.ViewHolder>{
     private List<ModelActivityInboxDr> modelActivityInboxDrList;
     private Context context;
 
-    public AdapterActivity(List<ModelActivityInboxDr> modelActivityInboxDrList, Context context) {
+    public AdapterActivityInboxDr(List<ModelActivityInboxDr> modelActivityInboxDrList, Context context) {
         this.modelActivityInboxDrList = modelActivityInboxDrList;
         this.context = context;
     }
