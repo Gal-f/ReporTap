@@ -52,7 +52,9 @@ public class InboxDoctor extends OptionsMenu {
         recyclerView = (RecyclerView)findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.addItemDecoration(new DividerItemDecoration(getApplicationContext(), DividerItemDecoration.VERTICAL));
+        DividerItemDecoration divider = new DividerItemDecoration(getApplicationContext(), DividerItemDecoration.VERTICAL);
+        divider.setDrawable(getDrawable(R.drawable.dividerbig));
+        recyclerView.addItemDecoration(divider);
 
         modelActivityInboxDrList = new ArrayList<>();
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
