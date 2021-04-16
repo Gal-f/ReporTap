@@ -1,10 +1,12 @@
 package il.reportap;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -34,7 +36,7 @@ import java.util.Map;
 public class InboxDoctor extends OptionsMenu {
 
     private RecyclerView recyclerView;
-    private AdapterActivity adapter;
+    private AdapterActivityInboxDr adapter;
     private List<ModelActivityInboxDr> modelActivityInboxDrList;
     private List<ModelActivityInboxDr> urgentList;
 
@@ -50,6 +52,7 @@ public class InboxDoctor extends OptionsMenu {
         recyclerView = (RecyclerView)findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.addItemDecoration(new DividerItemDecoration(getApplicationContext(), DividerItemDecoration.VERTICAL));
 
         modelActivityInboxDrList = new ArrayList<>();
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
@@ -82,7 +85,7 @@ public class InboxDoctor extends OptionsMenu {
                         e.printStackTrace();
                     }
 
-                    adapter = new AdapterActivity(modelActivityInboxDrList,getApplicationContext());
+                    adapter = new AdapterActivityInboxDr(modelActivityInboxDrList,getApplicationContext());
                     recyclerView.setAdapter(adapter);
 
                 },
@@ -117,13 +120,13 @@ public class InboxDoctor extends OptionsMenu {
                             urgentList.add(modelActivityInboxDrList.get(i));
                         }
                     }
-                    adapter = new AdapterActivity(urgentList,getApplicationContext());
+                    adapter = new AdapterActivityInboxDr(urgentList,getApplicationContext());
                     ImageView img = (ImageView)findViewById(R.id.imageView3);
                     img.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.red),
                             PorterDuff.Mode.MULTIPLY);
                 }
                 else {
-                    adapter = new AdapterActivity(modelActivityInboxDrList,getApplicationContext());
+                    adapter = new AdapterActivityInboxDr(modelActivityInboxDrList,getApplicationContext());
                     ImageView img = (ImageView)findViewById(R.id.imageView3);
                     img.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.gray),
                             PorterDuff.Mode.MULTIPLY);
@@ -134,6 +137,15 @@ public class InboxDoctor extends OptionsMenu {
             }
 
         });
+        Button btnS= (Button)findViewById(R.id.sentB);
+        btnS.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                startActivity(new Intent(getApplicationContext(), SentDoctor.class));
+            }
+        });
+
     }
 
 

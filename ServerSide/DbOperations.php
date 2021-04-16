@@ -147,7 +147,7 @@ class DbOperations
     }
     function sentdr($works_in_dept){
         $response = array();
-        $query="SELECT M.ID, M.sent_time, M.text, U.full_name, M.patient_ID, T.name, (CASE WHEN M.confirm_time IS NULL THEN 0 ELSE M.confirm_time END) AS confirm_time FROM messages as M JOIN test_types as T ON M.test_type=T.ID JOIN users as U ON M.sender_user=U.employee_ID WHERE U.works_in_dept = ? order by M.sent_time desc ";
+        $query="SELECT R.ID, R.sent_time, R.text, U.full_name, M.patient_ID, T.name, (CASE WHEN R.confirm_time IS NULL THEN 0 ELSE R.confirm_time END) AS confirm_time FROM responses as R JOIN messages M on R.response_to_messageID=M.ID JOIN users as U ON R.sender_user=U.employee_ID JOIN test_types as T ON M.test_type=T.ID   WHERE U.works_in_dept = ? order by R.sent_time desc ";
         $stmt = $this->conn->prepare($query);
         $stmt->bind_param("i", $works_in_dept);
 
