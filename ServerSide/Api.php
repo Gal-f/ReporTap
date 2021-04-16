@@ -61,7 +61,13 @@ if (isset($_GET['apicall'])) {
                 $response=$oper->inboxdr($_POST['department']);
             }
         break;
-            
+
+        case 'sentdr':
+            $response = isTheseParametersAvailable(array('works_in_dept'));
+            if (!$response['error']){
+                $response=$oper->sentdr($_POST['works_in_dept']);
+            }
+        break;
         case 'getDeptsAndTests':
             $response = $oper->getDeptsAndTests();
         break;
@@ -86,7 +92,7 @@ if (isset($_GET['apicall'])) {
                 $response = $oper->forward_message($_POST['messageID'], $_POST['department'], $_POST['sender']);
              }
         break;
-        
+
         default:
             $response['error'] = true;
             $response['message'] = 'Invalid Operation Called';

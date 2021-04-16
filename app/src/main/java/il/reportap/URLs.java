@@ -12,6 +12,7 @@ public class URLs {
     public static final String URL_GETMESSAGE = ROOT_URL + "getMessage";
     public static final String URL_GET_DEPTS_N_TESTS = ROOT_URL + "getDeptsAndTests";
     public static final String URL_INBOXDR = ROOT_URL + "inboxdr";
+    public static final String URL_SENTDR = ROOT_URL+ "sentdr";
     public static final String URL_MARK_AS_READ = ROOT_URL + "markAsRead";
     public static final String URL_NEWRESPONSE = ROOT_URL + "newReply";
     public static final String URL_FORWARDMESSAGE = ROOT_URL + "forwardMessage";
