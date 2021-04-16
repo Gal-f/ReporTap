@@ -1,10 +1,10 @@
 package il.reportap;
 
-public class ModelActivity {
+public class ModelActivityInboxDr {
     private Integer id,isUrgent;
     private String sentTime,patientId,testName;
 
-    public ModelActivity(Integer id, Integer isUrgent, String sentTime, String patientId, String testName) {
+    public ModelActivityInboxDr(Integer id, Integer isUrgent, String sentTime, String patientId, String testName) {
         this.id = id;
         this.isUrgent = isUrgent;
         this.sentTime = sentTime;
@@ -12,7 +12,7 @@ public class ModelActivity {
         this.testName = testName;
     }
 
-    public ModelActivity() {
+    public ModelActivityInboxDr() {
     }
 
     public Integer getId(){return id;}

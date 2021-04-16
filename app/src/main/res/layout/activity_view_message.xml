@@ -259,12 +259,13 @@
             android:gravity="center"
             android:weightSum="1">
             <TextView
-                android:id="@+id/textViewComments"
+                android:id="@+id/textViewCommentsLabel"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.2"
                 android:text="הערות:"/>
             <TextView
+                android:id="@+id/textViewComments"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.6" />
@@ -360,6 +361,29 @@
                 android:layout_weight="0.8"
                 android:background="#74C043" /><!--TODO: Replace this View with horizontalLine_h2 from class Design -->
         </LinearLayout>
+        <!-- For TESTING ONLY, remove this -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Debug\\Test:"
+            android:padding="10dp" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        <EditText
+            android:id="@+id/testMessageIDBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="הקלידו מס' הודעה לבדיקה"
+            android:textSize="12dp" />
+        <Button
+            android:id="@+id/ButtonTestMessageIDBox"
+            android:layout_width="70dp"
+            android:layout_height="35dp"
+            android:text="שלח"
+            android:textSize="12dp" />
+        </LinearLayout>
+        <!-- END TEST ONLY -->
     </LinearLayout>
     <!-- Last layout closer -->
 

@@ -5,18 +5,16 @@
     android:id="@+id/linearLayout"
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
+    android:background="#E1DCDC"
     android:baselineAligned="false"
-    tools:context="il.reportap.InboxDoctor"
-    android:background="#E1DCDC">
+    tools:context="il.reportap.InboxDoctor">
 
 
     <LinearLayout
-        android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         tools:ignore="MissingConstraints">
 
@@ -60,6 +58,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="55dp"
+        
         android:background="@color/background"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -70,38 +69,28 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/linearLayout4"
                 android:layout_width="match_parent"
-                android:layout_height="81dp"
-                android:orientation="horizontal">
+                android:paddingLeft="80dp"
+                android:layout_height="wrap_content">
 
-                <ImageView
-                    android:id="@+id/imageView3"
-                    android:layout_width="24dp"
-                    android:layout_height="57dp"
-                    android:layout_weight="1"
-                    app:srcCompat="@drawable/ic_urgent" />
-
-                <CheckBox
-                    android:id="@+id/checkBox"
-                    android:layout_width="77dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:paddingRight="5dp"
-                    android:text="@string/inboxEmerg" />
 
                 <TextView
                     android:id="@+id/textView"
-                    android:layout_width="260dp"
-                    android:layout_height="match_parent"
-                    android:padding="2dp"
-                    android:text="@string/inboxDesc" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="10dp"
+                    android:text="@string/sentDesc"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerView"
+                android:id="@+id/recyclerViewSentDr"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior" />
