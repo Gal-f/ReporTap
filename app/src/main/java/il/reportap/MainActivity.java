@@ -111,9 +111,9 @@ public class MainActivity extends AppCompatActivity {
                         //creating a new user object - names are identical to the columns in the db
                         User user = new User(
                                 userJson.getInt("id"),
-                                //  userJson.getString("username"),
                                 userJson.getString("employee_ID"),
                                 userJson.getString("full_name"),
+                                userJson.getString("email"),
                                 userJson.getString("role"),
                                 userJson.getString("phone_number"),
                                 userJson.getInt("works_in_dept")

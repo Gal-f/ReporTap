@@ -4,17 +4,14 @@ public class User {
 
     private int id;
    // private String username;
-    private String employeeNumber;
-    private String fullName;
-    private String jobTitle;
-    private String phoneNumber;
+    private String employeeNumber, fullName, email, jobTitle, phoneNumber;
     private int department;
 
-    public User(int id, String employeeNumber, String fullName, String jobTitle, String phoneNumber, int department) {
+    public User(int id, String employeeNumber, String fullName, String email,  String jobTitle, String phoneNumber, int department) {
         this.id = id;
-       // this.username = username;
         this.employeeNumber = employeeNumber;
         this.fullName = fullName;
+        this.email = email;
         this.jobTitle = jobTitle;
         this.phoneNumber = phoneNumber;
         this.department = department;
@@ -24,16 +21,16 @@ public class User {
         return id;
     }
 
- /*   public String getUsername() {
-        return username;
-    }*/
-
     public String getEmployeeNumber() {
         return employeeNumber;
     }
 
     public String getFullName() {
         return fullName;
+    }
+
+    public String getEmail() {
+        return email;
     }
 
     public String getJobTitle() {

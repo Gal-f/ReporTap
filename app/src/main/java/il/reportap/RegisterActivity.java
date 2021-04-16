@@ -24,7 +24,7 @@ import java.util.HashMap;
 public class RegisterActivity extends AppCompatActivity {
 
     EditText editTextPassword, editTextEmployeeNumber,
-            editTextFullName, editTextPhoneNumber;
+            editTextFullName, editTextPhoneNumber, editTextEmail;
     Spinner spinnerDepartment, spinnerJobTitle;
     HashMap<String, Integer> deptData = new HashMap<String, Integer>(){{
         put("מעבדה מיקרוביולוגית",1);
@@ -39,6 +39,7 @@ public class RegisterActivity extends AppCompatActivity {
         editTextPassword = (EditText) findViewById(R.id.editTextPassword);
         editTextEmployeeNumber = (EditText) findViewById(R.id.editTextEmployeeNumber);
         editTextFullName = (EditText) findViewById(R.id.editTextFullName);
+        editTextEmail = (EditText) findViewById(R.id.editTextEmail);
         spinnerJobTitle = findViewById(R.id.spinnerJobTitle);
         editTextPhoneNumber = (EditText) findViewById(R.id.editTextPhoneNumber);
         spinnerDepartment = findViewById(R.id.spinnerDepartment);
@@ -81,6 +82,7 @@ public class RegisterActivity extends AppCompatActivity {
         final String password = editTextPassword.getText().toString().trim();
         final String employeeNumber = editTextEmployeeNumber.getText().toString().trim();
         final String fullName = editTextFullName.getText().toString().trim();
+        final String email = editTextEmail.getText().toString().trim();
         final String jobTitle = spinnerJobTitle.getSelectedItem().toString().trim();
         final String phoneNumber = editTextPhoneNumber.getText().toString().trim();
         final String department = spinnerDepartment.getSelectedItem().toString().trim();
@@ -124,6 +126,20 @@ public class RegisterActivity extends AppCompatActivity {
             editTextFullName.requestFocus();
             return;
         }
+
+        if (TextUtils.isEmpty(email)) {
+            editTextEmail.setError("Please enter your email");
+            editTextEmail.requestFocus();
+            return;
+        }
+
+        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            editTextEmail.setError("נא להזין אימייל תקני");
+            editTextEmail.requestFocus();
+            return;
+        }
+
+
 
         if (TextUtils.isEmpty(phoneNumber)) {
             editTextPhoneNumber.setError("יש להזין מספר טלפון");
@@ -180,6 +196,7 @@ public class RegisterActivity extends AppCompatActivity {
                 params.put("password", password);
                 params.put("employee_ID", employeeNumber);
                 params.put("full_name", fullName);
+                params.put("email", email);
                 params.put("role", jobTitle);
                 params.put("phone_number", phoneNumber);
                 params.put("works_in_dept", deptID);
@@ -217,9 +234,9 @@ public class RegisterActivity extends AppCompatActivity {
                         //creating a new user object - names are identical to the columns in the db
                         User user = new User(
                                 userJson.getInt("id"),
-                                // userJson.getString("username"),
                                 userJson.getString("employee_ID"),
                                 userJson.getString("full_name"),
+                                userJson.getString("email"),
                                 userJson.getString("role"),
                                 userJson.getString("phone_number"),
                                 userJson.getInt("works_in_dept")

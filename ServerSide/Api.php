@@ -14,21 +14,21 @@ if (isset($_GET['apicall'])) {
 
     switch ($_GET['apicall']) {
 
-        case 'signup':
-            $response = isTheseParametersAvailable(array('password', 'employee_ID', 'full_name', 'role', 'phone_number', 'works_in_dept'));
-            if (!$response['error']) {
-                //getting the values 
-                $password = md5($_POST['password']);
-                $employeeNumber = $_POST['employee_ID'];
-                $fullName = $_POST['full_name'];
-                $jobTitle = $_POST['role'];
-                $phoneNumber = $_POST['phone_number'];
-                $deptID = $_POST['works_in_dept'];
-
-                $response = $oper->signup($password, $employeeNumber, $fullName, $jobTitle, $phoneNumber, $deptID);
-            }
-        break;
-
+       case 'signup':
+                   $response = isTheseParametersAvailable(array('password', 'employee_ID', 'full_name', 'email', 'role', 'phone_number', 'works_in_dept'));
+                   if (!$response['error']) {
+                       //getting the values
+                       $password = md5($_POST['password']);
+                       $employeeNumber = $_POST['employee_ID'];
+                       $fullName = $_POST['full_name'];
+       				$email = $_POST['email'];
+                       $jobTitle = $_POST['role'];
+                       $phoneNumber = $_POST['phone_number'];
+                       $deptID = $_POST['works_in_dept'];
+                       $response = $oper->signup($password, $employeeNumber, $fullName, $email, $jobTitle, $phoneNumber, $deptID);
+                   }
+               break;
+               
         case 'login':
             $response = isTheseParametersAvailable(array('employee_ID', 'password'));
             if (!$response['error']) {
