@@ -7,10 +7,6 @@
     android:background="#E1DCDC"
     tools:context="il.reportap.NewMessage">
 
-    <include
-        android:id="@+id/include"
-        layout="@layout/activity_header" />
-
     <LinearLayout
         android:id="@+id/mainLinearLayout"
         android:layout_width="match_parent"
