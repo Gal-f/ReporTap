@@ -2,6 +2,8 @@ package il.reportap;
 
 import android.annotation.SuppressLint;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -49,8 +51,9 @@ public class SentDoctor extends OptionsMenu {
         recyclerView = (RecyclerView)findViewById(R.id.recyclerViewSentDr);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-       // DividerItemDecoration divider = new DividerItemDecoration(getApplicationContext(), DividerItemDecoration.VERTICAL);
-        recyclerView.addItemDecoration(new DividerItemDecoration(getApplicationContext(), DividerItemDecoration.VERTICAL));
+        DividerItemDecoration divider = new DividerItemDecoration(getApplicationContext(), DividerItemDecoration.VERTICAL);
+        divider.setDrawable(getDrawable(R.drawable.dividerbig));
+        recyclerView.addItemDecoration(divider);
         modelActivitySentDrList = new ArrayList<>();
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
                 URLs.URL_SENTDR,
