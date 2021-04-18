@@ -17,7 +17,7 @@
         tools:ignore="MissingConstraints">
 
         <Button
-            android:id="@+id/sentB"
+            android:id="@+id/sentBS"
             android:layout_width="wrap_content"
             android:layout_height="60dp"
             android:layout_weight="1"
@@ -28,7 +28,7 @@
             app:strokeWidth="2dp" />
 
         <Button
-            android:id="@+id/doneB"
+            android:id="@+id/doneBS"
             android:layout_width="wrap_content"
             android:layout_height="60dp"
             android:layout_weight="1"
@@ -39,7 +39,7 @@
             app:strokeWidth="2dp" />
 
         <Button
-            android:id="@+id/toDoB"
+            android:id="@+id/toDoBS"
             android:layout_width="wrap_content"
             android:layout_height="60dp"
             android:layout_weight="1"
@@ -52,7 +52,7 @@
     </LinearLayout>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swiperefresh"
+        android:id="@+id/swiperefresh1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="55dp"

@@ -16,5 +16,5 @@ public class URLs {
     public static final String URL_MARK_AS_READ = ROOT_URL + "markAsRead";
     public static final String URL_NEWRESPONSE = ROOT_URL + "newReply";
     public static final String URL_FORWARDMESSAGE = ROOT_URL + "forwardMessage";
-
+    public static final String URL_DONE=ROOT_URL+ "donedr";
 }

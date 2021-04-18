@@ -182,6 +182,45 @@ class DbOperations
         return $response;
     }
 
+    function donedr($department)
+    {
+        $response = array();
+        $query="SELECT M.ID, M.sent_time, M.patient_ID, T.name, M.text, U.full_name FROM messages as M JOIN test_types as T ON M.test_type=T.ID JOIN users as U ON M.confirm_user=U.employee_ID WHERE M.recipient_dept = ? AND M.confirm_time IS NOT NULL order by M.sent_time desc ";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("i", $department);
+
+        $stmt->execute();
+
+        $stmt->store_result();
+        $rows=$stmt->num_rows;
+
+        if ($stmt->num_rows > 0) {
+
+            while ($rows>0){
+                $stmt->bind_result($id, $sentTime, $patientId, $testName, $text, $fullNameU);
+                $stmt->fetch();
+            
+                $report[$stmt->num_rows-$rows] = array('id' =>$id,
+                    'sent_time' => $sentTime,
+                    'patient_id' => $patientId,
+                    'name' => $testName,
+                    'text' => $text,
+                    'full_name' => $fullNameU
+                );
+                $rows--;
+                //TODO add a 'recieve_time' to each message only the first time it is presented in the inboxdr
+            }
+            $response['error'] = false;
+            $response['message'] = 'new report for you';
+            $response['report'] = $report;
+        } else {
+            $response['error'] = true;
+            $response['message'] = 'שגיאה בהצגת הדיווח';
+        }
+        return $response;
+        
+    }
+
     function getMessage($messageID){
         //TODO Join Messages & Test-types tables on testType field, in order to get boolean or numeric value.
         // If this works, remove field is_value_bool from table Messages and change function send_message accordingly.
