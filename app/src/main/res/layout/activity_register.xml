@@ -26,8 +26,7 @@
             android:layout_marginBottom="8dp"
             android:fontFamily="sans-serif"
             android:hint="מספר עובד"
-            android:inputType="text"
-            android:text="111555" />
+            android:inputType="text" />
 
         <EditText
             android:id="@+id/editTextPassword"
@@ -39,7 +38,6 @@
             android:gravity="right"
             android:hint="סיסמה"
             android:inputType="textPassword"
-            android:text="1111"
             android:textDirection="anyRtl" />
 
 
@@ -51,8 +49,7 @@
             android:layout_marginBottom="8dp"
             android:fontFamily="sans-serif"
             android:hint="שם מלא"
-            android:inputType="text"
-            android:text="עדן פרץ" />
+            android:inputType="text" />
 
         <EditText
             android:id="@+id/editTextEmail"
@@ -62,8 +59,7 @@
             android:layout_marginBottom="8dp"
             android:fontFamily="sans-serif"
             android:hint="אימייל"
-            android:inputType="textEmailAddress"
-            android:text="eden08640@gmail.com" />
+            android:inputType="textEmailAddress" />
 
         <EditText
             android:id="@+id/editTextPhoneNumber"
@@ -75,7 +71,6 @@
             android:gravity="right"
             android:hint="מספר טלפון"
             android:inputType="phone"
-            android:text="0505802310"
             android:textDirection="anyRtl" />
 
         <Spinner
