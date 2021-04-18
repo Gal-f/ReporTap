@@ -1,7 +1,10 @@
 package il.reportap;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -42,15 +45,16 @@ public class SentDoctor extends OptionsMenu {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sent_doctor);
-        Button btn = (Button)findViewById(R.id.sentB);
+        Button btn = (Button)findViewById(R.id.sentBS);
         btn.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.stroke));
         btn.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
 
         recyclerView = (RecyclerView)findViewById(R.id.recyclerViewSentDr);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-       // DividerItemDecoration divider = new DividerItemDecoration(getApplicationContext(), DividerItemDecoration.VERTICAL);
-        recyclerView.addItemDecoration(new DividerItemDecoration(getApplicationContext(), DividerItemDecoration.VERTICAL));
+        DividerItemDecoration divider = new DividerItemDecoration(getApplicationContext(), DividerItemDecoration.VERTICAL);
+        divider.setDrawable(getDrawable(R.drawable.dividerbig));
+        recyclerView.addItemDecoration(divider);
         modelActivitySentDrList = new ArrayList<>();
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
                 URLs.URL_SENTDR,
@@ -104,7 +108,22 @@ public class SentDoctor extends OptionsMenu {
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
 
-
+        Button btnD= (Button)findViewById(R.id.doneBS);
+        btnD.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                startActivity(new Intent(getApplicationContext(), DoneDoctor.class));
+            }
+        });
+        Button btnI= (Button)findViewById(R.id.toDoBS);
+        btnI.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                startActivity(new Intent(getApplicationContext(), InboxDoctor.class));
+            }
+        });
     }
 
 

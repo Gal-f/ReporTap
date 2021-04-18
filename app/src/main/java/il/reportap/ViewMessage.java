@@ -33,7 +33,7 @@ import java.util.Map;
 
 public class ViewMessage extends OptionsMenu {
 
-    private String messageID; //TODO get this from the previous screen somehow
+    private Integer messageID; //TODO get this from the previous screen somehow
     private TextView sentTime, senderName, patientId, patientName, testName, componentName, measuredAmountValue, measurementUnit, boolValue, comments;
     private ImageView isUrgent;
     private boolean isTestValueBool;
@@ -61,7 +61,7 @@ public class ViewMessage extends OptionsMenu {
         this.isUrgent = findViewById(R.id.imageViewUrgent);
 
         // FOR TESTING ONLY. REMOVE THIS WHEN DONE.
-        Button button =findViewById(R.id.ButtonTestMessageIDBox);
+/*        Button button =findViewById(R.id.ButtonTestMessageIDBox);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,9 +69,14 @@ public class ViewMessage extends OptionsMenu {
                 getMessage(messageID);
             }
         });
-
+*/
         //END TESTING ONLY
-        //getMessage(this.messageID);
+
+        //  APPLY THESE 2 after adding and intent-extra in the linking page (the redirecting message in the inbox to be clicked on)
+        if (getIntent().getExtras() != null) {
+            messageID = getIntent().getIntExtra("MESSAGE_ID", 0);
+            getMessage(this.messageID);
+        }
 
         //TODO add other test results for the same patient (nice to have for version #1)
 
@@ -114,7 +119,7 @@ public class ViewMessage extends OptionsMenu {
         requestQueue.add(stringRequest);
     }
 
-    public void getMessage(String messageID){
+    public void getMessage(Integer messageID){
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URLs.URL_GETMESSAGE, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -166,7 +171,7 @@ public class ViewMessage extends OptionsMenu {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
-                params.put("messageID", messageID);
+                params.put("messageID", messageID.toString());
                 return params;
             }
         };
@@ -208,17 +213,19 @@ public class ViewMessage extends OptionsMenu {
         });
     }
 
-    public void markAsRead(String messageID, String userID){
+    public void markAsRead(Integer messageID, String userID){
         // show confirmation box
         // on approval show progressDialog
         // add approval time and user in DB table
-    }
 
-    public void reply(String messageID){
 
     }
 
-    public void forward(String messageID){
+    public void reply(Integer messageID){
+
+    }
+
+    public void forward(Integer messageID){
 
     }
 }

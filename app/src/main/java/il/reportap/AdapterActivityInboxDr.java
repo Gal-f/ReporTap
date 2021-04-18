@@ -1,6 +1,7 @@
 package il.reportap;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -43,6 +45,16 @@ public class AdapterActivityInboxDr extends RecyclerView.Adapter<AdapterActivity
                holder.isUrgent.setColorFilter(ContextCompat.getColor(context, R.color.red),
                        PorterDuff.Mode.MULTIPLY);
             }
+            holder.messageID = modelActivityInboxDr.getId();
+            holder.cardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, ViewMessage.class);
+                    intent.putExtra("MESSAGE_ID", holder.messageID);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(intent);
+                }
+            });
     }
 
     @Override
@@ -54,14 +66,17 @@ public class AdapterActivityInboxDr extends RecyclerView.Adapter<AdapterActivity
 
         public TextView sentTime, patientId,testName;
         public ImageView isUrgent;
+        public Integer messageID;
+        public CardView cardView;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
-            sentTime = itemView.findViewById(R.id.sentTime);
-            patientId = itemView.findViewById(R.id.patientId);
-            testName = itemView.findViewById(R.id.testName);
-            isUrgent = itemView.findViewById(R.id.isUrgent);
+            cardView = (CardView)itemView.findViewById(R.id.card_view);
+            sentTime = (TextView)itemView.findViewById(R.id.sentTime);
+            patientId = (TextView)itemView.findViewById(R.id.patientId);
+            testName = (TextView)itemView.findViewById(R.id.testName);
+            isUrgent = (ImageView) itemView.findViewById(R.id.isUrgent);
         }
     }
 }

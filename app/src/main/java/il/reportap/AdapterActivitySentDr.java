@@ -44,8 +44,7 @@ public class AdapterActivitySentDr extends RecyclerView.Adapter<AdapterActivityS
             holder.senderName.setText(modelActivitySentDr.getSender_name());
             if (!modelActivitySentDr.getConfirm_time().equals("0"))
             {
-                holder.isChecked.setColorFilter(ContextCompat.getColor(context, R.color.lightgreen),
-                        PorterDuff.Mode.MULTIPLY);
+                holder.isChecked.setImageResource(R.drawable.eyecheck2_bmp);
             }
     }
 
