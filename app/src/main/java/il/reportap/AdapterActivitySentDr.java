@@ -61,12 +61,12 @@ public class AdapterActivitySentDr extends RecyclerView.Adapter<AdapterActivityS
         public ViewHolder(View itemView) {
             super(itemView);
 
-            sentTime = (TextView)itemView.findViewById(R.id.sentTimeS);
-            patientId = (TextView)itemView.findViewById(R.id.patientIdS);
-            testName = (TextView)itemView.findViewById(R.id.testNameS);
-            text = (TextView)itemView.findViewById(R.id.RepText);
-            isChecked=(ImageView)itemView.findViewById(R.id.isChecked);
-            senderName=(TextView)itemView.findViewById(R.id.senderName);
+            sentTime = itemView.findViewById(R.id.sentTimeS);
+            patientId = itemView.findViewById(R.id.patientIdS);
+            testName = itemView.findViewById(R.id.testNameS);
+            text = itemView.findViewById(R.id.RepText);
+            isChecked= itemView.findViewById(R.id.isChecked);
+            senderName= itemView.findViewById(R.id.senderName);
         }
     }
 }

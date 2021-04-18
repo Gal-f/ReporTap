@@ -2,14 +2,14 @@ package il.reportap;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.PorterDuff;
-
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.loginregister.R;
 
@@ -58,10 +58,10 @@ public class AdapterActivityInboxDr extends RecyclerView.Adapter<AdapterActivity
         public ViewHolder(View itemView) {
             super(itemView);
 
-            sentTime = (TextView)itemView.findViewById(R.id.sentTime);
-            patientId = (TextView)itemView.findViewById(R.id.patientId);
-            testName = (TextView)itemView.findViewById(R.id.testName);
-            isUrgent = (ImageView) itemView.findViewById(R.id.isUrgent);
+            sentTime = itemView.findViewById(R.id.sentTime);
+            patientId = itemView.findViewById(R.id.patientId);
+            testName = itemView.findViewById(R.id.testName);
+            isUrgent = itemView.findViewById(R.id.isUrgent);
         }
     }
 }

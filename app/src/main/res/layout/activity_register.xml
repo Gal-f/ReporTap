@@ -26,7 +26,8 @@
             android:layout_marginBottom="8dp"
             android:fontFamily="sans-serif"
             android:hint="מספר עובד"
-            android:inputType="text" />
+            android:inputType="text"
+            android:text="111555" />
 
         <EditText
             android:id="@+id/editTextPassword"
@@ -38,6 +39,7 @@
             android:gravity="right"
             android:hint="סיסמה"
             android:inputType="textPassword"
+            android:text="1111"
             android:textDirection="anyRtl" />
 
 
@@ -49,17 +51,19 @@
             android:layout_marginBottom="8dp"
             android:fontFamily="sans-serif"
             android:hint="שם מלא"
-            android:inputType="text" />
+            android:inputType="text"
+            android:text="עדן פרץ" />
 
         <EditText
             android:id="@+id/editTextEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
             android:fontFamily="sans-serif"
             android:hint="אימייל"
-            android:inputType="textEmailAddress" />
+            android:inputType="textEmailAddress"
+            android:text="eden08640@gmail.com" />
 
         <EditText
             android:id="@+id/editTextPhoneNumber"
@@ -71,6 +75,7 @@
             android:gravity="right"
             android:hint="מספר טלפון"
             android:inputType="phone"
+            android:text="0505802310"
             android:textDirection="anyRtl" />
 
         <Spinner
@@ -97,7 +102,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            android:onClick="sendMessage"
             android:text="הרשם" />
 
         <TextView
@@ -120,5 +124,34 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/dialogPopUp"
+        android:layout_width="350dp"
+        android:layout_height="350dp"
+        android:background="#95E3E0"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:outlineProvider="bounds"
+        android:outlineSpotShadowColor="#00BCD4"
+        android:visibility="invisible">
+
+
+        <EditText
+            android:id="@+id/editTextOTP"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:ems="10"
+            android:gravity="center"
+            android:hint="נא להזין את קוד האימות"
+            android:inputType="textPersonName" />
+
+        <Button
+            android:id="@+id/buttonSendOTP"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="send" />
+    </LinearLayout>
 
 </RelativeLayout>
