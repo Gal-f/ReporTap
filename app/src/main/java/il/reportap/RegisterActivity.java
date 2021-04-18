@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -18,17 +19,23 @@ import com.example.loginregister.R;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.util.HashMap;
+import java.util.Random;
+import java.util.concurrent.Executors;
 
 
 public class RegisterActivity extends AppCompatActivity {
 
     EditText editTextPassword, editTextEmployeeNumber,
-            editTextFullName, editTextPhoneNumber, editTextEmail;
+            editTextFullName, editTextPhoneNumber, editTextEmail, editTextOTP;
     Spinner spinnerDepartment, spinnerJobTitle;
-    HashMap<String, Integer> deptData = new HashMap<String, Integer>(){{
-        put("מעבדה מיקרוביולוגית",1);
-        put("פנימית א",2);
+    LinearLayout dialog;
+    String otp;
+
+    HashMap<String, Integer> deptData = new HashMap<String, Integer>() {{
+        put("מעבדה מיקרוביולוגית", 1);
+        put("פנימית א", 2);
     }};
 
     @Override
@@ -36,46 +43,40 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        editTextPassword = (EditText) findViewById(R.id.editTextPassword);
-        editTextEmployeeNumber = (EditText) findViewById(R.id.editTextEmployeeNumber);
-        editTextFullName = (EditText) findViewById(R.id.editTextFullName);
-        editTextEmail = (EditText) findViewById(R.id.editTextEmail);
+        editTextPassword = findViewById(R.id.editTextPassword);
+        editTextEmployeeNumber = findViewById(R.id.editTextEmployeeNumber);
+        editTextFullName = findViewById(R.id.editTextFullName);
+        editTextEmail = findViewById(R.id.editTextEmail);
         spinnerJobTitle = findViewById(R.id.spinnerJobTitle);
-        editTextPhoneNumber = (EditText) findViewById(R.id.editTextPhoneNumber);
+        editTextPhoneNumber = findViewById(R.id.editTextPhoneNumber);
         spinnerDepartment = findViewById(R.id.spinnerDepartment);
+        editTextOTP = findViewById(R.id.editTextOTP);
+        dialog = (LinearLayout) findViewById(R.id.dialogPopUp);
+        otp = new DecimalFormat("000000").format(new Random().nextInt(999999));
 
         //define spinners options
-        String[] departments = new String[]{"בחר מחלקה","מעבדה מיקרוביולוגית", "פנימית א"};
+        String[] departments = new String[]{"בחר מחלקה", "מעבדה מיקרוביולוגית", "פנימית א"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, departments);
         spinnerDepartment.setAdapter(adapter);
 
-        String[] roles = new String[]{"בחר תפקיד","מנהל.ת מחלקה", "עובד.ת מעבדה","רופא.ה","עובד.ת אדמיניסטרציה","אח.ות"};
+        String[] roles = new String[]{"בחר תפקיד", "מנהל.ת מחלקה", "עובד.ת מעבדה", "רופא.ה", "עובד.ת אדמיניסטרציה", "אח.ות"};
         ArrayAdapter<String> adapter2 = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, roles);
         spinnerJobTitle.setAdapter(adapter2);
 
-        findViewById(R.id.buttonRegister).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //if user pressed on button register
-                //here we will register the user to server
-                registerUser();
-            }
+        findViewById(R.id.buttonRegister).setOnClickListener(view -> {
+            //if user pressed on button register
+            //here we will register the user to server
+            registerUser();
         });
 
-        findViewById(R.id.textViewLogin).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //if user pressed on login
-                //we will open the login screen
-                finish();
-                startActivity(new Intent(RegisterActivity.this, MainActivity.class));
-            }
+        findViewById(R.id.textViewLogin).setOnClickListener(view -> {
+            //if user pressed on login
+            //we will open the login screen
+            finish();
+            startActivity(new Intent(RegisterActivity.this, MainActivity.class));
         });
 
 
-    }
-    public void sendMessage(View view) {
-        // Do something in response to button
     }
 
     private void registerUser() {
@@ -121,14 +122,14 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
         //not allowed: numbers, english letters, signs, less than one space, less than 2 characters in a word
-        if(!fullName.matches("^(([\\u0590-\\u05FF\\uFB1D-\\uFB4F]{2,})*)\\s+([\\u0590-\\u05FF\\uFB1D-\\uFB4F]*)$")){
+        if (!fullName.matches("^(([\\u0590-\\u05FF\\uFB1D-\\uFB4F]{2,})*)\\s+([\\u0590-\\u05FF\\uFB1D-\\uFB4F]*)$")) {
             editTextFullName.setError("שם מלא צריך להכיל אותיות בעברית בלבד ורווח בין השם הפרטי לבין שם המשפחה");
             editTextFullName.requestFocus();
             return;
         }
 
         if (TextUtils.isEmpty(email)) {
-            editTextEmail.setError("Please enter your email");
+            editTextEmail.setError("יש להזין אימייל");
             editTextEmail.requestFocus();
             return;
         }
@@ -140,22 +141,21 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
 
-
         if (TextUtils.isEmpty(phoneNumber)) {
             editTextPhoneNumber.setError("יש להזין מספר טלפון");
             editTextPhoneNumber.requestFocus();
             return;
         }
 
-        if(phoneNumber.length()!=10){
+        if (phoneNumber.length() != 10) {
             editTextPhoneNumber.setError("מספר טלפון צריך להכיל 10 ספרות בדיוק");
             editTextPhoneNumber.requestFocus();
             return;
         }
 
         String startPhoneNum = phoneNumber.substring(0, 3);
-        if(!(startPhoneNum.equals("050")||startPhoneNum.equals("052")||startPhoneNum.equals("054")
-                ||startPhoneNum.equals("058"))){
+        if (!(startPhoneNum.equals("050") || startPhoneNum.equals("052") || startPhoneNum.equals("054")
+                || startPhoneNum.equals("058"))) {
             editTextPhoneNumber.setError("מספר טלפון צריך להתחיל ב: 050/052/054/058 ");
             editTextPhoneNumber.requestFocus();
             return;
@@ -175,17 +175,15 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         }
 
-
-
         //for saving the id of the chosen department as a foreign key in the user record
         final Integer deptID = deptData.get(department);
-
 
         //if it passes all the validations
 
         class RegisterUser extends AsyncTask<Void, Void, String> {
 
             private ProgressBar progressBar;
+
             @Override
             protected String doInBackground(Void... voids) {
                 //creating request handler object
@@ -200,7 +198,7 @@ public class RegisterActivity extends AppCompatActivity {
                 params.put("role", jobTitle);
                 params.put("phone_number", phoneNumber);
                 params.put("works_in_dept", deptID);
-
+                params.put("otp", otp);
 
                 //returning the response
                 return requestHandler.sendPostRequest(URLs.URL_REGISTER, params);
@@ -222,12 +220,11 @@ public class RegisterActivity extends AppCompatActivity {
 
                 try {
                     //converting response to json object
-                    JSONObject obj = new JSONObject(s);
+                     JSONObject obj = new JSONObject(s);
 
                     //if no error in response
                     if (!obj.getBoolean("error")) {
                         Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
-
                         //getting the user from the response
                         JSONObject userJson = obj.getJSONObject("user");
 
@@ -242,14 +239,10 @@ public class RegisterActivity extends AppCompatActivity {
                                 userJson.getInt("works_in_dept")
 
                         );
-                        //storing the user in shared preferences
-                        SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
-
-                        //starting the profile activity
-                        finish();
-                        startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
-                    } else {
-                        Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
+                        dialog.setVisibility(View.VISIBLE);
+                        findViewById(R.id.buttonSendOTP).setOnClickListener(view -> {
+                            validateOTP(user);
+                        });
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -258,9 +251,34 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
         //executing the async task
-        RegisterUser ru = new RegisterUser();
+        final RegisterUser ru = new RegisterUser();
         ru.execute();
     }
 
+    private void validateOTP(User user) {
+        Executors.newSingleThreadExecutor().submit(() -> {
+            try {
+                //get the user input to check the validation code
+                String userOTP = editTextOTP.getText().toString();
+                if (userOTP.equals(otp)) {
+                    RequestHandler secondRequestHandler = new RequestHandler();
+                    HashMap<String, Object> params = new HashMap<>();
+                    params.put("employee_ID", user.getEmployeeNumber());
+                    secondRequestHandler.sendPostRequest(URLs.URL_VREIFIEDUSER, params);
+                    //storing the user in shared preferences
+                    SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
+                    finish();
+                    //TODO - navigate to lab inbox if this is a lab worker
+                    startActivity(new Intent(getApplicationContext(), InboxDoctor.class));
+                } else {
+                    Toast.makeText(RegisterActivity.this,
+                            "קוד שגוי, נסה שוב", Toast.LENGTH_LONG)
+                            .show();
+                }
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        });
 
+    }
 }

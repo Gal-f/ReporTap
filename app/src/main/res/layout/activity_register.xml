@@ -55,8 +55,8 @@
             android:id="@+id/editTextEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
             android:fontFamily="sans-serif"
             android:hint="אימייל"
             android:inputType="textEmailAddress" />
@@ -97,7 +97,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            android:onClick="sendMessage"
             android:text="הרשם" />
 
         <TextView
@@ -120,5 +119,34 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/dialogPopUp"
+        android:layout_width="350dp"
+        android:layout_height="350dp"
+        android:background="#95E3E0"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:outlineProvider="bounds"
+        android:outlineSpotShadowColor="#00BCD4"
+        android:visibility="invisible">
+
+
+        <EditText
+            android:id="@+id/editTextOTP"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:ems="10"
+            android:gravity="center"
+            android:hint="נא להזין את קוד האימות"
+            android:inputType="textPersonName" />
+
+        <Button
+            android:id="@+id/buttonSendOTP"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="send" />
+    </LinearLayout>
 
 </RelativeLayout>

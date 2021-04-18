@@ -3,22 +3,19 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PorterDuff;
-
-import androidx.cardview.widget.CardView;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.loginregister.R;
 
 import java.util.List;
-
-import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
-import static androidx.core.content.ContextCompat.startActivity;
 
 public class AdapterActivityInboxDr extends RecyclerView.Adapter<AdapterActivityInboxDr.ViewHolder>{
     private List<ModelActivityInboxDr> modelActivityInboxDrList;

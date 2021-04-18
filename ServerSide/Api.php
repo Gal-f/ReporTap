@@ -14,21 +14,30 @@ if (isset($_GET['apicall'])) {
 
     switch ($_GET['apicall']) {
 
-       case 'signup':
-                   $response = isTheseParametersAvailable(array('password', 'employee_ID', 'full_name', 'email', 'role', 'phone_number', 'works_in_dept'));
-                   if (!$response['error']) {
-                       //getting the values
-                       $password = md5($_POST['password']);
-                       $employeeNumber = $_POST['employee_ID'];
-                       $fullName = $_POST['full_name'];
-       				$email = $_POST['email'];
-                       $jobTitle = $_POST['role'];
-                       $phoneNumber = $_POST['phone_number'];
-                       $deptID = $_POST['works_in_dept'];
-                       $response = $oper->signup($password, $employeeNumber, $fullName, $email, $jobTitle, $phoneNumber, $deptID);
-                   }
-               break;
-               
+        case 'signup':
+            $response = isTheseParametersAvailable(array('password', 'employee_ID', 'full_name', 'email', 'role', 'phone_number', 'works_in_dept', 'otp'));
+            if (!$response['error']) {
+                //getting the values
+                $password = md5($_POST['password']);
+                $employeeNumber = $_POST['employee_ID'];
+                $fullName = $_POST['full_name'];
+                $email = $_POST['email'];
+                $jobTitle = $_POST['role'];
+                $phoneNumber = $_POST['phone_number'];
+                $deptID = $_POST['works_in_dept'];
+                $otp = $_POST['otp'];
+                $response = $oper->signup($password, $employeeNumber, $fullName, $email, $jobTitle, $phoneNumber, $deptID, $otp);
+            }
+        break;
+
+        case 'verifiedUser':
+			$response = isTheseParametersAvailable(array('employee_ID'));
+			if (!$response['error']) {
+			$employeeNumber = $_POST['employee_ID'];
+			$response = $oper-> verifiedUser($employeeNumber);
+			}
+		break;
+
         case 'login':
             $response = isTheseParametersAvailable(array('employee_ID', 'password'));
             if (!$response['error']) {
@@ -39,6 +48,7 @@ if (isset($_GET['apicall'])) {
                 $response = $oper->login($employeeNumber, $password);
             }
         break;
+
 
         case 'newMessage':
             //TODO Don't ask for patientName, as it can be retrieved with patientId. Solve this by somehow presenting the patientName on the new message form, after typing the ID.
