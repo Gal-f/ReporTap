@@ -1,6 +1,7 @@
 package il.reportap;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.GradientDrawable;
@@ -44,7 +45,7 @@ public class SentDoctor extends OptionsMenu {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sent_doctor);
-        Button btn = (Button)findViewById(R.id.sentB);
+        Button btn = (Button)findViewById(R.id.sentBS);
         btn.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.stroke));
         btn.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
 
@@ -107,7 +108,22 @@ public class SentDoctor extends OptionsMenu {
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
 
-
+        Button btnD= (Button)findViewById(R.id.doneBS);
+        btnD.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                startActivity(new Intent(getApplicationContext(), DoneDoctor.class));
+            }
+        });
+        Button btnI= (Button)findViewById(R.id.toDoBS);
+        btnI.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                startActivity(new Intent(getApplicationContext(), InboxDoctor.class));
+            }
+        });
     }
 
 

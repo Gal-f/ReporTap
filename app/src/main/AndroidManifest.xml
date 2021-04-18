@@ -29,6 +29,7 @@
             </intent-filter>
         </activity>
         <activity android:name="il.reportap.SentDoctor"/>
+        <activity android:name="il.reportap.DoneDoctor"/>
 
         <meta-data
             android:name="preloaded_fonts"
