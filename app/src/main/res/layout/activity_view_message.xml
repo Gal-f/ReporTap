@@ -278,74 +278,90 @@
             android:weightSum="1"
             android:gravity="center"
             android:orientation="horizontal">
-        <TableLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_weight="0.8">
-            <TableRow>
-                <ImageView
-                    android:id="@+id/imageViewUrgent"
-                    android:layout_width="100px"
-                    android:layout_height="100px"
-                    android:src="@drawable/greyexclamation_trans"
-                    android:tooltipText="לא דחוף"
-                    android:layout_marginHorizontal="5dp"/>
-                <ImageView
-                    android:id="@+id/imageButtonRead"
-                    android:layout_width="100px"
-                    android:layout_height="100px"
-                    android:src="@drawable/eye"
-                    android:tooltipText="לא נקרא"
-                    android:layout_marginHorizontal="5dp"
-                    android:hapticFeedbackEnabled="true" />
-                <ImageView
-                    android:id="@+id/imageButtonReply"
-                    android:layout_width="100px"
-                    android:layout_height="100px"
-                    android:src="@drawable/replyicon"
-                    android:tooltipText="שליחת תגובה לדיווח"
-                    android:layout_marginHorizontal="5dp"/>
-                <ImageView
-                    android:id="@+id/imageButtonForward"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:src="@drawable/forwardicon"
-                    android:layout_gravity="center"
-                    android:tooltipText="העברה למחלקה אחרת"
-                    android:layout_marginHorizontal="5dp"/>
-            </TableRow>
-            <TableRow>
-                <TextView
-                    android:id="@+id/textViewUrgent"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="12dp"
-                    android:text="לא דחוף"
-                    android:layout_marginHorizontal="5dp"/>
-                <TextView
-                    android:id="@+id/textViewRead"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="12dp"
-                    android:text="סימון כ'נקרא'"
-                    android:layout_marginHorizontal="5dp"/>
-                <TextView
-                    android:id="@+id/textViewReply"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="12dp"
-                    android:text="שליחת תגובה"
-                    android:layout_marginHorizontal="5dp"/>
-                <TextView
-                    android:id="@+id/textViewForward"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="12dp"
-                    android:text="העברה למחלקה אחרת"
-                    android:layout_marginHorizontal="5dp"/>
-            </TableRow>
-        </TableLayout>>
+            <TableLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.8"
+                android:stretchColumns="*">
+                <TableRow android:layout_weight="1">
+                    <ImageView
+                        android:id="@+id/imageViewUrgent"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:scaleType="fitCenter"
+                        android:adjustViewBounds="true"
+                        android:src="@drawable/greyexclamation_trans"
+                        android:tooltipText="לא דחוף"
+                        android:layout_marginHorizontal="5dp"/>
+                    <ImageButton
+                        android:id="@+id/imageButtonRead"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:scaleType="fitCenter"
+                        android:adjustViewBounds="true"
+                        android:src="@drawable/eye"
+                        android:tooltipText="לא נקרא"
+                        android:layout_marginHorizontal="5dp"
+                        android:hapticFeedbackEnabled="true"
+                        android:background="?android:selectableItemBackground"/>
+                    <ImageButton
+                        android:id="@+id/imageButtonReply"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:scaleType="fitCenter"
+                        android:adjustViewBounds="true"
+                        android:layout_marginHorizontal="5dp"
+                        android:src="@drawable/ic_baseline_reply_24"
+                        android:background="?android:selectableItemBackground"
+                        android:tooltipText="שליחת תגובה לדיווח"
+                        />
+
+                    <ImageButton
+                        android:id="@+id/imageButtonForward"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:scaleType="fitCenter"
+                        android:adjustViewBounds="true"
+                        android:layout_marginHorizontal="5dp"
+                        android:src="@drawable/ic_baseline_forward_to_inbox_24"
+                        android:background="?android:selectableItemBackground"
+                        android:tooltipText="העברה למחלקה אחרת" />
+                </TableRow>
+                <TableRow android:layout_weight="1">
+                    <TextView
+                        android:id="@+id/textViewUrgent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="12dp"
+                        android:text="לא דחוף"
+                        android:layout_marginHorizontal="5dp"/>
+                    <TextView
+                        android:id="@+id/textViewRead"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="12dp"
+                        android:text="סימון כ'נקרא'"
+                        android:layout_marginHorizontal="5dp"/>
+                    <TextView
+                        android:id="@+id/textViewReply"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="12dp"
+                        android:text="שליחת תגובה"
+                        android:layout_marginHorizontal="5dp"/>
+                    <TextView
+                        android:id="@+id/textViewForward"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="12dp"
+                        android:text="העברה למחלקה אחרת"
+                        android:layout_marginHorizontal="5dp"/>
+                </TableRow>
+            </TableLayout>
         </LinearLayout>
         <LinearLayout
             android:id="@+id/horizontalLine2"
