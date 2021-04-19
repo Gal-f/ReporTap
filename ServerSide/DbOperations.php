@@ -343,15 +343,29 @@ class DbOperations
 
     function markAsRead($messageID, $userID){
         $response = array();
-        $stmt = $this->conn->prepare("UPDATE messages SET confirm_time = CURRENT_TIMESTAMP, confirm_user = ? WHERE messages.ID = ?;");
-        $stmt->bind_param("ss", $userID, $messageID);
-        if ($stmt->execute()) {
-            $response['error'] = false;
-            $response['message'] = 'Message marked as read successfully';
-        } else {
+        // Query to add a confirmation user and time
+        $stmtMark = $this->conn->prepare("UPDATE messages SET confirm_time = CURRENT_TIMESTAMP, confirm_user = ? WHERE messages.ID = ?;");
+        $stmtMark->bind_param("si", $userID, $messageID);
+        // Query to check whether the message had already been marked by another user
+        $stmtCheck = $this->conn->prepare("SELECT confirm_user FROM messages WHERE confirm_user IS NULL AND ID = ?");
+        $stmtCheck->bind_param("i",$messageID);
+        $stmtCheck->execute();
+        $stmtCheck->store_result();
+        if ($stmtCheck->num_rows == 0){  // If it had been marked by another user, return a message and don't continue
             $response['error'] = true;
-            $response['message'] = 'Error while trying to mark the message as read';
+            $response['message'] = "ההודעה כבר אושרה ע\"י משתמש אחר";
+            $response['alreadyMarked'] = true;
+        } else {
+            if ($stmtMark->execute()) {
+                $response['error'] = false; // Successfully marked by the user
+                $response['message'] = 'Message marked as read successfully';
+                $response['alreadyMarked'] = false;
+            } else {
+                $response['error'] = true;  // Unable to mark, server-side error
+                $response['message'] = 'Error while trying to mark the message as read';
+                $response['alreadyMarked'] = false;
         }
+    }
         return $response;
     }
 
