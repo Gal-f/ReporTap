@@ -90,9 +90,8 @@ public class NewMessage extends OptionsMenu {
             }
         });
 
-        @SuppressLint("WrongViewCast")
-        AutoCompleteTextView deptSelect = findViewById(R.id.autoCompleteTextViewTestName);
-        deptSelect.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        //Display the correct interface for boolean and numeric test types
+        testName.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String selectedTest = parent.getItemAtPosition(position).toString();
@@ -128,6 +127,7 @@ public class NewMessage extends OptionsMenu {
         final String componentName = this.componentName.getText().toString().trim();
         final String isUrgent = (this.isUrgent.isChecked()?"1":"0");
         final String comments = this.comments.getText().toString().trim();
+
         // Set both numeric and boolean test results (as we can't define constants inside a condition) and use only one of them down the road
         final String measuredAmount = this.measuredAmount.getText().toString().trim();
         int selectedRadio = ((RadioGroup) findViewById(R.id.radioGroupBoolResult)).getCheckedRadioButtonId();
@@ -181,11 +181,10 @@ public class NewMessage extends OptionsMenu {
                 params.put("testType",testName);
                 params.put("componentName",componentName);
                 params.put("boolValue", "false");
+                params.put("isValueBool", (isTestValueBool ? "1" : "0"));
                 if (isTestValueBool) {     // Use either a numeric or boolean result, depending on the test type
-                    params.put("isValueBool", Boolean.toString(isTestValueBool));
                     params.put("testResultValue", booleanResult);
                 } else {
-                    params.put("isValueBool", Boolean.toString(isTestValueBool));
                     params.put("testResultValue", measuredAmount);
                 }
                 params.put("isUrgent",isUrgent);

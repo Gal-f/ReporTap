@@ -33,7 +33,7 @@ public class RegisterActivity extends AppCompatActivity {
     LinearLayout dialog;
     String otp;
 
-    HashMap<String, Integer> deptData = new HashMap<String, Integer>() {{
+    HashMap<String, Integer> deptData = new HashMap<String, Integer>() {{ //TODO connect this to the depts DB table
         put("מעבדה מיקרוביולוגית", 1);
         put("פנימית א", 2);
     }};
