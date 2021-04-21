@@ -16,4 +16,5 @@ public class URLs {
     public static final String URL_FORWARDMESSAGE = ROOT_URL + "forwardMessage";
     public static final String URL_VREIFIEDUSER = ROOT_URL + "verifiedUser";
     public static final String URL_DONE=ROOT_URL+ "donedr";
+    public static final String URL_INBOXLAB = ROOT_URL+ "inboxlab";
 }

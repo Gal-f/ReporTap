@@ -128,14 +128,15 @@ public class InboxDoctor extends OptionsMenu {
                         JSONArray repArray = repObj.getJSONArray("report");
 
                         for(int i=0; i<repArray.length(); i++){
-                            ModelActivityInboxDr modelActivityInboxDr = new ModelActivityInboxDr();
+
                             JSONObject jObg = new JSONObject();
                             jObg= repArray.getJSONObject(i);
-                            modelActivityInboxDr.setId(jObg.getInt("id"));
-                            modelActivityInboxDr.setSentTime(jObg.getString("sent_time"));
-                            modelActivityInboxDr.setPatientId(jObg.getString("patient_id"));
-                            modelActivityInboxDr.setTestName(jObg.getString("name"));
-                            modelActivityInboxDr.setUrgent(jObg.getInt("is_urgent"));
+                            ModelActivityInboxDr modelActivityInboxDr = new ModelActivityInboxDr(jObg.getInt("id"),
+                                    jObg.getInt("is_urgent"),
+                                    jObg.getString("sent_time"),
+                                    jObg.getString("patient_id"),
+                                    jObg.getString("name")
+                                    );
                             modelActivityInboxDrList.add(modelActivityInboxDr);
                         }
 

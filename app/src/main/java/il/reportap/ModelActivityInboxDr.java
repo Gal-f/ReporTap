@@ -32,24 +32,5 @@ public class ModelActivityInboxDr {
         return isUrgent;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public void setSentTime(String sentTime) {
-        this.sentTime = sentTime;
-    }
-
-    public void setPatientId(String patientId) {
-        this.patientId = patientId;
-    }
-
-    public void setTestName(String testName) {
-        this.testName = testName;
-    }
-
-    public void setUrgent(Integer urgent) {
-        isUrgent = urgent;
-    }
 }
 
