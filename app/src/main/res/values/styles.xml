@@ -12,4 +12,8 @@
         <item name="cornerSize">50%</item>
     </style>
 
+    <style name="AlertDialogRTL" parent="ThemeOverlay.AppCompat.Dialog.Alert">
+        <item name="android:layoutDirection">rtl</item>
+    </style>
+
 </resources>
