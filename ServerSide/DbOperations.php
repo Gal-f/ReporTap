@@ -402,7 +402,7 @@ class DbOperations
     function inboxlab($department)
     {
         $response = array();
-        $query="SELECT R.ID,M.ID, R.sent_time, M.patient_ID, T.name, R.text, CASE WHEN T.measurement_unit='mg' THEN 'מג' WHEN T.measurement_unit='µg' THEN 'מקג' ELSE T.measurement_unit END as measurement_unit, M.component, M.is_value_boolean,M.test_result_value, U.full_name, D.name FROM responses as R JOIN messages as M on R.response_to_messageID=M.ID JOIN users as U ON M.sender_user=U.employee_ID JOIN test_types as T ON M.test_type=T.ID JOIN departments as D ON U.works_in_dept=D.ID WHERE R.recipient_dept = ? AND R.confirm_time IS NULL order by R.sent_time desc";
+        $query="SELECT R.ID,M.ID, R.sent_time, M.patient_ID, T.name, R.text, CASE WHEN T.measurement_unit='mg' THEN 'מג' WHEN T.measurement_unit='µg' THEN 'מקג' ELSE T.measurement_unit END as measurement_unit, M.component, CASE WHEN M.is_value_boolean IS NULL THEN 0 ELSE M.is_value_boolean END AS is_value_boolean,M.test_result_value, U.full_name, D.name FROM responses as R JOIN messages as M on R.response_to_messageID=M.ID JOIN users as U ON M.sender_user=U.employee_ID JOIN test_types as T ON M.test_type=T.ID JOIN departments as D ON U.works_in_dept=D.ID WHERE R.recipient_dept = ? AND R.confirm_time IS NULL order by R.sent_time desc";
         $stmt = $this->conn->prepare($query);
         $stmt->bind_param("i", $department);
 
