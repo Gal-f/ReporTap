@@ -252,7 +252,7 @@ class DbOperations
         //TODO Join Messages & Test-types tables on testType field, in order to get boolean or numeric value.
         // If this works, remove field is_value_bool from table Messages and change function send_message accordingly.
         $response = array();
-        $stmt = $this->conn->prepare("SELECT M.ID, M.sent_time, M.patient_ID, T.ID, T.name, T.measurement_unit, M.is_value_boolean, M.test_result_value, M.text, M.component, M.is_urgent, M.sender_user FROM messages as M JOIN test_types as T ON M.test_type=T.ID WHERE M.ID = ?");
+        $stmt = $this->conn->prepare("SELECT M.ID, M.sent_time, M.patient_ID, P.full_name, T.ID, T.name, T.measurement_unit, M.is_value_boolean, M.test_result_value, M.text, M.component, M.is_urgent, M.sender_user, U.full_name, U.works_in_dept, D.name FROM messages as M JOIN test_types as T ON M.test_type=T.ID JOIN users as U ON M.sender_user=U.employee_ID JOIN departments as D ON U.works_in_dept=D.ID JOIN patients as P ON M.patient_ID=P.patient_ID WHERE M.ID = ?");
         //TODO Join users on message.sender_user=users.ID and add to SELECT the user name and department, to be displayed in the message screen
         //TODO perform the last TODO again for patient name
         $stmt->bind_param("s", $messageID);
@@ -260,12 +260,13 @@ class DbOperations
         $stmt->store_result();
         if ($stmt->num_rows > 0){
             if ($stmt->num_rows < 2){
-                $stmt->bind_result($messageID, $sentTime, $patientId, $testID, $testName, $measurementUnit, $isValueBool, $testResultValue, $comments, $componentName, $isUrgent, $sender);
+                $stmt->bind_result($messageID, $sentTime, $patientId, $patientName, $testID, $testName, $measurementUnit, $isValueBool, $testResultValue, $comments, $componentName, $isUrgent, $sender, $senderName, $senderDept, $senderDeptName);
                 $stmt->fetch();
                 $requestedMessage = array(
                     'messageID' => $messageID,
                     'sentTime' => $sentTime,
                     'patientId' => $patientId,
+                    'patientName' => $patientName,
                     'testID' => $testID,
                     'testName' => $testName,
                     'measurementUnit' => $measurementUnit,
@@ -274,7 +275,10 @@ class DbOperations
                     'comments' => $comments,
                     'componentName' => $componentName,
                     'isUrgent' => $isUrgent,
-                    'sender' => $sender
+                    'sender' => $sender,
+                    'senderName' => $senderName,
+                    'senderDept' => $senderDept,
+                    'senderDeptName' => $senderDeptName
                 );
                 $response['error'] = false;
                 $response['message'] = 'Pulled message successfully';
