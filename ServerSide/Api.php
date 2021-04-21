@@ -84,6 +84,12 @@ if (isset($_GET['apicall'])) {
                 $response=$oper->donedr($_POST['department']);
             }
         break;
+        case 'inboxlab':
+            $response = isTheseParametersAvailable(array('department'));
+            if (!$response['error']){
+                $response=$oper->inboxlab($_POST['department']);
+            }
+        break;
         case 'getDeptsAndTests':
             $response = $oper->getDeptsAndTests();
         break;

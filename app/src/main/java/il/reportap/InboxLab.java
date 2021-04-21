@@ -33,77 +33,46 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class InboxDoctor extends OptionsMenu {
+public class InboxLab extends OptionsMenu {
 
     private RecyclerView recyclerView;
-    private AdapterActivityInboxDr adapter;
-    private List<ModelActivityInboxDr> modelActivityInboxDrList;
-    private List<ModelActivityInboxDr> urgentList;
+    private AdapterActivityInboxLab adapter;
+    private List<ModelActivityInboxLab> modelActivityInboxLabList;
 
     @SuppressLint("ResourceAsColor")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.inbox_doctor);
+        setContentView(R.layout.inbox_lab);
         Button btn = (Button)findViewById(R.id.toDoBI);
         btn.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.stroke));
         btn.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
 
-        recyclerView = (RecyclerView)findViewById(R.id.recyclerViewInbox);
+        recyclerView = (RecyclerView)findViewById(R.id.recyclerViewInboxL);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         DividerItemDecoration divider = new DividerItemDecoration(getApplicationContext(), DividerItemDecoration.VERTICAL);
         divider.setDrawable(getDrawable(R.drawable.dividerbig));
         recyclerView.addItemDecoration(divider);
 
-        modelActivityInboxDrList = new ArrayList<>();
+        modelActivityInboxLabList = new ArrayList<>();
         myStringRequest();
-        CheckBox chkBx = (CheckBox)findViewById(R.id.checkBox);
-        chkBx.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                if(chkBx.isChecked()){
-                    urgentList= new ArrayList<>();
-                    for (int i = 0; i< modelActivityInboxDrList.size(); i++)
-                    {
-                        if (modelActivityInboxDrList.get(i).getIsUrgent()==1)
-                        {
-                            urgentList.add(modelActivityInboxDrList.get(i));
-                        }
-                    }
-                    adapter = new AdapterActivityInboxDr(urgentList,getApplicationContext());
-                    ImageView img = (ImageView)findViewById(R.id.imageView3);
-                    img.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.red),
-                            PorterDuff.Mode.MULTIPLY);
-                }
-                else {
-                    adapter = new AdapterActivityInboxDr(modelActivityInboxDrList,getApplicationContext());
-                    ImageView img = (ImageView)findViewById(R.id.imageView3);
-                    img.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.gray),
-                            PorterDuff.Mode.MULTIPLY);
-
-                }
-                recyclerView.setAdapter(adapter);
-
-            }
-
-        });
-        SwipeRefreshLayout mySwipeToRefresh= (SwipeRefreshLayout)findViewById(R.id.swiperefresh);
-        mySwipeToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                myStringRequest();
-                mySwipeToRefresh.setRefreshing(false);
-            }
-        });
-        Button btnS= (Button)findViewById(R.id.sentBI);
-        btnS.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-                startActivity(new Intent(getApplicationContext(), SentDoctor.class));
-            }
-        });
+//        SwipeRefreshLayout mySwipeToRefresh= (SwipeRefreshLayout)findViewById(R.id.swiperefresh);
+//        mySwipeToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+//            @Override
+//            public void onRefresh() {
+//                myStringRequest();
+//                mySwipeToRefresh.setRefreshing(false);
+//            }
+//        });
+//        Button btnS= (Button)findViewById(R.id.sentBI);
+//        btnS.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                finish();
+//                startActivity(new Intent(getApplicationContext(), SentDoctor.class));
+//            }
+//        });
         Button btnD= (Button)findViewById(R.id.doneBI);
         btnD.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,7 +87,7 @@ public class InboxDoctor extends OptionsMenu {
 
     public void myStringRequest (){
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
-                URLs.URL_INBOXDR,
+                URLs.URL_INBOXLAB,
                 //lambda expression
                 response -> {
 
@@ -128,16 +97,21 @@ public class InboxDoctor extends OptionsMenu {
                         JSONArray repArray = repObj.getJSONArray("report");
 
                         for(int i=0; i<repArray.length(); i++){
-
                             JSONObject jObg = new JSONObject();
                             jObg= repArray.getJSONObject(i);
-                            ModelActivityInboxDr modelActivityInboxDr = new ModelActivityInboxDr(jObg.getInt("id"),
-                                    jObg.getInt("is_urgent"),
+                            ModelActivityInboxLab modelActivityInboxLab = new ModelActivityInboxLab(jObg.getInt("id"),
+                                    jObg.getInt("messageID"),
                                     jObg.getString("sent_time"),
                                     jObg.getString("patient_id"),
-                                    jObg.getString("name")
-                                    );
-                            modelActivityInboxDrList.add(modelActivityInboxDr);
+                                    jObg.getString("name"),
+                                    jObg.getString("text"),
+                                    jObg.getString("measurement"),
+                                    jObg.getString("component"),
+                                    jObg.getInt("is_value_bool"),
+                                    Float.valueOf((float) jObg.getDouble("result_value")),
+                                    jObg.getString("full_name"),
+                                    jObg.getString("dept_name"));
+                            modelActivityInboxLabList.add(modelActivityInboxLab);
                         }
 
 
@@ -147,7 +121,7 @@ public class InboxDoctor extends OptionsMenu {
                         e.printStackTrace();
                     }
 
-                    adapter = new AdapterActivityInboxDr(modelActivityInboxDrList,getApplicationContext());
+                    adapter = new AdapterActivityInboxLab(modelActivityInboxLabList,getApplicationContext());
                     recyclerView.setAdapter(adapter);
 
                 },
