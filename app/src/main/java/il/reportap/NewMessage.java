@@ -116,6 +116,14 @@ public class NewMessage extends OptionsMenu {
                 fillTestValues();
             }
         });
+
+        findViewById(R.id.imageButtonBarcode).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "סריקת ברקוד לא זמינה עדיין בגירסה הזו...", Toast.LENGTH_LONG).show();
+
+            }
+        });
     }
 
     public Boolean Send(){

@@ -1,14 +1,15 @@
 package il.reportap;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AlertDialog;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Pair;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -33,16 +34,18 @@ import java.util.Map;
 
 public class ViewMessage extends OptionsMenu {
 
-    private Integer messageID; //TODO get this from the previous screen somehow
-    private TextView sentTime, senderName, patientId, patientName, testName, componentName, measuredAmountValue, measurementUnit, boolValue, comments;
+    private Integer messageID, senderID, senderDept;
+    private TextView sentTime, senderName, senderDeptName, patientId, patientName, testName, componentName, measuredAmountValue, measurementUnit, boolValue, comments;
     private boolean isTestValueBool;
     private ImageView isUrgent;
-    private ImageButton wasRead, reply, forward; //TODO change these to ImageButtons
-    private Boolean successMarkRead, successReply, successForward;
+    private ImageButton wasReadButton, replyButton, forwardButton;
+    private EditText editTextReplyText;
 
     private HashMap<String, Integer> deptMap;                     //Translates department name to it's corresponding ID
     private HashMap<String, Pair<Integer, String>> testTypeMap;   //Translates test type ID to it's corresponding name + result type (in this form: [name, [ID, resultType]] )
     private ProgressDialog progressDialog;
+
+    //TODO Define back-button to refresh the inbox rather then just go back to it's old state
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +56,8 @@ public class ViewMessage extends OptionsMenu {
 
         populateHashmaps();
         this.sentTime = findViewById(R.id.textViewDateTime);
+        this.senderName = findViewById(R.id.textViewSenderName);
+        this.senderDeptName = findViewById(R.id.textViewSenderDeptName);
         this.patientName = findViewById(R.id.textViewPatientName);
         this.patientId = findViewById(R.id.textViewPatientID);
         this.testName = findViewById(R.id.textViewTestName);
@@ -62,6 +67,7 @@ public class ViewMessage extends OptionsMenu {
         this.boolValue = findViewById(R.id.textViewBoolResult);
         this.comments = findViewById(R.id.textViewComments);
         this.isUrgent = findViewById(R.id.imageViewUrgent);
+        this.editTextReplyText = findViewById(R.id.EditTextReplyText);
 
         // FOR TESTING ONLY. REMOVE THIS WHEN DONE.
 /*        Button button =findViewById(R.id.ButtonTestMessageIDBox);
@@ -107,6 +113,7 @@ public class ViewMessage extends OptionsMenu {
                     }
                 }
                 catch (JSONException e){
+                    Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
                     e.printStackTrace();
                 }
             }
@@ -133,9 +140,14 @@ public class ViewMessage extends OptionsMenu {
                         Toast.makeText(getApplicationContext(), jsonObject.getString("message"), Toast.LENGTH_LONG).show();
                     } else {
                         JSONObject requestedMessage = jsonObject.getJSONObject("requestedMessage");
-                        //patientName.setText(requestedMessage.getString("patientName"));
+                        patientName.setText(requestedMessage.getString("patientName"));
                         sentTime.setText(requestedMessage.getString("sentTime"));
+                        senderName.setText(requestedMessage.getString("senderName"));
+                        senderID = requestedMessage.getInt("sender");       // Keep sender ID for use later (though not presented on screen)
+                        senderDept = requestedMessage.getInt("senderDept"); // Keep sending department ID for use later (though not presented on screen)
+                        senderDeptName.setText(requestedMessage.getString("senderDeptName"));
                         patientId.setText(requestedMessage.getString("patientId"));
+                        patientName.setText(requestedMessage.getString("patientName"));
                         testName.setText(requestedMessage.getString("testName"));
                         componentName.setText(requestedMessage.getString("componentName"));
                         isTestValueBool = requestedMessage.getString("isValueBool").equals("1");
@@ -162,6 +174,7 @@ public class ViewMessage extends OptionsMenu {
                         updateFields();
                     }
                 } catch (JSONException e) {
+                    Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
                     e.printStackTrace();
                 }
             }
@@ -193,86 +206,161 @@ public class ViewMessage extends OptionsMenu {
             findViewById(R.id.linearLayoutMeasuredAmount).setVisibility(View.VISIBLE);
         }
 
-        wasRead =  findViewById(R.id.imageButtonRead);
-        reply = findViewById(R.id.imageButtonReply);
-        forward = findViewById(R.id.imageButtonForward);
+        wasReadButton =  findViewById(R.id.imageButtonRead);
+        replyButton = findViewById(R.id.imageButtonReply);
+        forwardButton = findViewById(R.id.imageButtonForward);
+        String userID = SharedPrefManager.getInstance(getApplicationContext()).getUser().getEmployeeNumber();
 
-        wasRead.setOnClickListener(new View.OnClickListener() {
+        wasReadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                markAsRead(messageID, SharedPrefManager.getInstance(getApplicationContext()).getUser().getEmployeeNumber());
+                markAsRead(messageID, userID);
             }
         });
-        reply.setOnClickListener(new View.OnClickListener() {
+        replyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                reply(messageID);
+                //TODO validate input
+                reply(messageID, userID, senderDept);
 
             }
         });
-        forward.setOnClickListener(new View.OnClickListener() {
+        forwardButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                forward(messageID);
+                //TODO validate input
+                forward(messageID, userID);
             }
         });
     }
 
     public void markAsRead(Integer messageID, String userID){
-
-        // TODO show confirmation box
-
-        progressDialog.setMessage("מעדכן שההודעה נקראה...");
-        progressDialog.show();
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, URLs.URL_MARK_AS_READ, new Response.Listener<String>() {
+        DialogInterface.OnClickListener confirmedMarkAsReadListener = new DialogInterface.OnClickListener() {
             @Override
-            public void onResponse(String response) {
-                try {
-                    Boolean successMarkRead = false;
-                    JSONObject jsonObject = new JSONObject(response);
-                    successMarkRead = !jsonObject.getBoolean("error");
-                    if (!successMarkRead) {
-                        Toast.makeText(getApplicationContext(), jsonObject.getString("message"), Toast.LENGTH_LONG).show();
-                        if (jsonObject.getBoolean("alreadyMarked")) {    // If the message had already been marked by another user, the function will also return TRUE and disable the button to mark again
-                            successMarkRead = true;
-                            wasRead.setImageResource(R.drawable.eyecheck2_bmp);
-                            wasRead.setClickable(false);
-                        }
-                    } else {
-                        Toast.makeText(getApplicationContext(), "ההודעה אושרה בהצלחה!", Toast.LENGTH_LONG).show();
-                        wasRead.setImageResource(R.drawable.eyecheck2_bmp);
-                        wasRead.setClickable(false);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        },
-                new Response.ErrorListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                progressDialog.setMessage("מעדכן שההודעה נקראה...");
+                progressDialog.show();
+                StringRequest stringRequest = new StringRequest(Request.Method.POST, URLs.URL_MARK_AS_READ, new Response.Listener<String>() {
                     @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+                    public void onResponse(String response) {
+                        try {
+                            Boolean successMarkRead = false;
+                            JSONObject jsonObject = new JSONObject(response);
+                            successMarkRead = !jsonObject.getBoolean("error");
+                            if (!successMarkRead) {
+                                Toast.makeText(getApplicationContext(), jsonObject.getString("message"), Toast.LENGTH_LONG).show();
+                                if (jsonObject.getBoolean("alreadyMarked")) {    // If the message had already been marked by another user, the function will also return TRUE and disable the button to mark again
+                                    successMarkRead = true;
+                                    wasReadButton.setImageResource(R.drawable.eyecheck2_bmp);
+                                    wasReadButton.setClickable(false);
+                                }
+                            } else {
+                                Toast.makeText(getApplicationContext(), "ההודעה אושרה בהצלחה!", Toast.LENGTH_LONG).show();
+                                wasReadButton.setImageResource(R.drawable.eyecheck2_bmp);
+                                wasReadButton.setClickable(false);
+                            }
+                        } catch (JSONException e) {
+                            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                            e.printStackTrace();
+                        }
                     }
-                }) {
-            @Nullable
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<>();
-                params.put("messageID",messageID.toString());
-                params.put("userID",userID);
-                return params;
+                },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+                            }
+                        }) {
+                    @Nullable
+                    @Override
+                    protected Map<String, String> getParams() throws AuthFailureError {
+                        Map<String, String> params = new HashMap<>();
+                        params.put("messageID",messageID.toString());
+                        params.put("userID",userID);
+                        return params;
+                    }
+                };
+                RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+                requestQueue.add(stringRequest);
+                progressDialog.hide();
             }
         };
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(stringRequest);
-        progressDialog.hide();
+        confirmMarkAsRead(messageID, userID, confirmedMarkAsReadListener);  // Show a confirmation dialog prior to marking the message as read
     }
 
-    public void reply(Integer messageID){
+    public void confirmMarkAsRead(Integer messageID, String userID, DialogInterface.OnClickListener confirmedMarkAsReadListener){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialogRTL);
+        builder.setTitle("אישור קריאה");
+        builder.setMessage(Html.fromHtml("האם לסמן שהדיווח נקרא?" + "<br/><b>" + "לא ניתן לבטל טיפול בדיווח" + "</b>"));
+        builder.setPositiveButton("כן", (DialogInterface.OnClickListener) confirmedMarkAsReadListener); // User confirmed
+        builder.setNegativeButton("ביטול", null);                                               // User cancelled
+        AlertDialog dialog = builder.show();
+        dialog.show();
+    }
+
+    public void reply(Integer messageID, String userID, Integer dept){
+        findViewById(R.id.replyPopupDialog).setVisibility(View.VISIBLE);    // Show popup dialog
+        findViewById(R.id.ButtonCancelReply).setOnClickListener(v -> {      // User canceled reply
+            findViewById(R.id.replyPopupDialog).setVisibility(View.INVISIBLE);
+            editTextReplyText.setText("");
+        });
+        findViewById(R.id.ButtonSendReply).setOnClickListener(v -> {        // User sent reply
+            progressDialog.setMessage("התגובה שלך נשלחת...");
+            progressDialog.show();
+
+            //Defining constant values for use in the parameters map
+            final String MessageID = messageID.toString();
+            final String UserID = userID.toString();
+            final String Dept = dept.toString();
+            final String ReplyText = editTextReplyText.getText().toString();
+
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, URLs.URL_NEWRESPONSE, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    try {
+                        JSONObject jsonObject = new JSONObject(response);
+                        if (jsonObject.getBoolean("error")) {
+                            Toast.makeText(getApplicationContext(), jsonObject.getString("message"), Toast.LENGTH_LONG).show();
+                        } else {
+                            //TODO mark as read
+                            Toast.makeText(getApplicationContext(), "התגובה נשלחה בהצלחה!", Toast.LENGTH_LONG).show();
+                            wasReadButton.setImageResource(R.drawable.eyecheck2_bmp);
+                            wasReadButton.setClickable(false);
+                        }
+                    } catch (JSONException e) {
+                        Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                        e.printStackTrace();
+                    }
+                }
+            },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    })
+            {
+                @Nullable
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("messageId", MessageID);
+                    params.put("sender", UserID);
+                    params.put("department", Dept);
+                    params.put("text", ReplyText);
+                    return params;
+                }
+            };
+            findViewById(R.id.replyPopupDialog).setVisibility(View.INVISIBLE);
+            ((EditText)findViewById(R.id.EditTextReplyText)).setText("");
+            progressDialog.hide();
+            RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+            requestQueue.add(stringRequest);
+        });
 
     }
 
-    public void forward(Integer messageID){
+    public void forward(Integer messageID, String userID){
 
     }
 }
