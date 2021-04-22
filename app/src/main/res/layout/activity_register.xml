@@ -126,36 +126,42 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    android:weightSum="1">
+    android:weightSum="1"
+    android:visibility="invisible">
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="25dp"
         android:background="@color/popup_background"
         android:gravity="center"
         android:orientation="vertical"
         android:outlineProvider="bounds"
         android:outlineSpotShadowColor="@color/popup_outlineSpotShadowColor"
-        android:visibility="visible">
+        android:padding="25dp">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layoutDirection="rtl">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="קוד אימות נשלח לכתובת המייל שלך."/>
+            android:layoutDirection="rtl"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="קוד אימות נשלח לכתובת המייל שלך." />
+
             <ImageView
                 android:layout_width="30dp"
                 android:layout_height="20dp"
                 android:layout_marginHorizontal="10dp"
                 android:src="@drawable/ic_baseline_mail_outline_24" />
         </LinearLayout>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="נדרש לאמת אותה כדי להשלים את ההרשמה."/>
+            android:text="נדרש לאמת אותה כדי להשלים את ההרשמה." />
+
         <EditText
             android:id="@+id/editTextOTP"
             android:layout_width="wrap_content"
