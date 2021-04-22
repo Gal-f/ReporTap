@@ -244,6 +244,9 @@ public class RegisterActivity extends AppCompatActivity {
                             validateOTP(user);
                         });
                     }
+                    else{
+                        Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_LONG).show();
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
