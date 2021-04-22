@@ -4,19 +4,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginStart="10dp"
-    android:layout_marginTop="50dp"
     android:layout_marginEnd="10dp"
-    android:layout_marginBottom="100dp"
     android:animateLayoutChanges="true"
+    android:gravity="center"
     tools:context="il.reportap.RegisterActivity">
 
-
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_centerVertical="true"
         android:orientation="vertical"
-        android:padding="10dp">
+        android:padding="10dp"
+        android:gravity="center_vertical"
+        android:layout_gravity="center_vertical">
 
 
         <EditText
@@ -112,7 +115,7 @@
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
 
     </LinearLayout>
-
+</ScrollView>
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"
@@ -179,5 +182,4 @@
             android:text="שלח" />
     </LinearLayout>
 </LinearLayout>
-
 </RelativeLayout>
