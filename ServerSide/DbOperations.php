@@ -406,7 +406,7 @@ class DbOperations
     function inboxlab($department)
     {
         $response = array();
-        $query="SELECT R.ID,M.ID, R.sent_time, M.patient_ID, T.name, R.text, CASE WHEN T.measurement_unit='mg' THEN 'מג' WHEN T.measurement_unit='µg' THEN 'מקג' ELSE T.measurement_unit END as measurement_unit, M.component, CASE WHEN M.is_value_boolean IS NULL THEN 0 ELSE M.is_value_boolean END AS is_value_boolean,M.test_result_value, U.full_name, D.name FROM responses as R JOIN messages as M on R.response_to_messageID=M.ID JOIN users as U ON M.sender_user=U.employee_ID JOIN test_types as T ON M.test_type=T.ID JOIN departments as D ON U.works_in_dept=D.ID WHERE R.recipient_dept = ? AND R.confirm_time IS NULL order by R.sent_time desc";
+        $query="SELECT R.ID,M.ID, R.sent_time, M.patient_ID, T.name, R.text,T.measurement_unit, M.component, CASE WHEN M.is_value_boolean IS NULL THEN 0 ELSE M.is_value_boolean END AS is_value_boolean,M.test_result_value, U.full_name, D.name FROM responses as R JOIN messages as M on R.response_to_messageID=M.ID JOIN users as U ON M.sender_user=U.employee_ID JOIN test_types as T ON M.test_type=T.ID JOIN departments as D ON U.works_in_dept=D.ID WHERE R.recipient_dept = ? AND R.confirm_time IS NULL order by R.sent_time desc";
         $stmt = $this->conn->prepare($query);
         $stmt->bind_param("i", $department);
 
@@ -432,6 +432,90 @@ class DbOperations
                     'is_value_bool' => $isValueBool,
                     'result_value'=> $resultValue,
                     'full_name'=> $fullName,
+                    'dept_name' => $deptName
+                );
+                $rows--;
+                //TODO add a 'recieve_time' to each message only the first time it is presented in the inboxdr
+            }
+            $response['error'] = false;
+            $response['message'] = 'new report for you';
+            $response['report'] = $report;
+        } else {
+            $response['error'] = true;
+            $response['message'] = 'שגיאה בהצגת הדיווח';
+        }
+        return $response;
+
+    }
+    function donelab($department)
+    {
+        $response = array();
+        $query="SELECT R.ID,M.ID, R.sent_time, M.patient_ID, T.name, R.text, T.measurement_unit, M.component, CASE WHEN M.is_value_boolean IS NULL THEN 0 ELSE M.is_value_boolean END AS is_value_boolean,M.test_result_value, U.full_name, D.name FROM responses as R JOIN messages as M on R.response_to_messageID=M.ID JOIN users as U ON M.sender_user=U.employee_ID JOIN test_types as T ON M.test_type=T.ID JOIN departments as D ON U.works_in_dept=D.ID WHERE R.recipient_dept = ? AND R.confirm_time IS NOT NULL order by R.sent_time desc";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("i", $department);
+
+        $stmt->execute();
+
+        $stmt->store_result();
+        $rows=$stmt->num_rows;
+
+        if ($stmt->num_rows > 0) {
+
+            while ($rows>0){
+                $stmt->bind_result($id,$messageID, $sentTime, $patientId, $testName, $text,$measurement,$component,$isValueBool,$resultValue,$fullName,$deptName);
+                $stmt->fetch();
+
+                $report[$stmt->num_rows-$rows] = array('id' =>$id,
+                    'messageID' => $messageID,
+                    'sent_time' => $sentTime,
+                    'patient_id' => $patientId,
+                    'name' => $testName,
+                    'text' => $text,
+                    'measurement' => $measurement,
+                    'component' => $component,
+                    'is_value_bool' => $isValueBool,
+                    'result_value'=> $resultValue,
+                    'full_name'=> $fullName,
+                    'dept_name' => $deptName
+                );
+                $rows--;
+                //TODO add a 'recieve_time' to each message only the first time it is presented in the inboxdr
+            }
+            $response['error'] = false;
+            $response['message'] = 'new report for you';
+            $response['report'] = $report;
+        } else {
+            $response['error'] = true;
+            $response['message'] = 'שגיאה בהצגת הדיווח';
+        }
+        return $response;
+
+    }
+
+    function sentlab($department)
+    {
+        $response = array();
+        $query="SELECT M.ID, M.sent_time, M.patient_ID, T.name, M.is_urgent,CASE WHEN M.confirm_time IS NULL THEN 0 ELSE M.confirm_time END AS confirm_time, D.name FROM messages as M JOIN test_types as T ON M.test_type=T.ID JOIN departments as D ON M.recipient_dept=D.ID JOIN users as U ON M.sender_user=U.employee_ID WHERE U.works_in_dept = ? order by M.sent_time desc";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("i", $department);
+
+        $stmt->execute();
+
+        $stmt->store_result();
+        $rows=$stmt->num_rows;
+
+        if ($stmt->num_rows > 0) {
+
+            while ($rows>0){
+                $stmt->bind_result($id, $sentTime, $patientId, $testName,$isUrgent, $confirmTime,$deptName);
+                $stmt->fetch();
+
+                $report[$stmt->num_rows-$rows] = array('id' =>$id,
+                    'sent_time' => $sentTime,
+                    'patient_id' => $patientId,
+                    'name' => $testName,
+                    'is_urgent' => $isUrgent,
+                    'confirm_time' => $confirmTime,
                     'dept_name' => $deptName
                 );
                 $rows--;
