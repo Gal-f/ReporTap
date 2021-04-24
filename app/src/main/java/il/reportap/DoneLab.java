@@ -2,12 +2,9 @@ package il.reportap;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -15,7 +12,6 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -33,7 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class InboxLab extends OptionsMenu {
+public class DoneLab extends OptionsMenu {
 
     private RecyclerView recyclerView;
     private AdapterActivityInboxLab adapter;
@@ -43,12 +39,12 @@ public class InboxLab extends OptionsMenu {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.inbox_lab);
-        Button btn = (Button)findViewById(R.id.toDoBIL);
+        setContentView(R.layout.done_lab);
+        Button btn = (Button)findViewById(R.id.doneBDL);
         btn.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.stroke));
         btn.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
 
-        recyclerView = (RecyclerView)findViewById(R.id.recyclerViewInboxL);
+        recyclerView = (RecyclerView)findViewById(R.id.recyclerViewDoneL);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         DividerItemDecoration divider = new DividerItemDecoration(getApplicationContext(), DividerItemDecoration.VERTICAL);
@@ -65,7 +61,7 @@ public class InboxLab extends OptionsMenu {
 //                mySwipeToRefresh.setRefreshing(false);
 //            }
 //        });
-        Button btnS= (Button)findViewById(R.id.sentBIL);
+        Button btnS= (Button)findViewById(R.id.sentBDL);
         btnS.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -73,12 +69,12 @@ public class InboxLab extends OptionsMenu {
                 startActivity(new Intent(getApplicationContext(), SentLab.class));
             }
         });
-        Button btnD= (Button)findViewById(R.id.doneBIL);
+        Button btnD= (Button)findViewById(R.id.toDoBDL);
         btnD.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
-                startActivity(new Intent(getApplicationContext(), DoneLab.class));
+                startActivity(new Intent(getApplicationContext(), InboxLab.class));
             }
         });
 
@@ -87,7 +83,7 @@ public class InboxLab extends OptionsMenu {
 
     public void myStringRequest (){
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
-                URLs.URL_INBOXLAB,
+                URLs.URL_DONELAB,
                 //lambda expression
                 response -> {
 

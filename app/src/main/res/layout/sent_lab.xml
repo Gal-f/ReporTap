@@ -21,7 +21,7 @@
         tools:ignore="MissingConstraints">
 
         <Button
-            android:id="@+id/sentBIL"
+            android:id="@+id/sentBSL"
             android:layout_width="wrap_content"
             android:layout_height="60dp"
             android:layout_weight="1"
@@ -32,7 +32,7 @@
             app:strokeWidth="2dp" />
 
         <Button
-            android:id="@+id/doneBIL"
+            android:id="@+id/doneBSL"
             android:layout_width="wrap_content"
             android:layout_height="60dp"
             android:layout_weight="1"
@@ -43,7 +43,7 @@
             app:strokeWidth="2dp" />
 
         <Button
-            android:id="@+id/toDoBIL"
+            android:id="@+id/toDoBSL"
             android:layout_width="wrap_content"
             android:layout_height="60dp"
             android:layout_weight="1"
@@ -71,25 +71,26 @@
             android:orientation="vertical">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/linearLayout6"
+                android:id="@+id/linearLayout5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <TextView
                     android:id="@+id/textView"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:paddingLeft="100dp"
-                    android:text="@string/inboxDescL"
+                    android:layout_height="wrap_content"
+                    android:padding="2dp"
+                    android:text="@string/sentDescL"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerViewInboxL"
+                android:id="@+id/recyclerViewSentL"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior" />
