@@ -7,7 +7,6 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -19,19 +18,16 @@ import com.example.loginregister.R;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.DecimalFormat;
 import java.util.HashMap;
-import java.util.Random;
-import java.util.concurrent.Executors;
 
 
 public class RegisterActivity extends AppCompatActivity {
 
     EditText editTextPassword, editTextEmployeeNumber,
-            editTextFullName, editTextPhoneNumber, editTextEmail, editTextOTP;
+            editTextFullName, editTextPhoneNumber, editTextEmail;
     Spinner spinnerDepartment, spinnerJobTitle;
-    LinearLayout dialog;
-    String otp;
+    //LinearLayout dialog;
+    //String otp;
 
     HashMap<String, Integer> deptData = new HashMap<String, Integer>() {{ //TODO connect this to the depts DB table
         put("מעבדה מיקרוביולוגית", 1);
@@ -50,9 +46,6 @@ public class RegisterActivity extends AppCompatActivity {
         spinnerJobTitle = findViewById(R.id.spinnerJobTitle);
         editTextPhoneNumber = findViewById(R.id.editTextPhoneNumber);
         spinnerDepartment = findViewById(R.id.spinnerDepartment);
-        editTextOTP = findViewById(R.id.editTextOTP);
-        dialog = (LinearLayout) findViewById(R.id.dialogPopUp);
-        otp = new DecimalFormat("000000").format(new Random().nextInt(999999));
 
         //define spinners options
         String[] departments = new String[]{"בחר מחלקה", "מעבדה מיקרוביולוגית", "פנימית א"};
@@ -122,7 +115,7 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
         //not allowed: numbers, english letters, signs, less than one space, less than 2 characters in a word
-        if (!fullName.matches("^(([\\u0590-\\u05FF\\uFB1D-\\uFB4F]{2,})*)\\s+([\\u0590-\\u05FF\\uFB1D-\\uFB4F]*)$")) {
+        if (!fullName.matches("^(([\\u0590-\\u05FF\\uFB1D-\\uFB4F]{2,})*)(\\s+[\\u0590-\\u05FF\\uFB1D-\\uFB4F]{2,})(?:\\s+[\\u0590-\\u05FF\\uFB1D-\\uFB4F]{2,}+){0,2}$")) {
             editTextFullName.setError("שם מלא צריך להכיל אותיות בעברית בלבד ורווח בין השם הפרטי לבין שם המשפחה");
             editTextFullName.requestFocus();
             return;
@@ -198,7 +191,8 @@ public class RegisterActivity extends AppCompatActivity {
                 params.put("role", jobTitle);
                 params.put("phone_number", phoneNumber);
                 params.put("works_in_dept", deptID);
-                params.put("otp", otp);
+               // params.put("otp", otp);
+                //params.put("sendTo", "phone");
 
                 //returning the response
                 return requestHandler.sendPostRequest(URLs.URL_REGISTER, params);
@@ -237,12 +231,11 @@ public class RegisterActivity extends AppCompatActivity {
                                 userJson.getString("role"),
                                 userJson.getString("phone_number"),
                                 userJson.getInt("works_in_dept")
-
                         );
-                        dialog.setVisibility(View.VISIBLE);
-                        findViewById(R.id.buttonSendOTP).setOnClickListener(view -> {
-                            validateOTP(user);
-                        });
+
+                        Intent intent = new Intent(RegisterActivity.this, TwoFactorAuth.class);
+                        intent.putExtra("user", user);
+                        startActivity(intent);
                     }
                     else{
                         Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_LONG).show();
@@ -256,32 +249,5 @@ public class RegisterActivity extends AppCompatActivity {
         //executing the async task
         final RegisterUser ru = new RegisterUser();
         ru.execute();
-    }
-
-    private void validateOTP(User user) {
-        Executors.newSingleThreadExecutor().submit(() -> {
-            try {
-                //get the user input to check the validation code
-                String userOTP = editTextOTP.getText().toString();
-                if (userOTP.equals(otp)) {
-                    RequestHandler secondRequestHandler = new RequestHandler();
-                    HashMap<String, Object> params = new HashMap<>();
-                    params.put("employee_ID", user.getEmployeeNumber());
-                    secondRequestHandler.sendPostRequest(URLs.URL_VREIFIEDUSER, params);
-                    //storing the user in shared preferences
-                    SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
-                    finish();
-                    //TODO - navigate to lab inbox if this is a lab worker
-                    startActivity(new Intent(getApplicationContext(), InboxDoctor.class));
-                } else {
-                    Toast.makeText(RegisterActivity.this,
-                            "קוד שגוי, נסה שוב", Toast.LENGTH_LONG)
-                            .show();
-                }
-            } catch (Exception exception) {
-                exception.printStackTrace();
-            }
-        });
-
     }
 }

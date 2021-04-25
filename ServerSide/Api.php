@@ -14,29 +14,41 @@ if (isset($_GET['apicall'])) {
 
     switch ($_GET['apicall']) {
 
-        case 'signup':
-            $response = isTheseParametersAvailable(array('password', 'employee_ID', 'full_name', 'email', 'role', 'phone_number', 'works_in_dept', 'otp'));
+       case 'signup':
+            $response = isTheseParametersAvailable(array('password', 'employee_ID', 'full_name', 'email', 'role', 'phone_number', 'works_in_dept'));
             if (!$response['error']) {
                 //getting the values
                 $password = md5($_POST['password']);
                 $employeeNumber = $_POST['employee_ID'];
                 $fullName = $_POST['full_name'];
-                $email = $_POST['email'];
+				$email = $_POST['email'];
                 $jobTitle = $_POST['role'];
                 $phoneNumber = $_POST['phone_number'];
                 $deptID = $_POST['works_in_dept'];
-                $otp = $_POST['otp'];
-                $response = $oper->signup($password, $employeeNumber, $fullName, $email, $jobTitle, $phoneNumber, $deptID, $otp);
+                $response = $oper->signup($password, $employeeNumber, $fullName, $email, $jobTitle, $phoneNumber, $deptID);
             }
         break;
 
-        case 'verifiedUser':
+		case 'sendOTP':
+			$response = isTheseParametersAvailable(array('email','phone_number','sendTo','otp'));
+			if (!$response['error']) {
+                //getting the values
+				$email = $_POST['email'];
+                $phoneNumber = $_POST['phone_number'];
+				$otp = $_POST['otp'];
+				$sendTo = $_POST['sendTo'];
+                $response = $oper->sendOTP($email, $phoneNumber, $sendTo, $otp);
+            }
+		break;
+
+		case 'verifiedUser':
 			$response = isTheseParametersAvailable(array('employee_ID'));
 			if (!$response['error']) {
 			$employeeNumber = $_POST['employee_ID'];
 			$response = $oper-> verifiedUser($employeeNumber);
 			}
 		break;
+
 
         case 'login':
             $response = isTheseParametersAvailable(array('employee_ID', 'password'));
@@ -88,6 +100,18 @@ if (isset($_GET['apicall'])) {
             $response = isTheseParametersAvailable(array('department'));
             if (!$response['error']){
                 $response=$oper->inboxlab($_POST['department']);
+            }
+        break;
+        case 'donelab':
+            $response = isTheseParametersAvailable(array('department'));
+            if (!$response['error']){
+                $response=$oper->donelab($_POST['department']);
+            }
+        break;
+        case 'sentlab':
+            $response = isTheseParametersAvailable(array('department'));
+            if (!$response['error']){
+                $response=$oper->sentlab($_POST['department']);
             }
         break;
         case 'getDeptsAndTests':

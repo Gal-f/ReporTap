@@ -119,12 +119,21 @@ public class MainActivity extends AppCompatActivity {
                                 userJson.getInt("works_in_dept")
 
                         );
-                        //storing the user in shared preferences
-                        SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
 
-                        //starting the inbox activity
-                        finish();
-                        startActivity(new Intent(getApplicationContext(), InboxDoctor.class));
+                        if(obj.getString("message").equals("משתמש לא מאומת")){
+                            Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_LONG).show();
+                            finish();
+                            Intent intent = new Intent(MainActivity.this, TwoFactorAuth.class);
+                            intent.putExtra("user", user);
+                            startActivity(intent);
+                        }
+                        else{
+                            //storing the user in shared preferences and log him in
+                            SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
+                            finish();
+                            //TODO - navigate to lab inbox if this is a lab worker
+                            startActivity(new Intent(getApplicationContext(), InboxDoctor.class));
+                        }
                     } else {
                         Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_LONG).show();
                     }

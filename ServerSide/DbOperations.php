@@ -1,6 +1,7 @@
 <?php
 
 require 'vendor/autoload.php';
+require_once 'vendor/sendgrid/sendgrid/sendgrid-php.php';
 
 class DbOperations
 {
@@ -15,7 +16,7 @@ class DbOperations
         $this->conn->query("SET NAMES 'utf8'");
     }
 
-   function signup($password, $employeeNumber, $fullName, $email, $jobTitle, $phoneNumber, $deptID, $otp)
+    function signup($password, $employeeNumber, $fullName, $email, $jobTitle, $phoneNumber, $deptID)
     {
         $response = array();
         //checking if a user with this employee number or phone number or email number already exists (must be unique)
@@ -30,41 +31,33 @@ class DbOperations
             $response['message'] = 'משתמש קיים במערכת עם אימייל, טלפון או מספר עובד זהה';
             $stmt->close();
         } else {
-			//send the user an email for second authentication and save his details in the db
-			$mail = new \SendGrid\Mail\Mail();
-			$mail->setFrom("eden.peretz@ibm.com", "ReporTap");
-			$mail->setSubject("אימות חשבון חדש");
-			$mail->addTo($email, $fullName);
-			$mail->addContent("text/plain", "קוד האימות שלך הוא: ".$otp);
-			$sendgrid = new \SendGrid('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');
 			try{
-				$sendgrid->send($mail);
-				$stmt = $this->conn->prepare("INSERT INTO users (password, employee_ID, full_name, email, role, phone_number, works_in_dept) VALUES (?, ?, ?, ?, ?, ?, ?)");
-				$stmt->bind_param("ssssssi", $password, $employeeNumber, $fullName, $email, $jobTitle, $phoneNumber, $deptID);
+					$stmt = $this->conn->prepare("INSERT INTO users (password, employee_ID, full_name, email, role, phone_number, works_in_dept) VALUES (?, ?, ?, ?, ?, ?, ?)");
+					$stmt->bind_param("ssssssi", $password, $employeeNumber, $fullName, $email, $jobTitle, $phoneNumber, $deptID);
 
-				if ($stmt->execute()) {
-					$stmt = $this->conn->prepare("SELECT id, employee_ID, full_name, email, role, phone_number, works_in_dept  FROM users WHERE employee_ID = ?");
-					$stmt->bind_param("s", $employeeNumber);
-					$stmt->execute();
-					$stmt->bind_result($id, $employeeNumber, $fullName, $email, $jobTitle, $phoneNumber, $deptID);
-					$stmt->fetch();
+					if ($stmt->execute()) {
+						$stmt = $this->conn->prepare("SELECT id, employee_ID, full_name, email, role, phone_number, works_in_dept  FROM users WHERE employee_ID = ?");
+						$stmt->bind_param("s", $employeeNumber);
+						$stmt->execute();
+						$stmt->bind_result($id, $employeeNumber, $fullName, $email, $jobTitle, $phoneNumber, $deptID);
+						$stmt->fetch();
 
-					$user = array(
-						'id' => $id,
-						'employee_ID' => $employeeNumber,
-						'full_name' => $fullName,
-						'email' => $email,
-						'role' => $jobTitle,
-						'phone_number' => $phoneNumber,
-						'works_in_dept' => $deptID
-					);
+						$user = array(
+							'id' => $id,
+							'employee_ID' => $employeeNumber,
+							'full_name' => $fullName,
+							'email' => $email,
+							'role' => $jobTitle,
+							'phone_number' => $phoneNumber,
+							'works_in_dept' => $deptID
+						);
 
-					$stmt->close();
-					//adding the user data in response
-					$response['error'] = false;
-					$response['message'] = 'משתמש נרשם בהצלחה';
-					$response['user'] = $user;
-				}
+						$stmt->close();
+						//adding the user data in response
+						$response['error'] = false;
+						$response['message'] = 'משתמש נרשם בהצלחה';
+						$response['user'] = $user;
+					}
 			}
 			catch (Exception $e) {
 				echo 'Caught exception: '. $e->getMessage() ."\n";
@@ -74,42 +67,116 @@ class DbOperations
         return $response;
     }
 
-   function verifiedUser($employeeNumber){
-		$response['message'] = 'the second authentication succeded';
-        $stmt = $this->conn->prepare('UPDATE `users` SET `otp_verified`=1 WHERE `employee_ID` = "'.$employeeNumber.'" ');
-		$stmt->bind_param("s", $employeeNumber);
+	function sendOTP($email, $phoneNumber, $sendTo, $otp){
+
+				include 'vendor/apiKeys.php';
+				//if the user wanted us to send him code via sms
+				if($sendTo == "phone"){
+					$phoneNum = "972".substr($phoneNumber,1);
+					$basic  = new \Vonage\Client\Credentials\Basic($vonageApiKey, $vonageApiSecret);
+					$client = new \Vonage\Client($basic);
+					$res = $client->sms()->send(new \Vonage\SMS\Message\SMS($phoneNum, "ReporTap", "קוד האימות שלך הוא: ".$otp));
+					$apiRes = $res->current();
+					//if the message was sent successfully
+					if($apiRes->getStatus() == 0){
+						$response['error'] = false;
+						$response['message'] = 'קוד נשלח בהצלחה';
+					}
+					else{
+						$response['error'] = true;
+						$response['message'] = 'שגיאה בשליחת קוד האימות';
+					}
+				}
+				//the user wanted us to send him code via email
+				else{
+					$mail = new \SendGrid\Mail\Mail();
+					$mail->setFrom("eden.peretz@ibm.com", "ReporTap");
+					$mail->setSubject("אימות חשבון חדש");
+				    $mail->addTo($email);
+					$mail->addContent("text/plain", "קוד האימות שלך הוא: ".$otp);
+					$sendgrid = new \SendGrid($sendGridApiKey);
+					try{
+							$sendGridRes = $sendgrid->send($mail);
+							if($sendGridRes->statusCode() >= 200 && $sendGridRes->statusCode() < 300){
+								$response['error'] = false;
+								$response['message'] = 'קוד נשלח בהצלחה';
+							}
+							else{
+								$response['error'] = true;
+								$response['message'] = 'שגיאה בשליחת קוד האימות';
+								$response['sendGridError'] = print_r($sendGridRes);
+							}
+
+					}
+					catch (Exception $e){
+						echo 'Caught exception: '. $e->getMessage() ."\n";
+					}
+
+				}
+		return $response;
+	}
+
+
+	function verifiedUser($employeeNumber){
+		$response = array();
+		//it this method was called we know that the user has already typed the correct code
+		$stmt = $this->conn->prepare('UPDATE `users` SET `otp_verified`=1 WHERE `employee_ID` = "'.$employeeNumber.'" ');
 		$stmt->execute();
-		$stmt->fetch();
+		$stmt->store_result();
+	//	$stmt->fetch();
+
+		//we would like to know if the system administrator approved the user's account
+		$stmt2 = $this->conn->prepare('SELECT is_active FROM users WHERE employee_ID = "'.$employeeNumber.'"');
+		$stmt2->execute();
+        $stmt2->store_result();
+		$stmt2->bind_result($isActive);
+	//	$stmt2->fetch();
+		if(!$isActive){
+			$response['message'] = "הקוד אומת בהצלחה, כעת יש להמתין לאישור מנהל";
+		}
+		else{
+			$response['message'] = 'הקוד אומת בהצלחה';
+		}
         return $response;
 	}
 
-    function login($employeeNumber, $password)
+     function login($employeeNumber, $password)
     {
         $response = array();
-        $stmt = $this->conn->prepare("SELECT id, employee_ID, full_name, email, role, phone_number, works_in_dept, otp_verified FROM users WHERE employee_ID = ? AND password = ?");
-        $stmt->bind_param("ss", $employeeNumber, $password);
-
+        $stmt = $this->conn->prepare("SELECT id, employee_ID, full_name, email, role, phone_number, works_in_dept, is_active, otp_verified FROM users WHERE employee_ID = ? AND password = ?");
+		$stmt->bind_param("ss", $employeeNumber, $password);
         $stmt->execute();
-
         $stmt->store_result();
 
-		//there is a user with this employee number and password in the db
+		//if there is a user with this employee number and password in the db
         if ($stmt->num_rows > 0) {
-            $stmt->bind_result($id, $employeeNumber, $fullName, $email, $jobTitle, $phoneNumber, $deptID, $otp);
-            $stmt->fetch();
-
-            $user = array(
-                'id' => $id,
-                'employee_ID' => $employeeNumber,
-                'full_name' => $fullName,
+			$stmt->bind_result($id, $employeeNumber, $fullName, $email, $jobTitle, $phoneNumber, $deptID, $isActive, $otp_verified);
+			$stmt->fetch();
+			$user = array(
+				'id' => $id,
+				'employee_ID' => $employeeNumber,
+				'full_name' => $fullName,
 				'email' => $email,
-                'role' => $jobTitle,
-                'phone_number' => $phoneNumber,
-                'works_in_dept' => $deptID
-            );
-            $response['error'] = false;
-            $response['message'] = 'התחברות בוצעה בהצלחה';
-            $response['user'] = $user;
+				'role' => $jobTitle,
+				'phone_number' => $phoneNumber,
+				'works_in_dept' => $deptID
+				);
+			$response['error'] = false;
+			$response['user'] = $user;
+			//check whether the user completed the 2fa or not
+			if($otp_verified){
+				//check whether the system administrator approved the user's account
+				if($isActive){
+					$response['message'] = 'התחברות בוצעה בהצלחה';
+				}
+				else{
+					$response['error'] = true;
+					$response['message'] = 'משתמש ממתין לאישור מנהל';
+				}
+			}
+			else{
+				 $response['message'] = 'משתמש לא מאומת';
+			}
         } else {
             $response['error'] = true;
             $response['message'] = 'שגיאה בפרטי ההזדהות';
@@ -406,7 +473,7 @@ class DbOperations
     function inboxlab($department)
     {
         $response = array();
-        $query="SELECT R.ID,M.ID, R.sent_time, M.patient_ID, T.name, R.text, CASE WHEN T.measurement_unit='mg' THEN 'מג' WHEN T.measurement_unit='µg' THEN 'מקג' ELSE T.measurement_unit END as measurement_unit, M.component, CASE WHEN M.is_value_boolean IS NULL THEN 0 ELSE M.is_value_boolean END AS is_value_boolean,M.test_result_value, U.full_name, D.name FROM responses as R JOIN messages as M on R.response_to_messageID=M.ID JOIN users as U ON M.sender_user=U.employee_ID JOIN test_types as T ON M.test_type=T.ID JOIN departments as D ON U.works_in_dept=D.ID WHERE R.recipient_dept = ? AND R.confirm_time IS NULL order by R.sent_time desc";
+        $query="SELECT R.ID,M.ID, R.sent_time, M.patient_ID, T.name, R.text,T.measurement_unit, M.component, CASE WHEN M.is_value_boolean IS NULL THEN 0 ELSE M.is_value_boolean END AS is_value_boolean,M.test_result_value, U.full_name, D.name FROM responses as R JOIN messages as M on R.response_to_messageID=M.ID JOIN users as U ON M.sender_user=U.employee_ID JOIN test_types as T ON M.test_type=T.ID JOIN departments as D ON U.works_in_dept=D.ID WHERE R.recipient_dept = ? AND R.confirm_time IS NULL order by R.sent_time desc";
         $stmt = $this->conn->prepare($query);
         $stmt->bind_param("i", $department);
 
@@ -432,6 +499,90 @@ class DbOperations
                     'is_value_bool' => $isValueBool,
                     'result_value'=> $resultValue,
                     'full_name'=> $fullName,
+                    'dept_name' => $deptName
+                );
+                $rows--;
+                //TODO add a 'recieve_time' to each message only the first time it is presented in the inboxdr
+            }
+            $response['error'] = false;
+            $response['message'] = 'new report for you';
+            $response['report'] = $report;
+        } else {
+            $response['error'] = true;
+            $response['message'] = 'שגיאה בהצגת הדיווח';
+        }
+        return $response;
+
+    }
+    function donelab($department)
+    {
+        $response = array();
+        $query="SELECT R.ID,M.ID, R.sent_time, M.patient_ID, T.name, R.text, T.measurement_unit, M.component, CASE WHEN M.is_value_boolean IS NULL THEN 0 ELSE M.is_value_boolean END AS is_value_boolean,M.test_result_value, U.full_name, D.name FROM responses as R JOIN messages as M on R.response_to_messageID=M.ID JOIN users as U ON M.sender_user=U.employee_ID JOIN test_types as T ON M.test_type=T.ID JOIN departments as D ON U.works_in_dept=D.ID WHERE R.recipient_dept = ? AND R.confirm_time IS NOT NULL order by R.sent_time desc";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("i", $department);
+
+        $stmt->execute();
+
+        $stmt->store_result();
+        $rows=$stmt->num_rows;
+
+        if ($stmt->num_rows > 0) {
+
+            while ($rows>0){
+                $stmt->bind_result($id,$messageID, $sentTime, $patientId, $testName, $text,$measurement,$component,$isValueBool,$resultValue,$fullName,$deptName);
+                $stmt->fetch();
+
+                $report[$stmt->num_rows-$rows] = array('id' =>$id,
+                    'messageID' => $messageID,
+                    'sent_time' => $sentTime,
+                    'patient_id' => $patientId,
+                    'name' => $testName,
+                    'text' => $text,
+                    'measurement' => $measurement,
+                    'component' => $component,
+                    'is_value_bool' => $isValueBool,
+                    'result_value'=> $resultValue,
+                    'full_name'=> $fullName,
+                    'dept_name' => $deptName
+                );
+                $rows--;
+                //TODO add a 'recieve_time' to each message only the first time it is presented in the inboxdr
+            }
+            $response['error'] = false;
+            $response['message'] = 'new report for you';
+            $response['report'] = $report;
+        } else {
+            $response['error'] = true;
+            $response['message'] = 'שגיאה בהצגת הדיווח';
+        }
+        return $response;
+
+    }
+
+    function sentlab($department)
+    {
+        $response = array();
+        $query="SELECT M.ID, M.sent_time, M.patient_ID, T.name, M.is_urgent,CASE WHEN M.confirm_time IS NULL THEN 0 ELSE M.confirm_time END AS confirm_time, D.name FROM messages as M JOIN test_types as T ON M.test_type=T.ID JOIN departments as D ON M.recipient_dept=D.ID JOIN users as U ON M.sender_user=U.employee_ID WHERE U.works_in_dept = ? order by M.sent_time desc";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("i", $department);
+
+        $stmt->execute();
+
+        $stmt->store_result();
+        $rows=$stmt->num_rows;
+
+        if ($stmt->num_rows > 0) {
+
+            while ($rows>0){
+                $stmt->bind_result($id, $sentTime, $patientId, $testName,$isUrgent, $confirmTime,$deptName);
+                $stmt->fetch();
+
+                $report[$stmt->num_rows-$rows] = array('id' =>$id,
+                    'sent_time' => $sentTime,
+                    'patient_id' => $patientId,
+                    'name' => $testName,
+                    'is_urgent' => $isUrgent,
+                    'confirm_time' => $confirmTime,
                     'dept_name' => $deptName
                 );
                 $rows--;

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="il.reportap.TwoFactorAuth">
+
+    <LinearLayout
+        android:id="@+id/dialogChooseWhereToSend"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:weightSum="1">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/popup_background"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:outlineProvider="bounds"
+            android:outlineSpotShadowColor="@color/popup_outlineSpotShadowColor"
+            android:padding="25dp">
+
+            <Button
+                android:id="@+id/buttonSendToPhone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="sendOtp"
+                android:text="שלחו לי קוד אימות ב-SMS" />
+
+            <Button
+                android:id="@+id/buttonSendToMail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="sendOtp"
+                android:text="שלחו לי קוד אימות ב-Email" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/dialogPopUp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:weightSum="1"
+        android:visibility="invisible">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/popup_background"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:outlineProvider="bounds"
+            android:outlineSpotShadowColor="@color/popup_outlineSpotShadowColor"
+            android:padding="25dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="קוד אימות נשלח לאמצעי שבחרת." />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="נדרש לאמת אותה כדי להשלים את ההרשמה." />
+
+            <EditText
+                android:id="@+id/editTextOTP"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:ems="10"
+                android:gravity="center"
+                android:hint="נא להזין את קוד האימות"
+                android:inputType="textPersonName" />
+
+            <Button
+                android:id="@+id/buttonSendOTP"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="validateOTP"
+                android:text="שלח" />
+        </LinearLayout>
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
