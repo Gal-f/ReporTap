@@ -47,7 +47,7 @@ public class RegisterActivity extends AppCompatActivity {
         editTextPhoneNumber = findViewById(R.id.editTextPhoneNumber);
         spinnerDepartment = findViewById(R.id.spinnerDepartment);
 
-        //define spinners options
+        //define spinners options   //TODO connect the following 2 to the DB tables
         String[] departments = new String[]{"בחר מחלקה", "מעבדה מיקרוביולוגית", "פנימית א"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, departments);
         spinnerDepartment.setAdapter(adapter);

@@ -10,9 +10,11 @@ import android.os.Bundle;
 import android.text.Html;
 import android.util.Pair;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +31,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,6 +43,7 @@ public class ViewMessage extends OptionsMenu {
     private ImageView isUrgent;
     private ImageButton wasReadButton, replyButton, forwardButton;
     private EditText editTextReplyText;
+    private Spinner spinnerForwardTo;
 
     private HashMap<String, Integer> deptMap;                     //Translates department name to it's corresponding ID
     private HashMap<String, Pair<Integer, String>> testTypeMap;   //Translates test type ID to it's corresponding name + result type (in this form: [name, [ID, resultType]] )
@@ -54,7 +58,6 @@ public class ViewMessage extends OptionsMenu {
 
         this.progressDialog = new ProgressDialog(this);
 
-        populateHashmaps();
         this.sentTime = findViewById(R.id.textViewDateTime);
         this.senderName = findViewById(R.id.textViewSenderName_Dept);
         this.patientName = findViewById(R.id.textViewPatientName);
@@ -66,16 +69,18 @@ public class ViewMessage extends OptionsMenu {
         this.boolValue = findViewById(R.id.textViewBoolResult);
         this.comments = findViewById(R.id.textViewComments);
         this.isUrgent = findViewById(R.id.imageViewUrgent);
-        this.editTextReplyText = findViewById(R.id.EditTextReplyText);
 
-        if (getIntent().getExtras() != null) {
+        this.editTextReplyText = findViewById(R.id.EditTextReplyText);
+        this.spinnerForwardTo = findViewById(R.id.SpinnerForwardTo);
+
+        if (getIntent().getExtras() != null) {  // Get the message ID from the previous screen - inbox
             messageID = getIntent().getIntExtra("MESSAGE_ID", 0);
-            getMessage(this.messageID);
+            getMessage(this.messageID);         // Update all message fields from the DB according to the received message ID
         }
 
         //TODO add other test results for the same patient (nice to have for version #1)
 
-        // this.isTestValueBool = ((Pair)testTypeMap.get(this.testName.getText())).second.equals("boolean"); //TODO skip the hashmaps? isTestValueBool gets value in getMessage() already
+        // this.isTestValueBool = ((Pair)testTypeMap.get(this.testName.getText())).second.equals("boolean"); //TODO skip this hashmap? isTestValueBool gets value in getMessage() already
     }
 
     public void populateHashmaps(){
@@ -97,6 +102,7 @@ public class ViewMessage extends OptionsMenu {
                         JSONObject testType = testTypesArray.getJSONObject(i);
                         testTypeMap.put(testType.getString("testName"), new Pair<>(testType.getInt("testID"), testType.getString("resultType")));
                     }
+                    inflateForwardList();
                 }
                 catch (JSONException e){
                     Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
@@ -107,11 +113,24 @@ public class ViewMessage extends OptionsMenu {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        //TODO Handle error response
+                        Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 });
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
+    }
+
+    public void inflateForwardList(){
+        //Define recipient list for forwarding
+
+        ArrayList<String> departments = new ArrayList<>();
+        for (String dept : this.deptMap.keySet())
+            if (this.deptMap.get(dept) != SharedPrefManager.getInstance(getApplicationContext()).getUser().getDepartment())  // Add all possible departments except the user's department, to whom he can't forward
+                departments.add(dept);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, departments);
+        spinnerForwardTo.setAdapter(adapter);
+        //TODO enforce only valid options from the list are selectable
     }
 
     public void getMessage(Integer messageID){
@@ -150,7 +169,7 @@ public class ViewMessage extends OptionsMenu {
                                 isUrgent.setTooltipText("דחוף");
                             }
                         } else {
-                            isUrgent.setImageResource(R.drawable.greyexclamation_trans);    //TODO resize grey and red triangles to same width
+                            isUrgent.setImageResource(R.drawable.greyexclamation_trans);
                             ((TextView)findViewById(R.id.textViewUrgent)).setText("לא דחוף");
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                                 isUrgent.setTooltipText("לא דחוף");
@@ -295,7 +314,7 @@ public class ViewMessage extends OptionsMenu {
 
             //Defining constant values for use in the parameters map
             final String MessageID = messageID.toString();
-            final String UserID = userID.toString();
+            final String UserID = userID;
             final String Dept = dept.toString();
             final String ReplyText = editTextReplyText.getText().toString();
 
@@ -346,6 +365,59 @@ public class ViewMessage extends OptionsMenu {
     }
 
     public void forward(Integer messageID, String userID){
+        populateHashmaps(); //TODO move this to inside forward() ?
+        findViewById(R.id.forwardPopupDialog).setVisibility(View.VISIBLE);    // Show popup dialog
+        findViewById(R.id.ButtonCancelForward).setOnClickListener(v -> {      // User canceled forward
+            findViewById(R.id.forwardPopupDialog).setVisibility(View.INVISIBLE);
+            spinnerForwardTo.setSelection(0);
+        });
+        findViewById(R.id.ButtonSendForward).setOnClickListener(v -> {        // User forwarded message
+            progressDialog.setMessage("ההודעה מועברת...");
+            progressDialog.show();
 
+            //Defining constant values for use in the parameters map
+            final String MessageID = messageID.toString();
+            final String UserID = userID;
+            final String DeptID = this.deptMap.get(spinnerForwardTo.getSelectedItem().toString()).toString(); //Getting the department ID from the selected department name
+
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, URLs.URL_FORWARDMESSAGE, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    try {
+                        JSONObject jsonObject = new JSONObject(response);
+                        if (jsonObject.getBoolean("error")) {
+                            Toast.makeText(getApplicationContext(), jsonObject.getString("message"), Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(getApplicationContext(), "ההודעה הועברה בהצלחה!", Toast.LENGTH_LONG).show();
+                        }
+                    } catch (JSONException e) {
+                        Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                        e.printStackTrace();
+                    }
+                }
+            },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    }) {
+                @Nullable
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("messageID", MessageID);
+                    params.put("sender", UserID);
+                    params.put("department", DeptID);
+                    return params;
+                }
+            };
+            findViewById(R.id.forwardPopupDialog).setVisibility(View.INVISIBLE);
+            spinnerForwardTo.setSelection(0);
+            progressDialog.hide();
+            RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+            requestQueue.add(stringRequest);
+        });
+        //TODO After forwarding: Exit back to inbox?/Grey out all the buttons?
     }
 }
