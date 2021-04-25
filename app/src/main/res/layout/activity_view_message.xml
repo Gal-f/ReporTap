@@ -16,7 +16,6 @@
         android:orientation="vertical"
         android:textDirection="rtl"
         android:layoutDirection="rtl"
-        app:layout_constraintTop_toBottomOf="@+id/include"
         tools:ignore="MissingConstraints">
 
         <!-- Navigation bar -->
@@ -146,7 +145,7 @@
                     android:layout_height="2dp"
                     android:layout_marginRight="10dp"
                     android:layout_weight="0.8"
-                    android:background="#74C043" /><!--TODO: Replace this View with horizontalLine_h2 from class Design -->
+                    android:background="@color/horizontal_line_green" /><!--TODO: Replace this View with horizontalLine_h2 from class Design -->
             </LinearLayout>
         <!-- Test details -->
         <TextView
@@ -320,7 +319,7 @@
                 android:layout_height="2dp"
                 android:layout_marginRight="10dp"
                 android:layout_weight="0.8"
-                android:background="#74C043" /><!--TODO: Replace this View with horizontalLine_h2 from class Design -->
+                android:background="@color/horizontal_line_green" /><!--TODO: Replace this View with horizontalLine_h2 from class Design -->
         </LinearLayout>
 
         <!-- Actions & symbols -->
@@ -428,31 +427,8 @@
                 android:layout_height="2dp"
                 android:layout_marginRight="10dp"
                 android:layout_weight="0.8"
-                android:background="#74C043" /><!--TODO: Replace this View with horizontalLine_h2 from class Design -->
+                android:background="@color/horizontal_line_green" /><!--TODO: Replace this View with horizontalLine_h2 from class Design -->
         </LinearLayout>
-        <!-- For TESTING ONLY, remove this -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Debug\\Test:"
-            android:padding="10dp" />
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-        <EditText
-            android:id="@+id/testMessageIDBox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="הקלידו מס' הודעה לבדיקה"
-            android:textSize="12dp" />
-        <Button
-            android:id="@+id/ButtonTestMessageIDBox"
-            android:layout_width="70dp"
-            android:layout_height="35dp"
-            android:text="שלח"
-            android:textSize="12dp" />
-        </LinearLayout>
-        <!-- END TEST ONLY -->
     </LinearLayout>
     <!-- Main layout closer -->
 

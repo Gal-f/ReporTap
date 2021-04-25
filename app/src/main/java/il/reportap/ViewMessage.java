@@ -69,19 +69,6 @@ public class ViewMessage extends OptionsMenu {
         this.isUrgent = findViewById(R.id.imageViewUrgent);
         this.editTextReplyText = findViewById(R.id.EditTextReplyText);
 
-        // FOR TESTING ONLY. REMOVE THIS WHEN DONE.
-/*        Button button =findViewById(R.id.ButtonTestMessageIDBox);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                messageID = ((EditText)findViewById(R.id.testMessageIDBox)).getText().toString();
-                getMessage(messageID);
-            }
-        });
-*/
-        //END TESTING ONLY
-
-        //  APPLY THESE 2 after adding and intent-extra in the linking page (the redirecting message in the inbox to be clicked on)
         if (getIntent().getExtras() != null) {
             messageID = getIntent().getIntExtra("MESSAGE_ID", 0);
             getMessage(this.messageID);
