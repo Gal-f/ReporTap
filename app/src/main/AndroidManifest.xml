@@ -28,6 +28,11 @@
         <activity android:name="il.reportap.SentDoctor" />
         <activity android:name="il.reportap.DoneDoctor" />
         <activity android:name="il.reportap.InboxLab" />
+        <activity android:name="il.reportap.SentDoctor"/>
+        <activity android:name="il.reportap.DoneDoctor"/>
+        <activity android:name="il.reportap.InboxLab"/>
+        <activity android:name="il.reportap.DoneLab"/>
+        <activity android:name="il.reportap.SentLab"/>
 
         <meta-data
             android:name="preloaded_fonts"

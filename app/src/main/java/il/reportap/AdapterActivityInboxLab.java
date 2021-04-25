@@ -47,7 +47,6 @@ public class AdapterActivityInboxLab extends RecyclerView.Adapter<AdapterActivit
             holder.deptName.setText(modelActivityInboxLab.getDept());
             holder.measurement.setText(modelActivityInboxLab.getMeasurement());
        //     holder.messageID = modelActivityInboxLab.getId();
-        //    holder.resultValue.setText(String.valueOf(modelActivityInboxLab.getResultValue()));
 //            holder.cardView.setOnClickListener(new View.OnClickListener() {
 //                @Override
 //                public void onClick(View v) {
@@ -62,9 +61,9 @@ public class AdapterActivityInboxLab extends RecyclerView.Adapter<AdapterActivit
                 holder.measurement.setVisibility(View.INVISIBLE);
                 if(Float.valueOf(modelActivityInboxLab.getResultValue())==1)
                 {
-                    holder.resultValue.setText("כן");
+                    holder.resultValue.setText(": חיובי");
                 }
-                else holder.resultValue.setText("לא");
+                else holder.resultValue.setText(": שלילי");
             }
             else
             {

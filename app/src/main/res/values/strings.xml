@@ -4,6 +4,7 @@
     <string name="inboxDescL">תגובות שנשלחו למעבדה שלך וטרם טופלו. בחרו בתגובה כדי לצפות בפרטים ולאשר את קבלתה</string>
     <string name="sentDesc">מסרים שנשלחו על-ידך או על-ידי אנשי המחלקה שלך. ניתן לראות האם סומנו כ"מטופלים" על-ידי הנמען</string>
     <string name="doneDesc">מסרים שסומנו כ"מטופלים" על-ידך או על-ידי אחד מאנשי המחלקה שלך</string>
+    <string name="doneDescL">תגובות שסומנו כ"מטופלים" על-ידך או על-ידי אחד מעובדי המעבדה שלך</string>
     <string name="inboxEmerg">להציג רק דחופים?</string>
     <string name="done">מסרים שטופלו</string>
     <string name="toDo">מסרים לטיפולי</string>
@@ -16,6 +17,7 @@
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
+    <string name="sentDescL">מסרים שנשלחו על-ידך או על-ידי אחד מעובדי המעבדה שלך. ניתן לראות האם סומנו כ"מטופלים" על-ידי הנמען</string>
 
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
