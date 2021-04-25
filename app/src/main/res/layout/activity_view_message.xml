@@ -317,95 +317,109 @@
 
         <!-- Actions & symbols -->
         <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:weightSum="1"
             android:gravity="center"
-            android:orientation="horizontal">
-            <TableLayout
+            android:layoutDirection="rtl">
+            <ImageView
+                android:id="@+id/imageViewUrgent"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:scaleType="fitCenter"
+                android:adjustViewBounds="true"
+                android:src="@drawable/greyexclamation_trans"
+                android:tooltipText="לא דחוף"
+                android:layout_marginHorizontal="5dp"
+                android:padding="5dp"
+                android:layout_weight="0.2"/>
+            <ImageButton
+                android:id="@+id/imageButtonRead"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:scaleType="fitCenter"
+                android:adjustViewBounds="true"
+                android:src="@drawable/eye"
+                android:tooltipText="לא נקרא"
+                android:layout_marginHorizontal="5dp"
+                android:hapticFeedbackEnabled="true"
+                android:background="?android:selectableItemBackground"
+                android:padding="5dp"
+                android:layout_weight="0.2"/>
+            <ImageButton
+                android:id="@+id/imageButtonReply"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:scaleType="fitCenter"
+                android:adjustViewBounds="true"
+                android:layout_marginHorizontal="5dp"
+                android:src="@drawable/ic_baseline_reply_24"
+                android:background="?android:selectableItemBackground"
+                android:tooltipText="שליחת תגובה לדיווח"
+                android:padding="5dp"
+                android:layout_weight="0.2" />
+            <ImageButton
+                android:id="@+id/imageButtonForward"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:scaleType="fitCenter"
+                android:adjustViewBounds="true"
+                android:layout_marginHorizontal="5dp"
+                android:src="@drawable/ic_baseline_forward_to_inbox_24"
+                android:background="?android:selectableItemBackground"
+                android:tooltipText="העברה למחלקה אחרת"
+                android:padding="5dp"
+                android:layout_weight="0.2"/>
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="1"
+            android:gravity="center"
+            android:layoutDirection="rtl"
+            android:textAlignment="center">
+            <TextView
+                android:id="@+id/textViewUrgent"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.8"
-                android:stretchColumns="*">
-                <TableRow android:layout_weight="1">
-                    <ImageView
-                        android:id="@+id/imageViewUrgent"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:scaleType="fitCenter"
-                        android:adjustViewBounds="true"
-                        android:src="@drawable/greyexclamation_trans"
-                        android:tooltipText="לא דחוף"
-                        android:layout_marginHorizontal="5dp"/>
-                    <ImageButton
-                        android:id="@+id/imageButtonRead"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:scaleType="fitCenter"
-                        android:adjustViewBounds="true"
-                        android:src="@drawable/eye"
-                        android:tooltipText="לא נקרא"
-                        android:layout_marginHorizontal="5dp"
-                        android:hapticFeedbackEnabled="true"
-                        android:background="?android:selectableItemBackground"/>
-                    <ImageButton
-                        android:id="@+id/imageButtonReply"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:scaleType="fitCenter"
-                        android:adjustViewBounds="true"
-                        android:layout_marginHorizontal="5dp"
-                        android:src="@drawable/ic_baseline_reply_24"
-                        android:background="?android:selectableItemBackground"
-                        android:tooltipText="שליחת תגובה לדיווח"
-                        />
-
-                    <ImageButton
-                        android:id="@+id/imageButtonForward"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:scaleType="fitCenter"
-                        android:adjustViewBounds="true"
-                        android:layout_marginHorizontal="5dp"
-                        android:src="@drawable/ic_baseline_forward_to_inbox_24"
-                        android:background="?android:selectableItemBackground"
-                        android:tooltipText="העברה למחלקה אחרת" />
-                </TableRow>
-                <TableRow android:layout_weight="1">
-                    <TextView
-                        android:id="@+id/textViewUrgent"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="12dp"
-                        android:text="לא דחוף"
-                        android:layout_marginHorizontal="5dp"/>
-                    <TextView
-                        android:id="@+id/textViewRead"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="12dp"
-                        android:text="סימון כ'נקרא'"
-                        android:layout_marginHorizontal="5dp"/>
-                    <TextView
-                        android:id="@+id/textViewReply"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="12dp"
-                        android:text="שליחת תגובה"
-                        android:layout_marginHorizontal="5dp"/>
-                    <TextView
-                        android:id="@+id/textViewForward"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="12dp"
-                        android:text="העברה למחלקה אחרת"
-                        android:layout_marginHorizontal="5dp"/>
-                </TableRow>
-            </TableLayout>
+                android:gravity="center"
+                android:textAlignment="center"
+                android:textSize="12dp"
+                android:text="לא דחוף"
+                android:layout_weight="0.2"/>
+            <TextView
+                android:id="@+id/textViewRead"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textAlignment="center"
+                android:textSize="12dp"
+                android:text="סימון כ'נקרא'"
+                android:layout_weight="0.2"/>
+            <TextView
+                android:id="@+id/textViewReply"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textAlignment="center"
+                android:textSize="12dp"
+                android:text="שליחת תגובה"
+                android:layout_weight="0.2"/>
+            <TextView
+                android:id="@+id/textViewForward"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textAlignment="center"
+                android:textSize="12dp"
+                android:text="העברה למחלקה אחרת"
+                android:layout_weight="0.2"/>
         </LinearLayout>
         <LinearLayout
             android:id="@+id/horizontalLine2"
@@ -422,6 +436,7 @@
                 android:layout_weight="0.8"
                 android:background="@color/horizontal_line_green" /><!--TODO: Replace this View with horizontalLine_h2 from class Design -->
         </LinearLayout>
+
     </LinearLayout>
     <!-- Main layout closer -->
 
