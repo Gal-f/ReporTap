@@ -35,7 +35,7 @@ import java.util.Map;
 public class ViewMessage extends OptionsMenu {
 
     private Integer messageID, senderID, senderDept;
-    private TextView sentTime, senderName, senderDeptName, patientId, patientName, testName, componentName, measuredAmountValue, measurementUnit, boolValue, comments;
+    private TextView sentTime, senderName, patientId, patientName, testName, componentName, measuredAmountValue, measurementUnit, boolValue, comments;
     private boolean isTestValueBool;
     private ImageView isUrgent;
     private ImageButton wasReadButton, replyButton, forwardButton;
@@ -56,8 +56,7 @@ public class ViewMessage extends OptionsMenu {
 
         populateHashmaps();
         this.sentTime = findViewById(R.id.textViewDateTime);
-        this.senderName = findViewById(R.id.textViewSenderName);
-        this.senderDeptName = findViewById(R.id.textViewSenderDeptName);
+        this.senderName = findViewById(R.id.textViewSenderName_Dept);
         this.patientName = findViewById(R.id.textViewPatientName);
         this.patientId = findViewById(R.id.textViewPatientID);
         this.testName = findViewById(R.id.textViewTestName);
@@ -129,10 +128,9 @@ public class ViewMessage extends OptionsMenu {
                         JSONObject requestedMessage = jsonObject.getJSONObject("requestedMessage");
                         patientName.setText(requestedMessage.getString("patientName"));
                         sentTime.setText(requestedMessage.getString("sentTime"));
-                        senderName.setText(requestedMessage.getString("senderName"));
+                        senderName.setText(requestedMessage.getString("senderName") + " | " + requestedMessage.getString("senderDeptName"));
                         senderID = requestedMessage.getInt("sender");       // Keep sender ID for use later (though not presented on screen)
                         senderDept = requestedMessage.getInt("senderDept"); // Keep sending department ID for use later (though not presented on screen)
-                        senderDeptName.setText(requestedMessage.getString("senderDeptName"));
                         patientId.setText(requestedMessage.getString("patientId"));
                         patientName.setText(requestedMessage.getString("patientName"));
                         testName.setText(requestedMessage.getString("testName"));
