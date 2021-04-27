@@ -3,6 +3,8 @@ package il.reportap;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.loginregister.R;
@@ -11,6 +13,8 @@ public class ProfileActivity extends OptionsMenu {
 
     TextView textViewEmployeeNumber,
             textViewFullName, textViewEmail, textViewJobTitle, textViewPhoneNumber, textViewDepartment;
+    boolean isActive;
+    LinearLayout notActive;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,10 +35,22 @@ public class ProfileActivity extends OptionsMenu {
         textViewJobTitle = (TextView) findViewById(R.id.textViewJobTitle);
         textViewPhoneNumber =  (TextView) findViewById(R.id.textViewPhoneNumber);
         textViewDepartment=  (TextView) findViewById(R.id.textViewDepartment);
+        Intent intent = getIntent();
+        //get the user data from Register Activity/Login activity
+        Bundle bundle = getIntent().getExtras();
+        try{
+            isActive = bundle.getBoolean("isActive");
+        } catch (NullPointerException e) {
+            isActive = true;
+        }
+
+        notActive = findViewById(R.id.notActive);
 
         //getting the current user
         User user = SharedPrefManager.getInstance(this).getUser();
-
+        if(!isActive){
+            notActive.setVisibility(View.VISIBLE);
+        }
         //setting the values to the textviews
         textViewEmployeeNumber.setText("מספר עובד: " + user.getEmployeeNumber());
         textViewFullName.setText(user.getFullName());

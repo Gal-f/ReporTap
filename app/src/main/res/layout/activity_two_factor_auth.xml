@@ -68,7 +68,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="נדרש לאמת אותה כדי להשלים את ההרשמה." />
+                android:text="נדרש לאמת אותו כדי להשלים את ההרשמה." />
 
             <EditText
                 android:id="@+id/editTextOTP"

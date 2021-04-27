@@ -123,9 +123,17 @@ public class MainActivity extends AppCompatActivity {
                         if(obj.getString("message").equals("משתמש לא מאומת")){
                             Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_LONG).show();
                             finish();
-                            Intent intent = new Intent(MainActivity.this, TwoFactorAuth.class);
-                            intent.putExtra("user", user);
-                            startActivity(intent);
+                            Intent intent1 = new Intent(MainActivity.this, TwoFactorAuth.class);
+                            intent1.putExtra("user", user);
+                            startActivity(intent1);
+                        }
+                        else if(obj.getString("message").equals("משתמש ממתין לאישור מנהל")){
+                            Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_LONG).show();
+                            SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
+                            finish();
+                            Intent intent2 = new Intent(MainActivity.this, ProfileActivity.class);
+                            intent2.putExtra("isActive", false);
+                            startActivity(intent2);
                         }
                         else{
                             //storing the user in shared preferences and log him in
