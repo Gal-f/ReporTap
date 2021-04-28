@@ -120,6 +120,7 @@ public class TwoFactorAuth extends AppCompatActivity {
                                      startActivity(new Intent(TwoFactorAuth.this, ProfileActivity.class));
                                  }
                              });
+                         //the user has been approved by the system manager
                          } else {
                              user.setActive(true);
                              //storing the user in shared preferences
