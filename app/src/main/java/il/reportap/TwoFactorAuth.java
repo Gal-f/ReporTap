@@ -110,17 +110,19 @@ public class TwoFactorAuth extends AppCompatActivity {
                         String responseMessage = obj.getString("message");
                         //if the user is still waiting for the manager confirmation
                          if (responseMessage.equals("הקוד אומת בהצלחה, כעת יש להמתין לאישור מנהל")) {
+                             SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
                              runOnUiThread(new Runnable()
                              {
                                  public void run()
                                  {
                                      Toast.makeText(getApplicationContext(), responseMessage, Toast.LENGTH_LONG).show();
                                      finish();
-                                     startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                     startActivity(new Intent(TwoFactorAuth.this, ProfileActivity.class));
                                  }
                              });
                          } else {
-                            //storing the user in shared preferences
+                             user.setActive(true);
+                             //storing the user in shared preferences
                             SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
                             finish();
                             //TODO - navigate to lab inbox if this is a lab worker

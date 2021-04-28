@@ -12,6 +12,7 @@
             android:id="@+id/header_cover_image"
             android:layout_width="match_parent"
             android:layout_height="200dp"
+            android:background="#B7ECDF"
             android:scaleType="centerCrop"
             android:src="@drawable/profile_background" />
 
@@ -31,14 +32,13 @@
             />
 
 
-
         <RelativeLayout
             android:id="@+id/profile_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/header_cover_image"
-            android:elevation="4dp"
             android:layout_marginTop="5dp"
+            android:elevation="4dp"
             android:paddingBottom="24dp">
 
 
@@ -48,9 +48,9 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="26dp"
+                android:fontFamily="@font/varela_round"
                 android:textColor="@color/black"
                 android:textSize="36sp"
-                android:fontFamily="@font/varela_round"
                 android:textStyle="bold" />
 
             <TextView
@@ -64,11 +64,51 @@
                 android:textSize="14sp" />
         </RelativeLayout>
 
+        <LinearLayout
+            android:id="@+id/notActive"
+            android:layout_width="300dp"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/profile_layout"
+            android:layout_centerInParent="true"
+            android:background="#FFFFFF"
+            android:elevation="4dp"
+            android:orientation="vertical"
+            android:paddingBottom="24dp"
+            android:visibility="gone">
+
+
+            <TextView
+                android:id="@+id/textViewNotActive"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="7dp"
+                android:fontFamily="@font/varela_round"
+                android:paddingRight="8dp"
+                android:text='המשתמש טרם אושר ע"י מנהל המערכת. '
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textViewNotActive2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/varela_round"
+                android:paddingRight="8dp"
+                android:text="רק משתמשים שאושרו יכולים להשתמש באפליקציה.
+                לעזרה יש לפנות למנהל המערכת."
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/profile_layout"
+            android:layout_below="@+id/notActive"
             android:layout_marginTop="5dp"
             android:orientation="vertical">
 
@@ -119,77 +159,3 @@
     </RelativeLayout>
 </ScrollView>
 
-
-    <!--<?xml version="1.0" encoding="utf-8"?>
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:context="il.reportap.ProfileActivity"
-        android:background="@color/background">
-
-
-        <TextView
-            android:id="@+id/textViewFullName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/varela_round"
-            android:padding="50dp"
-            android:textAlignment="center"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-            android:textSize="36sp"
-            android:textStyle="bold" />
-
-
-        <TextView
-            android:id="@+id/textViewId"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:textAlignment="center"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
-
-
-        <TextView
-            android:id="@+id/textViewEmployeeNumber"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:textAlignment="center"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
-
-
-        <TextView
-            android:id="@+id/textViewJobTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:textAlignment="center"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
-
-
-        <TextView
-            android:id="@+id/textViewPhoneNumber"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:textAlignment="center"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
-
-
-        <TextView
-            android:id="@+id/textViewDepartment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="40dp"
-            android:padding="10dp"
-            android:textAlignment="center"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
-
-
-
-
-
-    </LinearLayout> -->
