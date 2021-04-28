@@ -33,9 +33,17 @@ public class MainActivity extends AppCompatActivity {
 
         //TODO change to inbox doctor/inbox lab based on the job title.
         if (SharedPrefManager.getInstance(this).isLoggedIn()) {
-            finish();
-            startActivity(new Intent(this, InboxDoctor.class));
-            return;
+            if(SharedPrefManager.getInstance(this).getUser().isActive){
+                finish();
+                startActivity(new Intent(this, InboxDoctor.class));
+                return;
+            }
+            else{
+                finish();
+                startActivity(new Intent(this, ProfileActivity.class));
+                return;
+            }
+
         }
 
 
@@ -116,9 +124,7 @@ public class MainActivity extends AppCompatActivity {
                                 userJson.getString("email"),
                                 userJson.getString("role"),
                                 userJson.getString("phone_number"),
-                                userJson.getInt("works_in_dept")
-
-                        );
+                                userJson.getInt("works_in_dept"));
 
                         if(obj.getString("message").equals("משתמש לא מאומת")){
                             Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_LONG).show();
@@ -132,11 +138,11 @@ public class MainActivity extends AppCompatActivity {
                             SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
                             finish();
                             Intent intent2 = new Intent(MainActivity.this, ProfileActivity.class);
-                            intent2.putExtra("isActive", false);
                             startActivity(intent2);
                         }
                         else{
                             //storing the user in shared preferences and log him in
+                            user.setActive(true);
                             SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
                             finish();
                             //TODO - navigate to lab inbox if this is a lab worker

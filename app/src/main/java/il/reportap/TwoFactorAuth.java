@@ -117,13 +117,12 @@ public class TwoFactorAuth extends AppCompatActivity {
                                  {
                                      Toast.makeText(getApplicationContext(), responseMessage, Toast.LENGTH_LONG).show();
                                      finish();
-                                     Intent intent = new Intent(TwoFactorAuth.this, ProfileActivity.class);
-                                     intent.putExtra("isActive", false);
-                                     startActivity(intent);
+                                     startActivity(new Intent(TwoFactorAuth.this, ProfileActivity.class));
                                  }
                              });
                          } else {
-                            //storing the user in shared preferences
+                             user.setActive(true);
+                             //storing the user in shared preferences
                             SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
                             finish();
                             //TODO - navigate to lab inbox if this is a lab worker
