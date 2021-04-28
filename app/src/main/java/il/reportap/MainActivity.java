@@ -34,21 +34,18 @@ public class MainActivity extends AppCompatActivity {
         //TODO change to inbox doctor/inbox lab based on the job title.
         if (SharedPrefManager.getInstance(this).isLoggedIn()) {
             if(SharedPrefManager.getInstance(this).getUser().isActive){
-                finish();
                 startActivity(new Intent(this, InboxDoctor.class));
-                return;
             }
             else{
-                finish();
                 startActivity(new Intent(this, ProfileActivity.class));
-                return;
             }
+            return;
 
         }
 
 
         //if user presses on login
-        //calling the method login
+        //calling the login method
         findViewById(R.id.buttonLogin).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

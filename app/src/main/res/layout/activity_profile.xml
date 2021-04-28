@@ -95,8 +95,8 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/varela_round"
                 android:paddingRight="8dp"
-                android:text="רק משתמשים שאושרו יכולים להשתמש באפליקציה.
-                לעזרה יש לפנות למנהל המערכת."
+                android:text="רק משתמשים רשומים יכולים להשתמש באפליקציה. לעזרה יש לפנות למנהל המערכת "
+
                 android:textColor="@color/black"
                 android:textSize="14sp"
                 android:textStyle="bold" />

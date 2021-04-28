@@ -16,11 +16,9 @@ public class SharedPrefManager {
     private static final String KEY_PHONENUMBER = "keyphonemumber";
     private static final String KEY_DEPT = "keydepartment";
     private static final String KEY_ACTIVE = "keyactive";
-   // private static boolean KEY_ACTIVE;
 
     private static SharedPrefManager mInstance;
     private static Context mCtx;
-    private boolean isActive;
 
     private SharedPrefManager(Context context) {
         mCtx = context;
@@ -67,6 +65,7 @@ public class SharedPrefManager {
                 sharedPreferences.getString(KEY_PHONENUMBER, null),
                 sharedPreferences.getInt(KEY_DEPT, -1)
         );
+        //if the user has been approved by the system manager
         if(sharedPreferences.getBoolean(KEY_ACTIVE, false)){
             user.setActive(true);
         }
