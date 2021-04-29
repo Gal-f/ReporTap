@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     //converting response to json object
                     JSONObject obj = new JSONObject(s);
-
+                    String message = obj.getString("message");
                     //if no error in response
                     if (!obj.getBoolean("error")) {
 
@@ -123,15 +123,15 @@ public class MainActivity extends AppCompatActivity {
                                 userJson.getString("phone_number"),
                                 userJson.getInt("works_in_dept"));
 
-                        if(obj.getString("message").equals("משתמש לא מאומת")){
-                            Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_LONG).show();
+                        if(message.equals("משתמש לא מאומת")){
+                            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
                             finish();
                             Intent intent1 = new Intent(MainActivity.this, TwoFactorAuth.class);
                             intent1.putExtra("user", user);
                             startActivity(intent1);
                         }
-                        else if(obj.getString("message").equals("משתמש ממתין לאישור מנהל")){
-                            Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_LONG).show();
+                        else if(!obj.getBoolean("isActive")){
+                            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
                             SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
                             finish();
                             Intent intent2 = new Intent(MainActivity.this, ProfileActivity.class);
@@ -146,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
                             startActivity(new Intent(getApplicationContext(), InboxDoctor.class));
                         }
                     } else {
-                        Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

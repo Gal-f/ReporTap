@@ -132,9 +132,11 @@ class DbOperations
 		$stmt2->bind_result($isActive);
 	//	$stmt2->fetch();
 		if(!$isActive){
+		    $response['isActive'] = false;
 			$response['message'] = "הקוד אומת בהצלחה, כעת יש להמתין לאישור מנהל";
 		}
 		else{
+		    $response['isActive'] = true;
 			$response['message'] = 'הקוד אומת בהצלחה';
 		}
         return $response;
@@ -167,14 +169,18 @@ class DbOperations
 			if($otp_verified){
 				//check whether the system administrator approved the user's account
 				if($isActive){
+				    $response['error'] = false;
 					$response['message'] = 'התחברות בוצעה בהצלחה';
+					$response['isActive']= true;
 				}
 				else{
-				//	$response['error'] = true;
+					$response['error'] = false;
 					$response['message'] = 'משתמש ממתין לאישור מנהל';
+					$response['isActive']= false;
 				}
 			}
 			else{
+			     $response['error'] = false;
 				 $response['message'] = 'משתמש לא מאומת';
 			}
         } else {
