@@ -109,7 +109,7 @@ public class TwoFactorAuth extends AppCompatActivity {
                         JSONObject obj = new JSONObject(secondRequestHandler.sendPostRequest(URLs.URL_VREIFIEDUSER, params));
                         String responseMessage = obj.getString("message");
                         //if the user is still waiting for the manager confirmation
-                         if (obj.getBoolean("isActive")) {
+                         if (!obj.getBoolean("isActive")) {
                              SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
                              runOnUiThread(new Runnable()
                              {
