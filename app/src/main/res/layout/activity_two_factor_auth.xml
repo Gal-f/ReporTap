@@ -4,55 +4,77 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background"
     tools:context="il.reportap.TwoFactorAuth">
 
     <LinearLayout
         android:id="@+id/dialogChooseWhereToSend"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:gravity="center"
         android:orientation="vertical"
-        android:weightSum="1">
+        android:weightSum="1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="350dp"
+            android:layout_height="250dp"
             android:background="@color/popup_background"
             android:gravity="center"
             android:orientation="vertical"
             android:outlineProvider="bounds"
             android:outlineSpotShadowColor="@color/popup_outlineSpotShadowColor"
-            android:padding="25dp">
+            android:padding="25dp"
+            tools:ignore="UselessParent">
+
+            <TextView
+                android:id="@+id/helloUser"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/explanation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:text="@string/ChooseSMSorEmail" />
 
             <Button
                 android:id="@+id/buttonSendToPhone"
-                android:layout_width="wrap_content"
+                android:layout_width="230dp"
                 android:layout_height="wrap_content"
                 android:onClick="sendOtp"
-                android:text="שלחו לי קוד אימות ב-SMS" />
+                android:text="@string/sendMeSMS" />
 
             <Button
                 android:id="@+id/buttonSendToMail"
-                android:layout_width="wrap_content"
+                android:layout_width="230dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
                 android:onClick="sendOtp"
-                android:text="שלחו לי קוד אימות ב-Email" />
+                android:text="@string/sendEmail" />
 
         </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/dialogPopUp"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:gravity="center"
         android:orientation="vertical"
+        android:visibility="invisible"
         android:weightSum="1"
-        android:visibility="invisible">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="350dp"
+            android:layout_height="250dp"
             android:background="@color/popup_background"
             android:gravity="center"
             android:orientation="vertical"
@@ -63,12 +85,12 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="קוד אימות נשלח לאמצעי שבחרת." />
+                android:text="@string/sentCode" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="נדרש לאמת אותו כדי להשלים את ההרשמה." />
+                android:text="@string/validateCode" />
 
             <EditText
                 android:id="@+id/editTextOTP"
@@ -77,7 +99,8 @@
                 android:layout_gravity="center_horizontal"
                 android:ems="10"
                 android:gravity="center"
-                android:hint="נא להזין את קוד האימות"
+                android:hint="@string/enterCode"
+                android:importantForAutofill="no"
                 android:inputType="textPersonName" />
 
             <Button
@@ -85,7 +108,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="validateOTP"
-                android:text="שלח" />
+                android:text="@string/sendOTP" />
         </LinearLayout>
     </LinearLayout>
 

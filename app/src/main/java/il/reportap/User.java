@@ -21,6 +21,14 @@ public class User implements Serializable {
         this.isActive = false;
     }
 
+    public User(String full_name, String employee_id, String role, int works_in_dept) {
+        this.fullName = full_name;
+        this.employeeNumber = employee_id;
+        this.jobTitle = role;
+        this.department = works_in_dept;
+    }
+
+
     public void setActive(boolean active) {
         isActive = active;
     }

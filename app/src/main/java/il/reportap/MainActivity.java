@@ -35,14 +35,26 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        editTextEmployeeNumber = (EditText) findViewById(R.id.editTextEmployeeNumber);
-        editTextPassword = (EditText) findViewById(R.id.editTextPassword);
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        editTextEmployeeNumber = findViewById(R.id.editTextEmployeeNumber);
+        editTextPassword = findViewById(R.id.editTextPassword);
+        progressBar = findViewById(R.id.progressBar);
 
-        //TODO change to inbox doctor/inbox lab based on the job title.
         if (SharedPrefManager.getInstance(this).isLoggedIn()) {
+            //check if the user's account has been approved
             if (SharedPrefManager.getInstance(this).getUser().isActive) {
-                startActivity(new Intent(this, InboxDoctor.class));
+                switch(SharedPrefManager.getInstance(this).getUser().getDepartment()){
+                    case 1:
+                        startActivity(new Intent(this, InboxLab.class));
+                        break;
+
+                    case 2:
+                        startActivity(new Intent(this, InboxDoctor.class));
+                        break;
+
+                    case 6:
+                        startActivity(new Intent(this, ApproveUsers.class));
+                        break;
+                }
             } else {
                 startActivity(new Intent(this, ProfileActivity.class));
             }
@@ -136,7 +148,12 @@ public class MainActivity extends AppCompatActivity {
                             SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
                             finish();
                             //TODO - navigate to lab inbox if this is a lab worker
-                            startActivity(new Intent(getApplicationContext(), InboxDoctor.class));
+                            if(user.getJobTitle().equals("מנהל מערכת")){
+                                startActivity(new Intent(getApplicationContext(), ApproveUsers.class));
+                            }
+                            else{
+                                startActivity(new Intent(getApplicationContext(), InboxDoctor.class));
+                            }
                         }
                     } else {
                         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
