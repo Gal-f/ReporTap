@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -29,6 +30,7 @@ public class TwoFactorAuth extends AppCompatActivity {
     private String otp;
     private User user;
     EditText editTextOTP;
+    TextView helloUser;
     LinearLayout dialog;
 
     @Override
@@ -43,6 +45,8 @@ public class TwoFactorAuth extends AppCompatActivity {
         //get the user data from Register Activity/Login activity
         user = (User) getIntent().getSerializableExtra("user");
         dialog = (LinearLayout) findViewById(R.id.dialogPopUp);
+        helloUser = findViewById(R.id.helloUser);
+        helloUser.setText("שלום " + user.getFullName() +",");
 
     }
 

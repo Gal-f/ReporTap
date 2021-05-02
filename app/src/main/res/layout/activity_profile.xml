@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
@@ -83,23 +84,25 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="7dp"
                 android:fontFamily="@font/varela_round"
-                android:paddingRight="8dp"
-                android:text='המשתמש טרם אושר ע"י מנהל המערכת. '
+                android:paddingEnd="8dp"
+                android:text="@string/notApprovedYet"
                 android:textColor="@color/black"
                 android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                tools:ignore="RtlSymmetry" />
 
             <TextView
                 android:id="@+id/textViewNotActive2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/varela_round"
-                android:paddingRight="8dp"
-                android:text="רק משתמשים רשומים יכולים להשתמש באפליקציה. לעזרה יש לפנות למנהל המערכת "
+                android:paddingEnd="8dp"
+                android:text="@string/explainUser"
 
                 android:textColor="@color/black"
                 android:textSize="14sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                tools:ignore="RtlSymmetry" />
 
         </LinearLayout>
 
@@ -118,7 +121,6 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:background="#fff"
-                android:clickable="true"
                 android:elevation="4dp"
                 android:padding="20dp" />
 
@@ -130,7 +132,6 @@
                 android:layout_marginBottom="3dp"
                 android:layout_marginTop="3dp"
                 android:background="#fff"
-                android:clickable="true"
                 android:elevation="4dp"
                 android:padding="20dp" />
 
@@ -142,7 +143,6 @@
                 android:layout_marginBottom="3dp"
                 android:layout_marginTop="3dp"
                 android:background="#fff"
-                android:clickable="true"
                 android:elevation="4dp"
                 android:padding="20dp" />
 
@@ -152,7 +152,6 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:background="#fff"
-                android:clickable="true"
                 android:elevation="4dp"
                 android:padding="20dp" />
         </LinearLayout>

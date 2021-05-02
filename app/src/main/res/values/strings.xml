@@ -38,4 +38,13 @@
     <string name="attachment_summary_on">Automatically download attachments for incoming emails
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="ChooseSMSorEmail">על מנת להשלים את תהליך ההרשמה יש להזין קוד אימות חד פעמי. ניתן לקבל את קוד האימות במייל או בהודעת sms.</string>
+    <string name="sendMeSMS">שלחו לי קוד אימות ב-SMS</string>
+    <string name="sendEmail">שלחו לי קוד אימות ב-Email</string>
+    <string name="sentCode">קוד אימות נשלח לאמצעי שבחרת.</string>
+    <string name="validateCode">נדרש לאמת אותו כדי להשלים את ההרשמה.</string>
+    <string name="enterCode">נא להזין את קוד האימות</string>
+    <string name="sendOTP">שלח</string>
+    <string name="notApprovedYet">המשתמש טרם אושר עי מנהל המערכת.</string>
+    <string name="explainUser">רק משתמשים רשומים יכולים להשתמש באפליקציה. לעזרה יש לפנות למנהל המערכת</string>
 </resources>

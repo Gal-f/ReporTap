@@ -90,7 +90,7 @@ class DbOperations
 				//the user wanted us to send him code via email
 				else{
 					$mail = new \SendGrid\Mail\Mail();
-					$mail->setFrom("edenpe@mta.ac.il", "ReporTap");
+					$mail->setFrom("eden.peretz@ibm.com", "ReporTap");
 					$mail->setSubject("אימות חשבון חדש");
 				    $mail->addTo($email);
 					$mail->addContent("text/plain", "קוד האימות שלך הוא: ".$otp);
@@ -132,11 +132,9 @@ class DbOperations
 		$stmt2->bind_result($isActive);
 	//	$stmt2->fetch();
 		if(!$isActive){
-		    $response['isActive'] = false;
 			$response['message'] = "הקוד אומת בהצלחה, כעת יש להמתין לאישור מנהל";
 		}
 		else{
-		    $response['isActive'] = true;
 			$response['message'] = 'הקוד אומת בהצלחה';
 		}
         return $response;
@@ -169,18 +167,14 @@ class DbOperations
 			if($otp_verified){
 				//check whether the system administrator approved the user's account
 				if($isActive){
-				    $response['error'] = false;
 					$response['message'] = 'התחברות בוצעה בהצלחה';
-					$response['isActive']= true;
 				}
 				else{
-					$response['error'] = false;
+					$response['error'] = true;
 					$response['message'] = 'משתמש ממתין לאישור מנהל';
-					$response['isActive']= false;
 				}
 			}
 			else{
-			     $response['error'] = false;
 				 $response['message'] = 'משתמש לא מאומת';
 			}
         } else {
@@ -188,6 +182,38 @@ class DbOperations
             $response['message'] = 'שגיאה בפרטי ההזדהות';
         }
         return $response;
+    }
+
+      function getNotActive(){
+        $response = array();
+        $stmt = $this->conn->prepare('SELECT `full_name`, `employee_ID`, `role`, `works_in_dept` FROM users WHERE `is_active`=0');
+		$stmt->execute();
+		$stmt->store_result();
+		$rows = $stmt->num_rows;
+
+		 if ($stmt->num_rows > 0){
+
+		      while ($rows>0){
+		        $stmt->bind_result($fullName, $employeeNumber, $jobTitle, $deptID);
+                $stmt->fetch();
+
+                $users[$stmt->num_rows-$rows] = array('full_name' => $fullName,
+				'employee_ID' => $employeeNumber,
+				'role' => $jobTitle,
+				'works_in_dept' => $deptID
+                );
+                $rows--;
+		      }
+		     $response['error'] = false;
+		     $response['message'] = "יש משתמשים הממתינים לאישור";
+		     $response['users']= $users;
+		 }
+		 else{
+		     $response['error'] = false;
+		     $response['message']="אין משתמשים הממתינים לאישור";
+		 }
+
+		 return $response;
     }
 
     function send_message($sender, $department, $patientId, $patientName, $testType, $componentName, $isValueBool, $testResultValue, $isUrgent, $comments)
@@ -520,6 +546,52 @@ class DbOperations
         return $response;
 
     }
+    /*
+    function donelab($department)
+    {
+        $response = array();
+        $query="SELECT R.ID,M.ID, R.sent_time, M.patient_ID, T.name, R.text, T.measurement_unit, M.component, CASE WHEN M.is_value_boolean IS NULL THEN 0 ELSE M.is_value_boolean END AS is_value_boolean,M.test_result_value, U.full_name, D.name FROM responses as R JOIN messages as M on R.response_to_messageID=M.ID JOIN users as U ON M.sender_user=U.employee_ID JOIN test_types as T ON M.test_type=T.ID JOIN departments as D ON U.works_in_dept=D.ID WHERE R.recipient_dept = ? AND R.confirm_time IS NOT NULL order by R.sent_time desc";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("i", $department);
+
+        $stmt->execute();
+
+        $stmt->store_result();
+        $rows=$stmt->num_rows;
+
+        if ($stmt->num_rows > 0) {
+
+            while ($rows>0){
+                $stmt->bind_result($id,$messageID, $sentTime, $patientId, $testName, $text,$measurement,$component,$isValueBool,$resultValue,$fullName,$deptName);
+                $stmt->fetch();
+
+                $report[$stmt->num_rows-$rows] = array('id' =>$id,
+                    'messageID' => $messageID,
+                    'sent_time' => $sentTime,
+                    'patient_id' => $patientId,
+                    'name' => $testName,
+                    'text' => $text,
+                    'measurement' => $measurement,
+                    'component' => $component,
+                    'is_value_bool' => $isValueBool,
+                    'result_value'=> $resultValue,
+                    'full_name'=> $fullName,
+                    'dept_name' => $deptName
+                );
+                $rows--;
+                //TODO add a 'recieve_time' to each message only the first time it is presented in the inboxdr
+            }
+            $response['error'] = false;
+            $response['message'] = 'new report for you';
+            $response['report'] = $report;
+        } else {
+            $response['error'] = true;
+            $response['message'] = 'שגיאה בהצגת הדיווח';
+        }
+        return $response;
+
+    }*/
+
     function donelab($department)
     {
         $response = array();
@@ -604,4 +676,40 @@ class DbOperations
         return $response;
 
     }
+    function getdepttype($id)
+    {
+        $response = array();
+        $query="SELECT U.id, D.dept_type from users as U JOIN departments as D ON U.works_in_dept=D.ID where U.id = ? ";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("i", $id);
+
+        $stmt->execute();
+
+        $stmt->store_result();
+        $rows=$stmt->num_rows;
+
+        if ($stmt->num_rows > 0) {
+
+            while ($rows>0){
+                $stmt->bind_result($id, $deptType);
+                $stmt->fetch();
+
+                $deptTypeArr[$stmt->num_rows-$rows] = array('id' => $id,
+                'dept_type' => $deptType
+                );
+                $rows--;
+                //TODO add a 'recieve_time' to each message only the first time it is presented in the inboxdr
+            }
+            $response['error'] = false;
+            $response['message'] = 'new report for you';
+            $response['departmentType'] = $deptTypeArr;
+        } else {
+            $response['error'] = true;
+            $response['message'] = 'שגיאה בהצגת המחלקה';
+        }
+        return $response;
+
+
+    }
+
 }

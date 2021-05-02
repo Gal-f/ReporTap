@@ -12,7 +12,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -226,7 +225,7 @@ public class RegisterActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 }) {
-            protected Map<String, String> getParams() throws AuthFailureError {
+            protected Map<String, String> getParams() {
                 //creating request parameters
                 HashMap<String, String> params = new HashMap<>();
                 params.put("password", password);
@@ -244,85 +243,5 @@ public class RegisterActivity extends AppCompatActivity {
         requestQueue.add(stringRequest);
     }
 }
-
-        //if it passes all the validations
-
-        /*
-
-        class RegisterUser extends AsyncTask<Void, Void, String> {
-
-            private ProgressBar progressBar;
-
-            @Override
-            protected String doInBackground(Void... voids) {
-                //creating request handler object
-                RequestHandler requestHandler = new RequestHandler();
-
-                //creating request parameters
-                HashMap<String, Object> params = new HashMap<>();
-                params.put("password", password);
-                params.put("employee_ID", employeeNumber);
-                params.put("full_name", fullName);
-                params.put("email", email);
-                params.put("role", jobTitle);
-                params.put("phone_number", phoneNumber);
-                params.put("works_in_dept", deptID);
-               // params.put("otp", otp);
-                //params.put("sendTo", "phone");
-
-                //returning the response
-                return requestHandler.sendPostRequest(URLs.URL_REGISTER, params);
-            }
-
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-                //displaying the progress bar while user registers on the server
-                progressBar = (ProgressBar) findViewById(R.id.progressBar);
-                progressBar.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            protected void onPostExecute(String s) {
-                super.onPostExecute(s);
-                //hiding the progressbar after completion
-                progressBar.setVisibility(View.GONE);
-
-                try {
-                    //converting response to json object
-                     JSONObject obj = new JSONObject(s);
-
-                    //if no error in response
-                    if (!obj.getBoolean("error")) {
-                        Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
-                        //getting the user from the response
-                        JSONObject userJson = obj.getJSONObject("user");
-
-                        //creating a new user object - names are identical to the columns in the db
-                        User user = new User(
-                                userJson.getInt("id"),
-                                userJson.getString("employee_ID"),
-                                userJson.getString("full_name"),
-                                userJson.getString("email"),
-                                userJson.getString("role"),
-                                userJson.getString("phone_number"),
-                                userJson.getInt("works_in_dept"));
-
-                        Intent intent = new Intent(RegisterActivity.this, TwoFactorAuth.class);
-                        intent.putExtra("user", user);
-                        startActivity(intent);
-                    }
-                    else{
-                        Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_LONG).show();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }*/
-
-        //executing the async task
-      //  final RegisterUser ru = new RegisterUser();
-      //  ru.execute();
 
 

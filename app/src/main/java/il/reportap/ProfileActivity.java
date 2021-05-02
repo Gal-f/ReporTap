@@ -29,9 +29,7 @@ public class ProfileActivity extends OptionsMenu {
         textViewPhoneNumber =  (TextView) findViewById(R.id.textViewPhoneNumber);
         textViewDepartment=  (TextView) findViewById(R.id.textViewDepartment);
         isActive = user.isActive;
-
         notActive = findViewById(R.id.notActive);
-
         if(!isActive){
             notActive.setVisibility(View.VISIBLE);
         }
@@ -47,6 +45,8 @@ public class ProfileActivity extends OptionsMenu {
                 break;
             case 2:
                 textViewDepartment.setText("מחלקה: פנימית א");
+            case 6:
+                textViewDepartment.setText("מחלקה: הנהלה");
         }
 
     }
