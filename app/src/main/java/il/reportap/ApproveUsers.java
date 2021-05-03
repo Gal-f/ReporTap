@@ -90,6 +90,7 @@ public class ApproveUsers extends OptionsMenu {
             this.users = users;
         }
 
+
         @NonNull
         @Override
         public UserViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -105,6 +106,8 @@ public class ApproveUsers extends OptionsMenu {
         public int getItemCount() {
             return this.users.size();
         }
+
+
     }
 
 
