@@ -90,7 +90,7 @@ class DbOperations
 				//the user wanted us to send him code via email
 				else{
 					$mail = new \SendGrid\Mail\Mail();
-					$mail->setFrom("eden.peretz@ibm.com", "ReporTap");
+					$mail->setFrom("edenpe@mta.ac.il", "ReporTap");
 					$mail->setSubject("אימות חשבון חדש");
 				    $mail->addTo($email);
 					$mail->addContent("text/plain", "קוד האימות שלך הוא: ".$otp);
@@ -133,9 +133,11 @@ class DbOperations
 	//	$stmt2->fetch();
 		if(!$isActive){
 			$response['message'] = "הקוד אומת בהצלחה, כעת יש להמתין לאישור מנהל";
+			$response['isActive'] = false;
 		}
 		else{
 			$response['message'] = 'הקוד אומת בהצלחה';
+			$response['isActive'] = true;
 		}
         return $response;
 	}
@@ -168,10 +170,12 @@ class DbOperations
 				//check whether the system administrator approved the user's account
 				if($isActive){
 					$response['message'] = 'התחברות בוצעה בהצלחה';
+					$response['isActive'] = true;
 				}
 				else{
 					$response['error'] = true;
-					$response['message'] = 'משתמש ממתין לאישור מנהל';
+					$response['message'] = 'המשתמש ממתין לאישור מנהל';
+					$response['isActive'] = false;
 				}
 			}
 			else{
@@ -214,6 +218,18 @@ class DbOperations
 		 }
 
 		 return $response;
+    }
+
+    function approveUser($employeeNumber){
+        $stmt = $this->conn->prepare('UPDATE users SET is_active=1 WHERE employee_ID ="'.$employeeNumber.'"');
+        if ($stmt->execute()) {
+            $response['error'] = false;
+            $response['message'] = 'Updated the record successfully';
+        } else {
+            $response['error'] = true;
+            $response['message'] = 'Error while updating the record';
+        }
+        return $response;
     }
 
     function send_message($sender, $department, $patientId, $patientName, $testType, $componentName, $isValueBool, $testResultValue, $isUrgent, $comments)
