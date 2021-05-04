@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Pair;
 import android.view.View;
 import android.widget.AdapterView;
@@ -39,6 +40,7 @@ public class NewMessage extends OptionsMenu {
     private AutoCompleteTextView recipient, testName, componentName, patientId;
     private EditText /*patientId,*/ patientName, measuredAmount, comments;
     private CheckBox isUrgent;
+    private RadioGroup boolResultSelection;
     private ProgressDialog progressDialog;
     private boolean success, isTestValueBool;
 
@@ -59,13 +61,14 @@ public class NewMessage extends OptionsMenu {
         this.testName = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextViewTestName);
         this.componentName = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextViewComponentName);
         this.measuredAmount = (EditText) findViewById(R.id.editTextMeasuredAmount);
+        this.boolResultSelection = (RadioGroup) findViewById(R.id.radioGroupBoolResult);
         this.isUrgent = (CheckBox) findViewById(R.id.checkBoxUrgent);
         this.comments = (EditText) findViewById(R.id.editTextTextMultiLineComments);
         this.progressDialog = new ProgressDialog(this);
 
         populateHashmaps(); // This populates the departments and test types from the DB and then adds them as options to the form.
 
-        patientId.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {  // Show patient name according to the selected patient ID
+        patientId.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {  // When selecting patient ID, show the patient's name accordingly
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedID = parent.getItemAtPosition(position).toString();
@@ -78,9 +81,48 @@ public class NewMessage extends OptionsMenu {
             }
         }
         );
-        findViewById(R.id.buttonSendMessage).setOnClickListener(new View.OnClickListener() {
+
+        findViewById(R.id.buttonSendMessage).setOnClickListener(new View.OnClickListener() {    // User clicked send
             @Override
             public void onClick(View v) {
+                // Input validations
+                if (TextUtils.isEmpty(recipient.getText().toString())) {
+                    recipient.setError("יש לבחור מחלקה נמענת");
+                    return;
+                }
+                if (!deptMap.containsKey(recipient.getText().toString())){
+                    recipient.setError("נא לבחור אחת מהמחלקות הקיימות");
+                    return;
+                }
+                if (patientId.length() != 9){
+                    patientId.setError("מספר זהות צריך לכלול 9 ספרות בדיוק");
+                    return;
+                }
+                if (!patientId.getText().toString().matches("[0-9]+")){
+                    patientId.setError("מספר זהות צריך לכלול ספרות בלבד");
+                    return;
+                }
+                if (!patientsMap.containsKey(patientId.getText().toString())){
+                    patientId.setError("המטופל לא קיים במערכת");
+                    return;
+                }
+                if (TextUtils.isEmpty(testName.getText().toString())){
+                    testName.setError("נא לבחור סוג בדיקה");
+                    return;
+                }
+                if (!testTypeMap.containsKey(testName.getText().toString())){
+                    testName.setError("נא לבחור בדיקה קיימת");
+                    return;
+                }
+                if (isTestValueBool)
+                    if (boolResultSelection.getCheckedRadioButtonId() == -1){
+                        //boolResultSelection.setError("נא לבחור תוצאה לבדיקה"); //TODO Check if anything similar exists (there is no setError for RadioGroup
+                        Toast.makeText(getApplicationContext(), "נא לבחור תוצאה לבדיקה", Toast.LENGTH_LONG).show();
+                        return;
+
+                    }
+                //Component, Measured amount and Comments are not validated, to allow the lab crew more flexibility.
+
                 Send();
                 //TODO show a message if Send() succeeded or not
             }
@@ -148,11 +190,12 @@ public class NewMessage extends OptionsMenu {
         final String isUrgent = (this.isUrgent.isChecked()?"1":"0");
         final String comments = this.comments.getText().toString().trim();
 
-        // Set both numeric and boolean test results (as we can't define constants inside a condition) and use only one of them down the road
+        // Set both numeric and boolean test results (as we can't define constants inside a condition), and use only one of them down the road
         final String measuredAmount = this.measuredAmount.getText().toString().trim();
-        int selectedRadio = ((RadioGroup) findViewById(R.id.radioGroupBoolResult)).getCheckedRadioButtonId();
+        int selectedRadio = boolResultSelection.getCheckedRadioButtonId();
         RadioButton rb = findViewById(selectedRadio);
-        final String booleanResult = (rb != null ? (rb.getText().equals("חיובית")?"1":"0") : "");
+
+        final String booleanResult = (rb != null ? (rb.getText().equals("חיובית")?"1":"0") : ""); // TODO Check if rb is actually null when none is selected, otherwise change it to check if selectedRadio == -1
 
         success = false;
         progressDialog.setMessage("ההודעה שלך נשלחת.\nנא להמתין לאישור...");
@@ -166,12 +209,9 @@ public class NewMessage extends OptionsMenu {
                 try {
                     JSONObject jsonObject = new JSONObject(response);
                     errorMessage = jsonObject.getString("message");
-                    if(jsonObject.getBoolean("error")){ // If there was any error along the way //TODO add validations for correct inputs
-                        Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
-                    } else {
+                    if(!jsonObject.getBoolean("error")) // If there was any error along the way
                         success = true;
-                        Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
-                    }
+                    Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
