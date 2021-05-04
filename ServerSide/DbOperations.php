@@ -396,7 +396,9 @@ class DbOperations
     function getDeptsAndTests()
     {
         $response = array();
-        $response['message'] = '';
+        $response['error'] = false; //Will contain 'true' if at least ONE of the three queries failed
+        $response['message'] = ''; //Will contain a concatinated string of the three successes or failures
+
         //1st part - Get Departments
         $query = "SELECT ID, departments.name FROM departments";
         $stmt = $this->conn->prepare($query);
@@ -418,29 +420,54 @@ class DbOperations
             $response['error'] = false;
             $response['message'] = 'Departments pulled successfully';
             $response['departments'] = $depts;
-            //2nd part - Get test types
-            $query = "SELECT ID, name, result_type FROM test_types";
-            $stmt2 = $this->conn->prepare($query);
-            $stmt2->execute();
-            $stmt2->store_result();
-
-            $rows = $stmt2->num_rows;
-            if ($rows == 0){
-                $response['error'] = true;
-                $response['message'] .= ', Unable to retrieve test types from the server';
-            } else {
-                while ($rows > 0){
-                    $stmt2->bind_result($testID, $testName, $resultType);
-                    $stmt2->fetch();
-
-                    $testsTypes[$stmt2->num_rows()-$rows] = array('testID' => $testID, 'testName' => $testName, 'resultType' => $resultType);
-                    $rows--;
-                }
-                $response['error'] = false;
-                $response['message'] .= ', Test types pulled successfully';
-                $response['testTypes'] = $testsTypes;
-            }
         }
+        
+        //2nd part - Get test types
+        $query = "SELECT ID, name, result_type FROM test_types";
+        $stmt2 = $this->conn->prepare($query);
+        $stmt2->execute();
+        $stmt2->store_result();
+
+        $rows = $stmt2->num_rows;
+        if ($rows == 0){
+            $response['error'] = true;
+            $response['message'] .= ', Unable to retrieve test types from the server';
+        } else {
+            while ($rows > 0){
+                $stmt2->bind_result($testID, $testName, $resultType);
+                $stmt2->fetch();
+
+                $testsTypes[$stmt2->num_rows-$rows] = array('testID' => $testID, 'testName' => $testName, 'resultType' => $resultType);
+                $rows--;
+            }
+            //Not setting $response['error']=false since it might have recieved 'true' for a previous query. If it remained 'false' thus far, we keep it false.
+            $response['message'] .= ', Test types pulled successfully';
+            $response['testTypes'] = $testsTypes;
+        }
+
+        //3rd part - Get patients
+        $query = "SELECT ID, patients.name FROM patients";
+        $stmt3 = $this->conn->prepare($query);
+        $stmt3->execute();
+        $stmt3->store_result();
+
+        $rows = $stmt3->num_rows;
+        if ($rows == 0){
+            $response['error'] = true;
+            $response['message'] .= ', Unable to retrieve patients\' details from the server';
+        } else {
+            while ($rows > 0){
+                $stmt3->bind_result($patientID, $patientName);
+                $stmt3->fetch();
+
+                $patients[$stmt3->num_rows-$rows] = array('ID' => $patientID, 'name' => $patientName);
+                $rows--;
+            }
+            //Not setting $response['error']=false since it might have recieved 'true' for a previous query. If it remained 'false' thus far, we keep it false.
+            $response['message'] .= ', Patients\' details pulled successfully';
+            $response['patients'] = $patients;
+        }
+
         return $response;
     }
 
