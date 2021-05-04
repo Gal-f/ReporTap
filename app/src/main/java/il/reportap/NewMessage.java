@@ -36,15 +36,15 @@ import java.util.Map;
 
 public class NewMessage extends OptionsMenu {
 
-    private AutoCompleteTextView recipient, testName, componentName;
-    private EditText patientId, patientName, measuredAmount, comments;
-    private RadioGroup boolResult;
+    private AutoCompleteTextView recipient, testName, componentName, patientId;
+    private EditText /*patientId,*/ patientName, measuredAmount, comments;
     private CheckBox isUrgent;
     private ProgressDialog progressDialog;
     private boolean success, isTestValueBool;
 
     private HashMap<String, Integer> deptMap;                     //Translates department name to it's corresponding ID
     private HashMap<String, Pair<Integer, String>> testTypeMap;   //Translates test type ID to it's corresponding name + result type (in this form: [name, [ID, resultType]] )
+    private HashMap<String, String> patientsMap;
     //TODO add a 'measurement unit' to testTypeMap and show it next to the measuredAmount EditText field
 
     @Override
@@ -53,7 +53,8 @@ public class NewMessage extends OptionsMenu {
         setContentView(R.layout.activity_new_message);
 
         this.recipient = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextViewTo);
-        this.patientId = (EditText) findViewById(R.id.editTextPatientIdNumber);
+        this.patientId = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextViewPatientIdNumber);
+        //this.patientId = (EditText) findViewById(R.id.editTextPatientIdNumber);
         this.patientName = (EditText) findViewById(R.id.editTextPatientName);
         this.testName = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextViewTestName);
         this.componentName = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextViewComponentName);
@@ -62,11 +63,21 @@ public class NewMessage extends OptionsMenu {
         this.comments = (EditText) findViewById(R.id.editTextTextMultiLineComments);
         this.progressDialog = new ProgressDialog(this);
 
-        //TODO Create auto-complete for patient ID? (optional)
-
         populateHashmaps(); // This populates the departments and test types from the DB and then adds them as options to the form.
-        //TODO extract function (populateHashmaps)
 
+        patientId.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {  // Show patient name according to the selected patient ID
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedID = parent.getItemAtPosition(position).toString();
+                patientName.setText(patientsMap.get(selectedID));
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                patientId.setError("נא לבחור מספר זהות של מטופל קיים");
+                patientId.setText(""); // TODO Is this necessary?
+            }
+        }
+        );
         findViewById(R.id.buttonSendMessage).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -95,7 +106,8 @@ public class NewMessage extends OptionsMenu {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String selectedTest = parent.getItemAtPosition(position).toString();
-                if (((Pair)testTypeMap.get(selectedTest)).second.equals("boolean")){
+                // If the test type is of a boolean result, set the result views to Radio selection instead of the Textviews.
+                if (((Pair)testTypeMap.get(selectedTest)).second.equals("boolean")){    // Check the test type in the map according to the test names
                     isTestValueBool = true;
                     findViewById(R.id.linearLayoutBoolResult).setVisibility(View.VISIBLE);
                     findViewById(R.id.linearLayoutMeasuredAmount).setVisibility(View.GONE);
@@ -212,18 +224,27 @@ public class NewMessage extends OptionsMenu {
             public void onResponse(String response) {
                 deptMap = new HashMap<String, Integer>();
                 testTypeMap = new HashMap<String, Pair<Integer, String>>();
+                patientsMap = new HashMap<String, String>();
 
                 try{
                     JSONObject entireResponse = new JSONObject(response);
                     JSONArray deptsArray = entireResponse.getJSONArray("departments");
-                    JSONArray testTypesArray = entireResponse.getJSONArray("testTypes");
+                    // Getting all departments
                     for (int i=0; i<deptsArray.length(); i++) {
                         JSONObject dept = deptsArray.getJSONObject(i);
                         deptMap.put(dept.getString("deptName"), dept.getInt("deptID"));
                     }
+                    // Getting all test types
+                    JSONArray testTypesArray = entireResponse.getJSONArray("testTypes");
                     for (int i=0; i<testTypesArray.length(); i++){
                         JSONObject testType = testTypesArray.getJSONObject(i);
                         testTypeMap.put(testType.getString("testName"), new Pair<>(testType.getInt("testID"), testType.getString("resultType")));
+                    }
+                    // Getting all patients
+                    JSONArray patientsArray = entireResponse.getJSONArray("patients");
+                    for (int i=0; i<patientsArray.length(); i++){
+                        JSONObject patient = patientsArray.getJSONObject(i);
+                        patientsMap.put(patient.getString("ID"), patient.getString("name"));
                     }
                     inflateAutocompleteOptions(); //Use the freshly populated hashmaps as options to select from in the form fields.
                     // The inflate call is done here in order to make sure the response for PopulateHashmaps() returned before calling inflateAutocompleteOptions().
