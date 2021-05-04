@@ -220,6 +220,18 @@ class DbOperations
 		 return $response;
     }
 
+    function approveUser($employeeNumber){
+        $stmt = $this->conn->prepare('UPDATE users SET is_active=1 WHERE employee_ID ="'.$employeeNumber.'"');
+        if ($stmt->execute()) {
+            $response['error'] = false;
+            $response['message'] = 'Updated the record successfully';
+        } else {
+            $response['error'] = true;
+            $response['message'] = 'Error while updating the record';
+        }
+        return $response;
+    }
+
     function send_message($sender, $department, $patientId, $patientName, $testType, $componentName, $isValueBool, $testResultValue, $isUrgent, $comments)
     {
         $response = array();
