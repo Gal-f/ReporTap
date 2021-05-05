@@ -10,50 +10,7 @@
     android:background="#E1DCDC">
 
 
-    <LinearLayout
-        android:id="@+id/linearLayout2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:ignore="MissingConstraints">
-
-        <Button
-            android:id="@+id/sentBSL"
-            android:layout_width="wrap_content"
-            android:layout_height="60dp"
-            android:layout_weight="1"
-            android:text="@string/sent"
-            android:textColor="#020202"
-            app:backgroundTint="#FFFFFF"
-            app:strokeColor="@color/stroke"
-            app:strokeWidth="2dp" />
-
-        <Button
-            android:id="@+id/doneBSL"
-            android:layout_width="wrap_content"
-            android:layout_height="60dp"
-            android:layout_weight="1"
-            android:text="@string/done"
-            android:textColor="#020202"
-            app:backgroundTint="#FFFFFF"
-            app:strokeColor="@color/stroke"
-            app:strokeWidth="2dp" />
-
-        <Button
-            android:id="@+id/toDoBSL"
-            android:layout_width="wrap_content"
-            android:layout_height="60dp"
-            android:layout_weight="1"
-            android:text="@string/toDo"
-            android:textColor="#020202"
-            app:backgroundTint="#FFFFFF"
-            app:strokeColor="@color/stroke"
-            app:strokeWidth="2dp" />
-
-    </LinearLayout>
+    <include layout="@layout/buttons_layout"/>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swiperefresh"

@@ -40,7 +40,7 @@ public class DoneLab extends OptionsMenu {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.done_lab);
-        Button btn = (Button)findViewById(R.id.doneBDL);
+        Button btn = (Button)findViewById(R.id.doneB);
         btn.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.stroke));
         btn.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
 
@@ -61,7 +61,7 @@ public class DoneLab extends OptionsMenu {
 //                mySwipeToRefresh.setRefreshing(false);
 //            }
 //        });
-        Button btnS= (Button)findViewById(R.id.sentBDL);
+        Button btnS= (Button)findViewById(R.id.sentB);
         btnS.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,7 +69,7 @@ public class DoneLab extends OptionsMenu {
                 startActivity(new Intent(getApplicationContext(), SentLab.class));
             }
         });
-        Button btnD= (Button)findViewById(R.id.toDoBDL);
+        Button btnD= (Button)findViewById(R.id.toDoB);
         btnD.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

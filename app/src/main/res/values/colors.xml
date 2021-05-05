@@ -12,6 +12,7 @@
     <color name="headercolor">#E1DCDC</color>
     <color name="divider">#74C043</color>
     <color name="gray">#635F5F</color>
+    <color name="lightGray">#E6D8D8</color>
     <color name="stroke">#03175E</color>
     <color name="lightgreen">#3C9C19</color>
     <color name="popup_background">#95E3E0</color>

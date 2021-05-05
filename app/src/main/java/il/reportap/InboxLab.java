@@ -44,9 +44,14 @@ public class InboxLab extends OptionsMenu {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.inbox_lab);
-        Button btn = (Button)findViewById(R.id.toDoBIL);
-        btn.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.stroke));
-        btn.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
+        Button btnI = (Button)findViewById(R.id.toDoB);
+        Button btnS = (Button)findViewById(R.id.sentB);
+        Button btnD = (Button)findViewById(R.id.doneB);
+        btnI.setText("תגובות לטיפולי");
+        btnS.setText("מסרים שנשלחו");
+        btnD.setText("מסרים שטופלו");
+        btnI.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.stroke));
+        btnI.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
 
         recyclerView = (RecyclerView)findViewById(R.id.recyclerViewInboxL);
         recyclerView.setHasFixedSize(true);
@@ -65,7 +70,6 @@ public class InboxLab extends OptionsMenu {
 //                mySwipeToRefresh.setRefreshing(false);
 //            }
 //        });
-        Button btnS= (Button)findViewById(R.id.sentBIL);
         btnS.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -73,7 +77,6 @@ public class InboxLab extends OptionsMenu {
                 startActivity(new Intent(getApplicationContext(), SentLab.class));
             }
         });
-        Button btnD= (Button)findViewById(R.id.doneBIL);
         btnD.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

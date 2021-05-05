@@ -4,19 +4,29 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.loginregister.R;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -34,7 +44,8 @@ public class MainActivity extends AppCompatActivity {
         //TODO change to inbox doctor/inbox lab based on the job title.
         if (SharedPrefManager.getInstance(this).isLoggedIn()) {
             finish();
-            startActivity(new Intent(this, InboxDoctor.class));
+            myStringRequestDept();
+//            startActivity(new Intent(getApplicationContext(), InboxDoctor.class));
             return;
         }
 
@@ -57,6 +68,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(), RegisterActivity.class));
             }
         });
+
+
 
 
     }
@@ -132,7 +145,8 @@ public class MainActivity extends AppCompatActivity {
                             SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
                             finish();
                             //TODO - navigate to lab inbox if this is a lab worker
-                            startActivity(new Intent(getApplicationContext(), InboxDoctor.class));
+                            myStringRequestDept();
+                            //startActivity(new Intent(getApplicationContext(), InboxDoctor.class));
                         }
                     } else {
                         Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_LONG).show();
@@ -161,4 +175,45 @@ public class MainActivity extends AppCompatActivity {
         UserLogin ul = new UserLogin();
         ul.execute();
     }
+
+    public void myStringRequestDept () {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST,
+                URLs.URL_DEPTTYPE,
+                //lambda expression
+                response -> {
+                    try {
+                        JSONObject deptObj = new JSONObject(response);
+                        JSONArray jDeptArr = deptObj.getJSONArray("departmentType");
+                        JSONObject jDeptObj = jDeptArr.getJSONObject(0);
+                        String deptType = jDeptObj.getString("dept_type");
+                       // final LayoutInflater factory = getLayoutInflater();
+                        if (deptType.equals("lab"))
+                        {
+                            finish();
+                            startActivity(new Intent(getApplicationContext(), InboxLab.class));
+                        }
+                        else if (deptType.equals("medical_dept"))
+                        {
+                            finish();
+                            startActivity(new Intent(getApplicationContext(), InboxDoctor.class));
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                },
+                //lambda expression
+                error -> Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show()) {
+            @Nullable
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("id", String.valueOf(SharedPrefManager.getInstance(getApplicationContext()).getUser().getId()));
+                return params;
+            }
+        };
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
+    }
+
 }

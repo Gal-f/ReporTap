@@ -45,9 +45,14 @@ public class InboxDoctor extends OptionsMenu {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.inbox_doctor);
-        Button btn = (Button)findViewById(R.id.toDoBI);
-        btn.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.stroke));
-        btn.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
+        Button btnI = (Button)findViewById(R.id.toDoB);
+        Button btnS = (Button)findViewById(R.id.sentB);
+        Button btnD = (Button)findViewById(R.id.doneB);
+        btnI.setText("מסרים לטיפולי");
+        btnS.setText("תגובות שנשלחו");
+        btnD.setText("תגובות שטופלו");
+        btnI.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.stroke));
+        btnI.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
 
         recyclerView = (RecyclerView)findViewById(R.id.recyclerViewInbox);
         recyclerView.setHasFixedSize(true);
@@ -88,15 +93,14 @@ public class InboxDoctor extends OptionsMenu {
             }
 
         });
-        SwipeRefreshLayout mySwipeToRefresh= (SwipeRefreshLayout)findViewById(R.id.swiperefresh);
-        mySwipeToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                myStringRequest();
-                mySwipeToRefresh.setRefreshing(false);
-            }
-        });
-        Button btnS= (Button)findViewById(R.id.sentBI);
+//        SwipeRefreshLayout mySwipeToRefresh= (SwipeRefreshLayout)findViewById(R.id.swiperefresh);
+//        mySwipeToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+//            @Override
+//            public void onRefresh() {
+//                myStringRequest();
+//                mySwipeToRefresh.setRefreshing(false);
+//            }
+//        });
         btnS.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -104,7 +108,6 @@ public class InboxDoctor extends OptionsMenu {
                 startActivity(new Intent(getApplicationContext(), SentDoctor.class));
             }
         });
-        Button btnD= (Button)findViewById(R.id.doneBI);
         btnD.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

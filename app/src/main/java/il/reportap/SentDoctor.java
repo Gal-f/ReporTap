@@ -45,7 +45,7 @@ public class SentDoctor extends OptionsMenu {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sent_doctor);
-        Button btn = (Button)findViewById(R.id.sentBS);
+        Button btn = (Button)findViewById(R.id.sentB);
         btn.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.stroke));
         btn.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
 
@@ -108,7 +108,7 @@ public class SentDoctor extends OptionsMenu {
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
 
-        Button btnD= (Button)findViewById(R.id.doneBS);
+        Button btnD= (Button)findViewById(R.id.doneB);
         btnD.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -116,7 +116,7 @@ public class SentDoctor extends OptionsMenu {
                 startActivity(new Intent(getApplicationContext(), DoneDoctor.class));
             }
         });
-        Button btnI= (Button)findViewById(R.id.toDoBS);
+        Button btnI= (Button)findViewById(R.id.toDoB);
         btnI.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

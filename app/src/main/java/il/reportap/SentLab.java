@@ -40,7 +40,7 @@ public class SentLab extends OptionsMenu {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sent_lab);
-        Button btn = (Button)findViewById(R.id.sentBSL);
+        Button btn = (Button)findViewById(R.id.sentB);
         btn.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.stroke));
         btn.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
 
@@ -103,7 +103,7 @@ public class SentLab extends OptionsMenu {
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
 
-        Button btnD= (Button)findViewById(R.id.doneBSL);
+        Button btnD= (Button)findViewById(R.id.doneB);
         btnD.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -111,7 +111,7 @@ public class SentLab extends OptionsMenu {
                 startActivity(new Intent(getApplicationContext(), DoneLab.class));
             }
         });
-        Button btnI= (Button)findViewById(R.id.toDoBSL);
+        Button btnI= (Button)findViewById(R.id.toDoB);
         btnI.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
