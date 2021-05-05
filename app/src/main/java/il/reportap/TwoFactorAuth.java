@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -29,6 +30,7 @@ public class TwoFactorAuth extends AppCompatActivity {
     private String otp;
     private User user;
     EditText editTextOTP;
+    TextView helloUser;
     LinearLayout dialog;
 
     @Override
@@ -43,6 +45,8 @@ public class TwoFactorAuth extends AppCompatActivity {
         //get the user data from Register Activity/Login activity
         user = (User) getIntent().getSerializableExtra("user");
         dialog = (LinearLayout) findViewById(R.id.dialogPopUp);
+        helloUser = findViewById(R.id.helloUser);
+        helloUser.setText("שלום " + user.getFullName() +",");
 
     }
 
@@ -109,18 +113,21 @@ public class TwoFactorAuth extends AppCompatActivity {
                         JSONObject obj = new JSONObject(secondRequestHandler.sendPostRequest(URLs.URL_VREIFIEDUSER, params));
                         String responseMessage = obj.getString("message");
                         //if the user is still waiting for the manager confirmation
-                         if (responseMessage.equals("הקוד אומת בהצלחה, כעת יש להמתין לאישור מנהל")) {
+                         if (!obj.getBoolean("isActive")) {
+                             SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
                              runOnUiThread(new Runnable()
                              {
                                  public void run()
                                  {
                                      Toast.makeText(getApplicationContext(), responseMessage, Toast.LENGTH_LONG).show();
                                      finish();
-                                     startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                     startActivity(new Intent(TwoFactorAuth.this, ProfileActivity.class));
                                  }
                              });
+                         //the user has been approved by the system manager
                          } else {
-                            //storing the user in shared preferences
+                             user.setActive(true);
+                             //storing the user in shared preferences
                             SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
                             finish();
                             //TODO - navigate to lab inbox if this is a lab worker

@@ -15,6 +15,7 @@ public class SharedPrefManager {
     private static final String KEY_JOBTITLE = "keyjobtitle";
     private static final String KEY_PHONENUMBER = "keyphonemumber";
     private static final String KEY_DEPT = "keydepartment";
+    private static final String KEY_ACTIVE = "keyactive";
 
     private static SharedPrefManager mInstance;
     private static Context mCtx;
@@ -42,6 +43,7 @@ public class SharedPrefManager {
         editor.putString(KEY_JOBTITLE, user.getJobTitle());
         editor.putString(KEY_PHONENUMBER, user.getPhoneNumber());
         editor.putInt(KEY_DEPT, user.getDepartment());
+        editor.putBoolean(KEY_ACTIVE, user.isActive());
         editor.apply();
     }
 
@@ -54,7 +56,7 @@ public class SharedPrefManager {
     //this method will give the logged in user
     public User getUser() {
         SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
-        return new User(
+        User user = new User(
                 sharedPreferences.getInt(KEY_ID, -1),
                 sharedPreferences.getString(KEY_EMPNUM, null),
                 sharedPreferences.getString(KEY_FULLNAME, null),
@@ -63,6 +65,11 @@ public class SharedPrefManager {
                 sharedPreferences.getString(KEY_PHONENUMBER, null),
                 sharedPreferences.getInt(KEY_DEPT, -1)
         );
+        //if the user has been approved by the system manager
+        if(sharedPreferences.getBoolean(KEY_ACTIVE, false)){
+            user.setActive(true);
+        }
+        return user;
     }
 
     //this method will logout the user 

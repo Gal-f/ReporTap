@@ -56,10 +56,21 @@ if (isset($_GET['apicall'])) {
 
                 $employeeNumber = $_POST['employee_ID'];
                 $password = md5($_POST['password']);
-
                 $response = $oper->login($employeeNumber, $password);
             }
         break;
+
+        case 'notActiveUsers':
+                $response = $oper->getNotActive();
+        break;
+
+        case 'approveUser':
+             $response = isTheseParametersAvailable('employee_ID');
+            if(!$response['error']){
+                 $employeeNumber = $_POST['employee_ID'];
+                 $response = $oper->approveUser($employeeNumber);
+            }
+            break;
 
 
         case 'newMessage':
@@ -112,6 +123,12 @@ if (isset($_GET['apicall'])) {
             $response = isTheseParametersAvailable(array('department'));
             if (!$response['error']){
                 $response=$oper->sentlab($_POST['department']);
+            }
+        break;
+        case 'getdepttype':
+            $response = isTheseParametersAvailable(array('id'));
+            if (!$response['error']){
+                $response=$oper->getdepttype($_POST['id']);
             }
         break;
         case 'getDeptsAndTests':
