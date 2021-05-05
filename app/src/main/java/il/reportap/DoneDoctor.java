@@ -44,7 +44,7 @@ public class DoneDoctor extends OptionsMenu {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.done_doctor);
-        Button btn = (Button)findViewById(R.id.doneBD);
+        Button btn = (Button)findViewById(R.id.doneB);
         btn.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.stroke));
         btn.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
 
@@ -65,7 +65,7 @@ public class DoneDoctor extends OptionsMenu {
                 mySwipeToRefresh.setRefreshing(false);
             }
         });
-        Button btnS= (Button)findViewById(R.id.sentBD);
+        Button btnS= (Button)findViewById(R.id.sentB);
         btnS.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -73,7 +73,7 @@ public class DoneDoctor extends OptionsMenu {
                 startActivity(new Intent(getApplicationContext(), SentDoctor.class));
             }
         });
-        Button btnI=(Button)findViewById(R.id.toDoBD);
+        Button btnI=(Button)findViewById(R.id.toDoB);
         btnI.setOnClickListener(new View.OnClickListener(){
 
             @Override

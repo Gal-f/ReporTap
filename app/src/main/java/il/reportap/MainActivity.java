@@ -3,6 +3,7 @@ package il.reportap;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -20,10 +21,13 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.loginregister.R;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -40,6 +44,9 @@ public class MainActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar);
 
         if (SharedPrefManager.getInstance(this).isLoggedIn()) {
+            finish();
+            myStringRequestDept();
+
             //check if the user's account has been approved
             if (SharedPrefManager.getInstance(this).getUser().isActive) {
                 switch(SharedPrefManager.getInstance(this).getUser().getDepartment()){
@@ -81,6 +88,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(), RegisterActivity.class));
             }
         });
+
+
 
 
     }
@@ -148,12 +157,17 @@ public class MainActivity extends AppCompatActivity {
                             SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
                             finish();
                             //TODO - navigate to lab inbox if this is a lab worker
+
+                            myStringRequestDept();
+                            //startActivity(new Intent(getApplicationContext(), InboxDoctor.class));
+
                             if(user.getJobTitle().equals("מנהל מערכת")){
                                 startActivity(new Intent(getApplicationContext(), ApproveUsers.class));
                             }
                             else{
                                 startActivity(new Intent(getApplicationContext(), InboxDoctor.class));
                             }
+
                         }
                     } else {
                         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
@@ -185,4 +199,45 @@ public class MainActivity extends AppCompatActivity {
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
     }
+
+    public void myStringRequestDept () {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST,
+                URLs.URL_DEPTTYPE,
+                //lambda expression
+                response -> {
+                    try {
+                        JSONObject deptObj = new JSONObject(response);
+                        JSONArray jDeptArr = deptObj.getJSONArray("departmentType");
+                        JSONObject jDeptObj = jDeptArr.getJSONObject(0);
+                        String deptType = jDeptObj.getString("dept_type");
+                       // final LayoutInflater factory = getLayoutInflater();
+                        if (deptType.equals("lab"))
+                        {
+                            finish();
+                            startActivity(new Intent(getApplicationContext(), InboxLab.class));
+                        }
+                        else if (deptType.equals("medical_dept"))
+                        {
+                            finish();
+                            startActivity(new Intent(getApplicationContext(), InboxDoctor.class));
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                },
+                //lambda expression
+                error -> Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show()) {
+            @Nullable
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("id", String.valueOf(SharedPrefManager.getInstance(getApplicationContext()).getUser().getId()));
+                return params;
+            }
+        };
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
+    }
+
 }
