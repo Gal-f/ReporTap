@@ -3,7 +3,6 @@ package il.reportap;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -16,7 +15,6 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.loginregister.R;
@@ -27,7 +25,6 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -43,26 +40,16 @@ public class MainActivity extends AppCompatActivity {
         editTextPassword = findViewById(R.id.editTextPassword);
         progressBar = findViewById(R.id.progressBar);
 
+
+        //if the user is already logged in
         if (SharedPrefManager.getInstance(this).isLoggedIn()) {
-            finish();
-            myStringRequestDept();
-
-            //check if the user's account has been approved
+            //check if the user's account has been approved by the system manager
             if (SharedPrefManager.getInstance(this).getUser().isActive) {
-                switch(SharedPrefManager.getInstance(this).getUser().getDepartment()){
-                    case 1:
-                        startActivity(new Intent(this, InboxLab.class));
-                        break;
-
-                    case 2:
-                        startActivity(new Intent(this, InboxDoctor.class));
-                        break;
-
-                    case 6:
-                        startActivity(new Intent(this, ApproveUsers.class));
-                        break;
-                }
+                //call the function that navigates the user to the relevant inbox
+                myStringRequestDept();
             } else {
+                //navigate the user to his profile
+                finish();
                 startActivity(new Intent(this, ProfileActivity.class));
             }
             return;
@@ -139,35 +126,26 @@ public class MainActivity extends AppCompatActivity {
                                 userJson.getString("phone_number"),
                                 userJson.getInt("works_in_dept"));
 
+                        //if the user has not completed the 2fa process
                         if (message.equals("משתמש לא מאומת")) {
                             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
                             finish();
                             Intent intent1 = new Intent(MainActivity.this, TwoFactorAuth.class);
                             intent1.putExtra("user", user);
                             startActivity(intent1);
+
+                        //check if the system manager has approved the user's account
                         } else if (!obj.getBoolean("isActive")) {
                             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
                             SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
                             finish();
-                            Intent intent2 = new Intent(MainActivity.this, ProfileActivity.class);
-                            startActivity(intent2);
+                            startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
                         } else {
                             //storing the user in shared preferences and log him in
                             user.setActive(true);
                             SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
                             finish();
-                            //TODO - navigate to lab inbox if this is a lab worker
-
                             myStringRequestDept();
-                            //startActivity(new Intent(getApplicationContext(), InboxDoctor.class));
-
-                            if(user.getJobTitle().equals("מנהל מערכת")){
-                                startActivity(new Intent(getApplicationContext(), ApproveUsers.class));
-                            }
-                            else{
-                                startActivity(new Intent(getApplicationContext(), InboxDoctor.class));
-                            }
-
                         }
                     } else {
                         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
@@ -178,12 +156,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
         },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
-                    }
-                })
+                error -> Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show())
         {
             @Nullable
             @Override
@@ -210,7 +183,6 @@ public class MainActivity extends AppCompatActivity {
                         JSONArray jDeptArr = deptObj.getJSONArray("departmentType");
                         JSONObject jDeptObj = jDeptArr.getJSONObject(0);
                         String deptType = jDeptObj.getString("dept_type");
-                       // final LayoutInflater factory = getLayoutInflater();
                         if (deptType.equals("lab"))
                         {
                             finish();
@@ -220,6 +192,11 @@ public class MainActivity extends AppCompatActivity {
                         {
                             finish();
                             startActivity(new Intent(getApplicationContext(), InboxDoctor.class));
+                        }
+                        //the user is the system manager
+                        else{
+                            finish();
+                            startActivity(new Intent(this, ApproveUsers.class));
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();

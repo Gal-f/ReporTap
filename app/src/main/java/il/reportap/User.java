@@ -6,7 +6,7 @@ public class User implements Serializable {
 
     public boolean isActive;
     private int id;
-    private String employeeNumber, fullName, email, jobTitle, phoneNumber;
+    private String employeeNumber, fullName, email, jobTitle, phoneNumber, deptType;
     private int department;
 
 
@@ -65,4 +65,11 @@ public class User implements Serializable {
         return department;
     }
 
+    public void setDeptType(String deptType) {
+        this.deptType = deptType;
+    }
+
+    public String getDeptType() {
+        return deptType;
+    }
 }

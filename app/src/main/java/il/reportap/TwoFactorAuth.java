@@ -25,7 +25,7 @@ import java.util.HashMap;
 import java.util.Random;
 import java.util.concurrent.Executors;
 
-public class TwoFactorAuth extends AppCompatActivity {
+public class  TwoFactorAuth extends AppCompatActivity {
 
     private String otp;
     private User user;
