@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class ApproveUsers extends OptionsMenu {
+public class ApproveUsers extends OptionsMenu  {
 
     RecyclerView usersRecyclerView;
     private List<User> usersList;
@@ -128,6 +128,7 @@ public class ApproveUsers extends OptionsMenu {
             department = (TextView) itemView.findViewById(R.id.department);
         }
 
+
         private void approveUser(String employeeID) {
             StringRequest stringRequest = new StringRequest(Request.Method.POST,
                     URLs.URL_APPROVEUSER,
@@ -142,6 +143,10 @@ public class ApproveUsers extends OptionsMenu {
                             }
                             else{
                                 Toast.makeText(getApplicationContext(), "הפעולה בוצעה בהצלחה", Toast.LENGTH_LONG).show();
+                                usersList.remove(getAdapterPosition());
+                                usersRecyclerView.removeViewAt(getAdapterPosition());
+                                usersRecyclerView.getAdapter().notifyItemRemoved(getAdapterPosition());
+                                usersRecyclerView.getAdapter().notifyItemRangeChanged(getAdapterPosition(), usersList.size());
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
