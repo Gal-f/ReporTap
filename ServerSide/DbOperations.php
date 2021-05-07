@@ -16,6 +16,7 @@ class DbOperations
         $this->conn->query("SET NAMES 'utf8'");
     }
 
+
     function signup($password, $employeeNumber, $fullName, $email, $jobTitle, $phoneNumber, $deptID)
     {
         $response = array();
@@ -31,7 +32,7 @@ class DbOperations
             $response['message'] = 'משתמש קיים במערכת עם אימייל, טלפון או מספר עובד זהה';
             $stmt->close();
         } else {
-			try{
+			    try{
 					$stmt = $this->conn->prepare("INSERT INTO users (password, employee_ID, full_name, email, role, phone_number, works_in_dept) VALUES (?, ?, ?, ?, ?, ?, ?)");
 					$stmt->bind_param("ssssssi", $password, $employeeNumber, $fullName, $email, $jobTitle, $phoneNumber, $deptID);
 
@@ -41,6 +42,15 @@ class DbOperations
 						$stmt->execute();
 						$stmt->bind_result($id, $employeeNumber, $fullName, $email, $jobTitle, $phoneNumber, $deptID);
 						$stmt->fetch();
+						$stmt->close();
+
+						$query="SELECT `dept_type` FROM `departments` WHERE `ID` = ? ";
+                		$stmt1 = $this->conn->prepare($query);
+                		$stmt1->bind_param("i", $deptID);
+                		$stmt1->execute();
+                		$stmt1->store_result();
+                		$stmt1->bind_result($deptType);
+                		$stmt1->fetch();
 
 						$user = array(
 							'id' => $id,
@@ -49,7 +59,8 @@ class DbOperations
 							'email' => $email,
 							'role' => $jobTitle,
 							'phone_number' => $phoneNumber,
-							'works_in_dept' => $deptID
+							'works_in_dept' => $deptID,
+							'dept_type' => $deptType
 						);
 
 						$stmt->close();
@@ -130,7 +141,7 @@ class DbOperations
 		$stmt2->execute();
         $stmt2->store_result();
 		$stmt2->bind_result($isActive);
-	//	$stmt2->fetch();
+		$stmt2->fetch();
 		if(!$isActive){
 			$response['message'] = "הקוד אומת בהצלחה, כעת יש להמתין לאישור מנהל";
 			$response['isActive'] = false;
@@ -154,6 +165,15 @@ class DbOperations
         if ($stmt->num_rows > 0) {
 			$stmt->bind_result($id, $employeeNumber, $fullName, $email, $jobTitle, $phoneNumber, $deptID, $isActive, $otp_verified);
 			$stmt->fetch();
+
+			$query="SELECT `dept_type` FROM `departments` WHERE `ID` = ? ";
+			$stmt1 = $this->conn->prepare($query);
+			$stmt1->bind_param("i", $deptID);
+			$stmt1->execute();
+			$stmt1->store_result();
+			$stmt1->bind_result($deptType);
+			$stmt1->fetch();
+
 			$user = array(
 				'id' => $id,
 				'employee_ID' => $employeeNumber,
@@ -161,7 +181,8 @@ class DbOperations
 				'email' => $email,
 				'role' => $jobTitle,
 				'phone_number' => $phoneNumber,
-				'works_in_dept' => $deptID
+				'works_in_dept' => $deptID,
+				'dept_type'=>$deptType
 				);
 			$response['error'] = false;
 			$response['user'] = $user;
@@ -173,7 +194,6 @@ class DbOperations
 					$response['isActive'] = true;
 				}
 				else{
-					$response['error'] = true;
 					$response['message'] = 'המשתמש ממתין לאישור מנהל';
 					$response['isActive'] = false;
 				}
@@ -594,51 +614,7 @@ class DbOperations
         return $response;
 
     }
-    /*
-    function donelab($department)
-    {
-        $response = array();
-        $query="SELECT R.ID,M.ID, R.sent_time, M.patient_ID, T.name, R.text, T.measurement_unit, M.component, CASE WHEN M.is_value_boolean IS NULL THEN 0 ELSE M.is_value_boolean END AS is_value_boolean,M.test_result_value, U.full_name, D.name FROM responses as R JOIN messages as M on R.response_to_messageID=M.ID JOIN users as U ON M.sender_user=U.employee_ID JOIN test_types as T ON M.test_type=T.ID JOIN departments as D ON U.works_in_dept=D.ID WHERE R.recipient_dept = ? AND R.confirm_time IS NOT NULL order by R.sent_time desc";
-        $stmt = $this->conn->prepare($query);
-        $stmt->bind_param("i", $department);
 
-        $stmt->execute();
-
-        $stmt->store_result();
-        $rows=$stmt->num_rows;
-
-        if ($stmt->num_rows > 0) {
-
-            while ($rows>0){
-                $stmt->bind_result($id,$messageID, $sentTime, $patientId, $testName, $text,$measurement,$component,$isValueBool,$resultValue,$fullName,$deptName);
-                $stmt->fetch();
-
-                $report[$stmt->num_rows-$rows] = array('id' =>$id,
-                    'messageID' => $messageID,
-                    'sent_time' => $sentTime,
-                    'patient_id' => $patientId,
-                    'name' => $testName,
-                    'text' => $text,
-                    'measurement' => $measurement,
-                    'component' => $component,
-                    'is_value_bool' => $isValueBool,
-                    'result_value'=> $resultValue,
-                    'full_name'=> $fullName,
-                    'dept_name' => $deptName
-                );
-                $rows--;
-                //TODO add a 'recieve_time' to each message only the first time it is presented in the inboxdr
-            }
-            $response['error'] = false;
-            $response['message'] = 'new report for you';
-            $response['report'] = $report;
-        } else {
-            $response['error'] = true;
-            $response['message'] = 'שגיאה בהצגת הדיווח';
-        }
-        return $response;
-
-    }*/
 
     function donelab($department)
     {
@@ -688,7 +664,7 @@ class DbOperations
     function sentlab($department)
     {
         $response = array();
-        $query="SELECT M.ID, M.sent_time, M.patient_ID, T.name, M.is_urgent,CASE WHEN M.confirm_time IS NULL THEN 0 ELSE M.confirm_time END AS confirm_time, D.name FROM messages as M JOIN test_types as T ON M.test_type=T.ID JOIN departments as D ON M.recipient_dept=D.ID JOIN users as U ON M.sender_user=U.employee_ID WHERE U.works_in_dept = ? order by M.sent_time desc";
+        $query="SELECT M.ID, M.sent_time, M.patient_ID, T.name, M.is_urgent,CASE WHEN M.confirm_time IS NULL THEN 0 ELSE M.confirm_time END AS confirm_time, D.name, M.text, T.measurement_unit, M.component, CASE WHEN M.is_value_boolean IS NULL THEN 0 ELSE M.is_value_boolean END AS is_value_boolean,M.test_result_value, U.full_name FROM messages as M JOIN test_types as T ON M.test_type=T.ID JOIN departments as D ON M.recipient_dept=D.ID JOIN users as U ON M.sender_user=U.employee_ID WHERE U.works_in_dept = ? order by M.sent_time desc";
         $stmt = $this->conn->prepare($query);
         $stmt->bind_param("i", $department);
 
@@ -700,7 +676,7 @@ class DbOperations
         if ($stmt->num_rows > 0) {
 
             while ($rows>0){
-                $stmt->bind_result($id, $sentTime, $patientId, $testName,$isUrgent, $confirmTime,$deptName);
+                $stmt->bind_result($id, $sentTime, $patientId, $testName,$isUrgent, $confirmTime,$deptName, $text, $measUnit, $component, $isValBool, $testResult, $fullNameU);
                 $stmt->fetch();
 
                 $report[$stmt->num_rows-$rows] = array('id' =>$id,
@@ -709,7 +685,13 @@ class DbOperations
                     'name' => $testName,
                     'is_urgent' => $isUrgent,
                     'confirm_time' => $confirmTime,
-                    'dept_name' => $deptName
+                    'dept_name' => $deptName,
+                    'text' => $text,
+                    'measurement_unit' => $measUnit,
+                    'component' => $component,
+                    'is_value_boolean' => $isValBool,
+                    'test_result_value' => $testResult,
+                    'full_name' => $fullNameU
                 );
                 $rows--;
                 //TODO add a 'recieve_time' to each message only the first time it is presented in the inboxdr
@@ -724,40 +706,6 @@ class DbOperations
         return $response;
 
     }
-    function getdepttype($id)
-    {
-        $response = array();
-        $query="SELECT U.id, D.dept_type from users as U JOIN departments as D ON U.works_in_dept=D.ID where U.id = ? ";
-        $stmt = $this->conn->prepare($query);
-        $stmt->bind_param("i", $id);
 
-        $stmt->execute();
-
-        $stmt->store_result();
-        $rows=$stmt->num_rows;
-
-        if ($stmt->num_rows > 0) {
-
-            while ($rows>0){
-                $stmt->bind_result($id, $deptType);
-                $stmt->fetch();
-
-                $deptTypeArr[$stmt->num_rows-$rows] = array('id' => $id,
-                'dept_type' => $deptType
-                );
-                $rows--;
-                //TODO add a 'recieve_time' to each message only the first time it is presented in the inboxdr
-            }
-            $response['error'] = false;
-            $response['message'] = 'new report for you';
-            $response['departmentType'] = $deptTypeArr;
-        } else {
-            $response['error'] = true;
-            $response['message'] = 'שגיאה בהצגת המחלקה';
-        }
-        return $response;
-
-
-    }
 
 }

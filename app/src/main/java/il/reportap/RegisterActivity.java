@@ -34,7 +34,6 @@ public class RegisterActivity extends AppCompatActivity {
     Spinner spinnerDepartment, spinnerJobTitle;
     ProgressBar progressBar;
 
-
     HashMap<String, Integer> deptData = new HashMap<String, Integer>() {{ //TODO connect this to the depts DB table
         put("מעבדה מיקרוביולוגית", 1);
         put("פנימית א", 2);
@@ -89,7 +88,6 @@ public class RegisterActivity extends AppCompatActivity {
         final String department = spinnerDepartment.getSelectedItem().toString().trim();
 
         //validations
-        //TODO validation function with switch case
 
         if (TextUtils.isEmpty(employeeNumber)) {
             editTextEmployeeNumber.setError("יש להזין מספר עובד");
@@ -197,7 +195,7 @@ public class RegisterActivity extends AppCompatActivity {
                         //getting the user from the response
                         JSONObject userJson = obj.getJSONObject("user");
 
-                        //creating a new user object - names are identical to the columns in the db
+                        //creating a new user object - names are identical to the columns in the server side
                         User user = new User(
                                 userJson.getInt("id"),
                                 userJson.getString("employee_ID"),
@@ -205,7 +203,8 @@ public class RegisterActivity extends AppCompatActivity {
                                 userJson.getString("email"),
                                 userJson.getString("role"),
                                 userJson.getString("phone_number"),
-                                userJson.getInt("works_in_dept"));
+                                userJson.getInt("works_in_dept"),
+                                userJson.getString("dept_type"));
 
                         Intent intent = new Intent(RegisterActivity.this, TwoFactorAuth.class);
                         intent.putExtra("user", user);

@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ReporTap"
         android:usesCleartextTraffic="true">
-        <activity android:name="il.reportap.ApproveUsers"></activity>
+        <activity android:name="il.reportap.ApproveUsers"/>
         <activity android:name="il.reportap.TwoFactorAuth" />
         <activity android:name="il.reportap.ViewMessage" />
         <activity android:name="il.reportap.InboxDoctor" />
@@ -26,9 +26,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="il.reportap.SentDoctor" />
-        <activity android:name="il.reportap.DoneDoctor" />
-        <activity android:name="il.reportap.InboxLab" />
         <activity android:name="il.reportap.SentDoctor" />
         <activity android:name="il.reportap.DoneDoctor" />
         <activity android:name="il.reportap.InboxLab" />
