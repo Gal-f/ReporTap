@@ -17,7 +17,7 @@ if (isset($_GET['apicall'])) {
        case 'signup':
             $response = isTheseParametersAvailable(array('password', 'employee_ID', 'full_name', 'email', 'role', 'phone_number', 'works_in_dept'));
             if (!$response['error']) {
-                //getting the values
+                //getting the values 
                 $password = md5($_POST['password']);
                 $employeeNumber = $_POST['employee_ID'];
                 $fullName = $_POST['full_name'];
@@ -28,11 +28,11 @@ if (isset($_GET['apicall'])) {
                 $response = $oper->signup($password, $employeeNumber, $fullName, $email, $jobTitle, $phoneNumber, $deptID);
             }
         break;
-
+		
 		case 'sendOTP':
 			$response = isTheseParametersAvailable(array('email','phone_number','sendTo','otp'));
 			if (!$response['error']) {
-                //getting the values
+                //getting the values 
 				$email = $_POST['email'];
                 $phoneNumber = $_POST['phone_number'];
 				$otp = $_POST['otp'];
@@ -40,7 +40,7 @@ if (isset($_GET['apicall'])) {
                 $response = $oper->sendOTP($email, $phoneNumber, $sendTo, $otp);
             }
 		break;
-
+		
 		case 'verifiedUser':
 			$response = isTheseParametersAvailable(array('employee_ID'));
 			if (!$response['error']) {
@@ -48,7 +48,7 @@ if (isset($_GET['apicall'])) {
 			$response = $oper-> verifiedUser($employeeNumber);
 			}
 		break;
-
+			
 
         case 'login':
             $response = isTheseParametersAvailable(array('employee_ID', 'password'));
@@ -59,6 +59,11 @@ if (isset($_GET['apicall'])) {
                 $response = $oper->login($employeeNumber, $password);
             }
         break;
+        
+        case 'notActiveUsers':
+                $response = $oper->getNotActive();
+        break;
+            
 
         case 'notActiveUsers':
                 $response = $oper->getNotActive();

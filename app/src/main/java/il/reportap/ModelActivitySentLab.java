@@ -1,10 +1,12 @@
 package il.reportap;
 
 public class ModelActivitySentLab {
-    private Integer id, isUrgent;
-    private String patientId,sentTime,deptName,testName, confirmTime;
+    private Integer id, isUrgent, isValueBool, testResult;
+    private String patientId,sentTime,deptName,testName, confirmTime, text, measurementUnit, component, fullName;
 
-    public ModelActivitySentLab(Integer id, String sent_time, String patient_id, String test_name, Integer isUrgent , String confirm_time, String dept_name) {
+    public ModelActivitySentLab(Integer id, String sent_time, String patient_id, String test_name, Integer isUrgent , String confirm_time, String dept_name,
+                                String text, String measurementUnit, String component, Integer isValueBool, Integer testResult,
+                                String fullName) {
         this.id = id;
         this.patientId = patient_id;
         this.sentTime = sent_time;
@@ -12,6 +14,13 @@ public class ModelActivitySentLab {
         this.deptName=dept_name;
         this.testName = test_name;
         this.confirmTime = confirm_time;
+        this.text=text;
+        this.measurementUnit=measurementUnit;
+        this.component=component;
+        this.isValueBool=isValueBool;
+        this.testResult=testResult;
+        this.fullName=fullName;
+
     }
 
     public Integer getId() {
@@ -40,5 +49,29 @@ public class ModelActivitySentLab {
 
     public String getConfirmTime() {
         return confirmTime;
+    }
+
+    public Integer getIsValueBool() {
+        return isValueBool;
+    }
+
+    public Integer getTestResult() {
+        return testResult;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public String getMeasurementUnit() {
+        return measurementUnit;
+    }
+
+    public String getComponent() {
+        return component;
+    }
+
+    public String getFullName() {
+        return fullName;
     }
 }
