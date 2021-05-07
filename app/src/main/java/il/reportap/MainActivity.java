@@ -9,7 +9,6 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -19,14 +18,12 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.loginregister.R;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
-import java.util.Map;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends NavigateUser {
 
     EditText editTextEmployeeNumber, editTextPassword;
     ProgressBar progressBar;
@@ -45,11 +42,13 @@ public class MainActivity extends AppCompatActivity {
         if (SharedPrefManager.getInstance(this).isLoggedIn()) {
             //check if the user's account has been approved by the system manager
             if (SharedPrefManager.getInstance(this).getUser().isActive) {
-                //call the function that navigates the user to the relevant inbox
-                myStringRequestDept();
+                try {
+                    goToClass(SharedPrefManager.getInstance(this).getUser().getDeptType());
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
             } else {
                 //navigate the user to his profile
-                finish();
                 startActivity(new Intent(this, ProfileActivity.class));
             }
             return;
@@ -75,10 +74,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(), RegisterActivity.class));
             }
         });
-
-
-
-
     }
 
     private void userLogin() {
@@ -116,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
                         //getting the user from the response
                         JSONObject userJson = obj.getJSONObject("user");
 
-                        //creating a new user object - names are identical to the columns in the db
+                        //creating a new user object - names are identical to the columns in the php code
                         User user = new User(
                                 userJson.getInt("id"),
                                 userJson.getString("employee_ID"),
@@ -124,7 +119,8 @@ public class MainActivity extends AppCompatActivity {
                                 userJson.getString("email"),
                                 userJson.getString("role"),
                                 userJson.getString("phone_number"),
-                                userJson.getInt("works_in_dept"));
+                                userJson.getInt("works_in_dept"),
+                                userJson.getString("dept_type"));
 
                         //if the user has not completed the 2fa process
                         if (message.equals("משתמש לא מאומת")) {
@@ -140,17 +136,19 @@ public class MainActivity extends AppCompatActivity {
                             SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
                             finish();
                             startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+
+                         //the user has finished the 2fa process and his account got the manager's approval
                         } else {
                             //storing the user in shared preferences and log him in
                             user.setActive(true);
                             SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
                             finish();
-                            myStringRequestDept();
+                            goToClass(user.getDeptType());
                         }
                     } else {
                         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
                     }
-                } catch (JSONException e) {
+                } catch (JSONException | ClassNotFoundException e) {
                     e.printStackTrace();
                 }
             }
@@ -172,49 +170,4 @@ public class MainActivity extends AppCompatActivity {
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
     }
-
-    public void myStringRequestDept () {
-        StringRequest stringRequest = new StringRequest(Request.Method.POST,
-                URLs.URL_DEPTTYPE,
-                //lambda expression
-                response -> {
-                    try {
-                        JSONObject deptObj = new JSONObject(response);
-                        JSONArray jDeptArr = deptObj.getJSONArray("departmentType");
-                        JSONObject jDeptObj = jDeptArr.getJSONObject(0);
-                        String deptType = jDeptObj.getString("dept_type");
-                        if (deptType.equals("lab"))
-                        {
-                            finish();
-                            startActivity(new Intent(getApplicationContext(), InboxLab.class));
-                        }
-                        else if (deptType.equals("medical_dept"))
-                        {
-                            finish();
-                            startActivity(new Intent(getApplicationContext(), InboxDoctor.class));
-                        }
-                        //the user is the system manager
-                        else{
-                            finish();
-                            startActivity(new Intent(this, ApproveUsers.class));
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                },
-                //lambda expression
-                error -> Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show()) {
-            @Nullable
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<>();
-                params.put("id", String.valueOf(SharedPrefManager.getInstance(getApplicationContext()).getUser().getId()));
-                return params;
-            }
-        };
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(stringRequest);
-    }
-
 }

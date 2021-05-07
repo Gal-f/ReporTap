@@ -10,7 +10,7 @@ public class User implements Serializable {
     private int department;
 
 
-    public User(int id, String employeeNumber, String fullName, String email, String jobTitle, String phoneNumber, int department) {
+    public User(int id, String employeeNumber, String fullName, String email, String jobTitle, String phoneNumber, int department, String deptType) {
         this.id = id;
         this.employeeNumber = employeeNumber;
         this.fullName = fullName;
@@ -18,6 +18,7 @@ public class User implements Serializable {
         this.jobTitle = jobTitle;
         this.phoneNumber = phoneNumber;
         this.department = department;
+        this.deptType = deptType;
         this.isActive = false;
     }
 
@@ -63,10 +64,6 @@ public class User implements Serializable {
 
     public int getDepartment() {
         return department;
-    }
-
-    public void setDeptType(String deptType) {
-        this.deptType = deptType;
     }
 
     public String getDeptType() {

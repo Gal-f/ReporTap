@@ -16,6 +16,7 @@ public class SharedPrefManager {
     private static final String KEY_PHONENUMBER = "keyphonemumber";
     private static final String KEY_DEPT = "keydepartment";
     private static final String KEY_ACTIVE = "keyactive";
+    private static final String KEY_DEPTTYPE= "keydepttype";
 
     private static SharedPrefManager mInstance;
     private static Context mCtx;
@@ -44,6 +45,7 @@ public class SharedPrefManager {
         editor.putString(KEY_PHONENUMBER, user.getPhoneNumber());
         editor.putInt(KEY_DEPT, user.getDepartment());
         editor.putBoolean(KEY_ACTIVE, user.isActive());
+        editor.putString(KEY_DEPTTYPE, user.getDeptType());
         editor.apply();
     }
 
@@ -63,7 +65,9 @@ public class SharedPrefManager {
                 sharedPreferences.getString(KEY_EMAIL, null),
                 sharedPreferences.getString(KEY_JOBTITLE, null),
                 sharedPreferences.getString(KEY_PHONENUMBER, null),
-                sharedPreferences.getInt(KEY_DEPT, -1)
+                sharedPreferences.getInt(KEY_DEPT, -1),
+                sharedPreferences.getString(KEY_DEPTTYPE, null)
+
         );
         //if the user has been approved by the system manager
         if(sharedPreferences.getBoolean(KEY_ACTIVE, false)){
