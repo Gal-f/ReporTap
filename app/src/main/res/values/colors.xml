@@ -18,4 +18,7 @@
     <color name="popup_background">#95E3E0</color>
     <color name="popup_outlineSpotShadowColor">#00BCD4</color>
     <color name="disabled_background">#d3d3d3 </color>
+    <color name="horizontal_line_blue">#0F2D6C</color>
+    <color name="horizontal_line_green">#74C043</color>
+
 </resources>

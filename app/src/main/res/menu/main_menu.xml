@@ -18,6 +18,7 @@
         android:id="@+id/settings"
         android:contentDescription="logo"
         android:icon="@drawable/settings"
+        android:visible="false"
         app:showAsAction="always" />
 
     <item

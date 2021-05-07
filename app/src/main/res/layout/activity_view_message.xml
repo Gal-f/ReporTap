@@ -16,7 +16,6 @@
         android:orientation="vertical"
         android:textDirection="rtl"
         android:layoutDirection="rtl"
-        app:layout_constraintTop_toBottomOf="@+id/include"
         tools:ignore="MissingConstraints">
 
         <!-- Navigation bar -->
@@ -146,7 +145,7 @@
                     android:layout_height="2dp"
                     android:layout_marginRight="10dp"
                     android:layout_weight="0.8"
-                    android:background="#74C043" /><!--TODO: Replace this View with horizontalLine_h2 from class Design -->
+                    android:background="@color/horizontal_line_green" /><!--TODO: Replace this View with horizontalLine_h2 from class Design -->
             </LinearLayout>
         <!-- Test details -->
         <TextView
@@ -292,17 +291,10 @@
                 android:textSize="12sp"
                 android:layout_marginBottom="5dp"/>
             <TextView
-                android:id="@+id/textViewSenderName"
+                android:id="@+id/textViewSenderName_Dept"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.3"
-                android:textSize="12sp"
-                android:layout_marginBottom="5dp"/>
-            <TextView
-                android:id="@+id/textViewSenderDeptName"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.3"
+                android:layout_weight="0.6"
                 android:textSize="12sp"
                 android:layout_marginBottom="5dp"/>
         </LinearLayout>
@@ -320,100 +312,114 @@
                 android:layout_height="2dp"
                 android:layout_marginRight="10dp"
                 android:layout_weight="0.8"
-                android:background="#74C043" /><!--TODO: Replace this View with horizontalLine_h2 from class Design -->
+                android:background="@color/horizontal_line_green" /><!--TODO: Replace this View with horizontalLine_h2 from class Design -->
         </LinearLayout>
 
         <!-- Actions & symbols -->
         <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:weightSum="1"
             android:gravity="center"
-            android:orientation="horizontal">
-            <TableLayout
+            android:layoutDirection="rtl">
+            <ImageView
+                android:id="@+id/imageViewUrgent"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:scaleType="fitCenter"
+                android:adjustViewBounds="true"
+                android:src="@drawable/greyexclamation_trans"
+                android:tooltipText="לא דחוף"
+                android:layout_marginHorizontal="5dp"
+                android:padding="5dp"
+                android:layout_weight="0.2"/>
+            <ImageButton
+                android:id="@+id/imageButtonRead"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:scaleType="fitCenter"
+                android:adjustViewBounds="true"
+                android:src="@drawable/eye"
+                android:tooltipText="לא נקרא"
+                android:layout_marginHorizontal="5dp"
+                android:hapticFeedbackEnabled="true"
+                android:background="?android:selectableItemBackground"
+                android:padding="5dp"
+                android:layout_weight="0.2"/>
+            <ImageButton
+                android:id="@+id/imageButtonReply"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:scaleType="fitCenter"
+                android:adjustViewBounds="true"
+                android:layout_marginHorizontal="5dp"
+                android:src="@drawable/ic_baseline_reply_24"
+                android:background="?android:selectableItemBackground"
+                android:tooltipText="שליחת תגובה לדיווח"
+                android:padding="5dp"
+                android:layout_weight="0.2" />
+            <ImageButton
+                android:id="@+id/imageButtonForward"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:scaleType="fitCenter"
+                android:adjustViewBounds="true"
+                android:layout_marginHorizontal="5dp"
+                android:src="@drawable/ic_baseline_forward_to_inbox_24"
+                android:background="?android:selectableItemBackground"
+                android:tooltipText="העברה למחלקה אחרת"
+                android:padding="5dp"
+                android:layout_weight="0.2"/>
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="1"
+            android:gravity="center"
+            android:layoutDirection="rtl"
+            android:textAlignment="center">
+            <TextView
+                android:id="@+id/textViewUrgent"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.8"
-                android:stretchColumns="*">
-                <TableRow android:layout_weight="1">
-                    <ImageView
-                        android:id="@+id/imageViewUrgent"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:scaleType="fitCenter"
-                        android:adjustViewBounds="true"
-                        android:src="@drawable/greyexclamation_trans"
-                        android:tooltipText="לא דחוף"
-                        android:layout_marginHorizontal="5dp"/>
-                    <ImageButton
-                        android:id="@+id/imageButtonRead"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:scaleType="fitCenter"
-                        android:adjustViewBounds="true"
-                        android:src="@drawable/eye"
-                        android:tooltipText="לא נקרא"
-                        android:layout_marginHorizontal="5dp"
-                        android:hapticFeedbackEnabled="true"
-                        android:background="?android:selectableItemBackground"/>
-                    <ImageButton
-                        android:id="@+id/imageButtonReply"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:scaleType="fitCenter"
-                        android:adjustViewBounds="true"
-                        android:layout_marginHorizontal="5dp"
-                        android:src="@drawable/ic_baseline_reply_24"
-                        android:background="?android:selectableItemBackground"
-                        android:tooltipText="שליחת תגובה לדיווח"
-                        />
-
-                    <ImageButton
-                        android:id="@+id/imageButtonForward"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:scaleType="fitCenter"
-                        android:adjustViewBounds="true"
-                        android:layout_marginHorizontal="5dp"
-                        android:src="@drawable/ic_baseline_forward_to_inbox_24"
-                        android:background="?android:selectableItemBackground"
-                        android:tooltipText="העברה למחלקה אחרת" />
-                </TableRow>
-                <TableRow android:layout_weight="1">
-                    <TextView
-                        android:id="@+id/textViewUrgent"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="12dp"
-                        android:text="לא דחוף"
-                        android:layout_marginHorizontal="5dp"/>
-                    <TextView
-                        android:id="@+id/textViewRead"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="12dp"
-                        android:text="סימון כ'נקרא'"
-                        android:layout_marginHorizontal="5dp"/>
-                    <TextView
-                        android:id="@+id/textViewReply"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="12dp"
-                        android:text="שליחת תגובה"
-                        android:layout_marginHorizontal="5dp"/>
-                    <TextView
-                        android:id="@+id/textViewForward"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="12dp"
-                        android:text="העברה למחלקה אחרת"
-                        android:layout_marginHorizontal="5dp"/>
-                </TableRow>
-            </TableLayout>
+                android:gravity="center"
+                android:textAlignment="center"
+                android:textSize="12dp"
+                android:text="לא דחוף"
+                android:layout_weight="0.2"/>
+            <TextView
+                android:id="@+id/textViewRead"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textAlignment="center"
+                android:textSize="12dp"
+                android:text="סימון כ'נקרא'"
+                android:layout_weight="0.2"/>
+            <TextView
+                android:id="@+id/textViewReply"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textAlignment="center"
+                android:textSize="12dp"
+                android:text="שליחת תגובה"
+                android:layout_weight="0.2"/>
+            <TextView
+                android:id="@+id/textViewForward"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textAlignment="center"
+                android:textSize="12dp"
+                android:text="העברה למחלקה אחרת"
+                android:layout_weight="0.2"/>
         </LinearLayout>
         <LinearLayout
             android:id="@+id/horizontalLine2"
@@ -428,31 +434,9 @@
                 android:layout_height="2dp"
                 android:layout_marginRight="10dp"
                 android:layout_weight="0.8"
-                android:background="#74C043" /><!--TODO: Replace this View with horizontalLine_h2 from class Design -->
+                android:background="@color/horizontal_line_green" /><!--TODO: Replace this View with horizontalLine_h2 from class Design -->
         </LinearLayout>
-        <!-- For TESTING ONLY, remove this -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Debug\\Test:"
-            android:padding="10dp" />
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-        <EditText
-            android:id="@+id/testMessageIDBox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="הקלידו מס' הודעה לבדיקה"
-            android:textSize="12dp" />
-        <Button
-            android:id="@+id/ButtonTestMessageIDBox"
-            android:layout_width="70dp"
-            android:layout_height="35dp"
-            android:text="שלח"
-            android:textSize="12dp" />
-        </LinearLayout>
-        <!-- END TEST ONLY -->
+
     </LinearLayout>
     <!-- Main layout closer -->
 
@@ -471,7 +455,6 @@
             android:padding="20dp"
             android:background="@color/popup_background"
             android:outlineSpotShadowColor="@color/popup_outlineSpotShadowColor"
-            android:visibility="visible"
             android:orientation="vertical"
             android:gravity="right"
             android:outlineProvider="bounds">
@@ -541,6 +524,75 @@
     </LinearLayout>
 
     <!-- Forward popup -->
+    <LinearLayout
+        android:id="@+id/forwardPopupDialog"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:weightSum="1"
+        android:visibility="invisible">
+        <LinearLayout
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:padding="20dp"
+            android:background="@color/popup_background"
+            android:outlineSpotShadowColor="@color/popup_outlineSpotShadowColor"
+            android:orientation="vertical"
+            android:gravity="right"
+            android:outlineProvider="bounds">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="העברת תוצאת מעבדה למחלקה אחרת"
+                android:textStyle="bold" />
+            <LinearLayout
+                android:layoutDirection="rtl"
+                android:textDirection="rtl"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:gravity="center_horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="המחלקה הנמענת:"/>
+                <Spinner
+                    android:id="@+id/SpinnerForwardTo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:drawable/btn_dropdown"
+                    android:spinnerMode="dropdown"
+                    android:textDirection="rtl" />
+            </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="\nלתשומת לבכם, לא ניתן לבטל פעולה זו."
+                    android:textSize="12sp"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:layoutDirection="rtl"
+                android:orientation="horizontal"
+                android:textDirection="rtl">
+                <Button
+                    android:id="@+id/ButtonSendForward"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="שלח"
+                    android:layout_margin="10dp"/>
+                <Button
+                    android:id="@+id/ButtonCancelForward"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ביטול"
+                    android:layout_margin="10dp"
+                    android:backgroundTint="@color/disabled_background"/>
 
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

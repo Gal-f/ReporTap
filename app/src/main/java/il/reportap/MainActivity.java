@@ -1,7 +1,6 @@
 package il.reportap;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -16,6 +15,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.loginregister.R;
@@ -31,31 +32,50 @@ import java.util.concurrent.atomic.AtomicReference;
 public class MainActivity extends AppCompatActivity {
 
     EditText editTextEmployeeNumber, editTextPassword;
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        editTextEmployeeNumber = (EditText) findViewById(R.id.editTextEmployeeNumber);
-        editTextPassword = (EditText) findViewById(R.id.editTextPassword);
+        editTextEmployeeNumber = findViewById(R.id.editTextEmployeeNumber);
+        editTextPassword = findViewById(R.id.editTextPassword);
+        progressBar = findViewById(R.id.progressBar);
 
-
-        //TODO change to inbox doctor/inbox lab based on the job title.
         if (SharedPrefManager.getInstance(this).isLoggedIn()) {
             finish();
             myStringRequestDept();
-//            startActivity(new Intent(getApplicationContext(), InboxDoctor.class));
+
+            //check if the user's account has been approved
+            if (SharedPrefManager.getInstance(this).getUser().isActive) {
+                switch(SharedPrefManager.getInstance(this).getUser().getDepartment()){
+                    case 1:
+                        startActivity(new Intent(this, InboxLab.class));
+                        break;
+
+                    case 2:
+                        startActivity(new Intent(this, InboxDoctor.class));
+                        break;
+
+                    case 6:
+                        startActivity(new Intent(this, ApproveUsers.class));
+                        break;
+                }
+            } else {
+                startActivity(new Intent(this, ProfileActivity.class));
+            }
             return;
+
         }
 
 
         //if user presses on login
-        //calling the method login
+        //calling the login method
         findViewById(R.id.buttonLogin).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                    userLogin();
+                userLogin();
             }
         });
 
@@ -92,29 +112,17 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        //if everything is fine
 
-        class UserLogin extends AsyncTask<Void, Void, String> {
+        progressBar.setVisibility(View.VISIBLE);
 
-            ProgressBar progressBar;
-
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URLs.URL_LOGIN, new Response.Listener<String>() {
             @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-                progressBar = (ProgressBar) findViewById(R.id.progressBar);
-                progressBar.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            protected void onPostExecute(String s) {
-                super.onPostExecute(s);
+            public void onResponse(String response) {
                 progressBar.setVisibility(View.GONE);
-
-
                 try {
                     //converting response to json object
-                    JSONObject obj = new JSONObject(s);
-
+                    JSONObject obj = new JSONObject(response);
+                    String message = obj.getString("message");
                     //if no error in response
                     if (!obj.getBoolean("error")) {
 
@@ -129,51 +137,67 @@ public class MainActivity extends AppCompatActivity {
                                 userJson.getString("email"),
                                 userJson.getString("role"),
                                 userJson.getString("phone_number"),
-                                userJson.getInt("works_in_dept")
+                                userJson.getInt("works_in_dept"));
 
-                        );
-
-                        if(obj.getString("message").equals("משתמש לא מאומת")){
-                            Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_LONG).show();
+                        if (message.equals("משתמש לא מאומת")) {
+                            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
                             finish();
-                            Intent intent = new Intent(MainActivity.this, TwoFactorAuth.class);
-                            intent.putExtra("user", user);
-                            startActivity(intent);
-                        }
-                        else{
+                            Intent intent1 = new Intent(MainActivity.this, TwoFactorAuth.class);
+                            intent1.putExtra("user", user);
+                            startActivity(intent1);
+                        } else if (!obj.getBoolean("isActive")) {
+                            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+                            SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
+                            finish();
+                            Intent intent2 = new Intent(MainActivity.this, ProfileActivity.class);
+                            startActivity(intent2);
+                        } else {
                             //storing the user in shared preferences and log him in
+                            user.setActive(true);
                             SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
                             finish();
                             //TODO - navigate to lab inbox if this is a lab worker
+
                             myStringRequestDept();
                             //startActivity(new Intent(getApplicationContext(), InboxDoctor.class));
+
+                            if(user.getJobTitle().equals("מנהל מערכת")){
+                                startActivity(new Intent(getApplicationContext(), ApproveUsers.class));
+                            }
+                            else{
+                                startActivity(new Intent(getApplicationContext(), InboxDoctor.class));
+                            }
+
                         }
                     } else {
-                        Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
 
+        },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                })
+        {
+            @Nullable
             @Override
-            protected String doInBackground(Void... voids) {
-                //creating request handler object
-                RequestHandler requestHandler = new RequestHandler();
-
+            protected HashMap<String, String> getParams() throws AuthFailureError {
                 //creating request parameters
-                HashMap<String, Object> params = new HashMap<>();
+                HashMap<String, String> params = new HashMap<>();
                 params.put("employee_ID", EmployeeNumber);
                 params.put("password", password);
-
-                //returing the response
-                return requestHandler.sendPostRequest(URLs.URL_LOGIN, params);
+                return params;
             }
-        }
+        };
 
-
-        UserLogin ul = new UserLogin();
-        ul.execute();
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
     }
 
     public void myStringRequestDept () {

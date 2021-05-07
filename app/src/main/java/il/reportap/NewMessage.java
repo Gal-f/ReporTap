@@ -246,7 +246,6 @@ public class NewMessage extends OptionsMenu {
     public void inflateAutocompleteOptions(){
         //Define autocomplete fields options
 
-        //String[] departments = (String[]) this.deptMap.values().toArray(); //casting doesn't work
         ArrayList<String> departments = new ArrayList<>();
         for (String dept : this.deptMap.keySet())
             departments.add(dept);
@@ -258,13 +257,12 @@ public class NewMessage extends OptionsMenu {
         ArrayList<String> tests = new ArrayList<>();
         for (int i=0; i<this.testTypeMap.size(); i++){
             tests.add((String) (this.testTypeMap.keySet().toArray()[i]));
-            //tests.add((String)((Pair)this.testTypeMap.values().toArray()[i]).first);  //obsolete
         }
         ArrayAdapter<String> adapter2 = new ArrayAdapter<>(this, android.R.layout.select_dialog_item, tests);
         testName.setAdapter(adapter2);
         testName.setThreshold(1);
 
-        String[] components = new String[]{"חיידק","בקטריה", "שניבוריג"};
+        String[] components = new String[]{"חיידק","בקטריה", "שניבוריג"};   //TODO Make this list dynamic with DB table?
         ArrayAdapter<String> adapter3 = new ArrayAdapter<>(this, android.R.layout.select_dialog_item, components);
         componentName.setAdapter(adapter3);
         componentName.setThreshold(1);
