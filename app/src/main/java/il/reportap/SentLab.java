@@ -71,7 +71,13 @@ public class SentLab extends OptionsMenu {
                                     jObg.getString("name"),
                                     jObg.getInt("is_urgent"),
                                     jObg.getString("confirm_time"),
-                                    jObg.getString("dept_name"));
+                                    jObg.getString("dept_name"),
+                                    jObg.getString("text"),
+                                    jObg.getString("measurement_unit"),
+                                    jObg.getString("component"),
+                                    jObg.getInt("is_value_boolean"),
+                                    jObg.getInt("test_result_value"),
+                                    jObg.getString("full_name"));
                             modelActivitySentLabList.add(modelActivitySentLab);
                             System.out.println(modelActivitySentLabList.get(i).getId());
                         }

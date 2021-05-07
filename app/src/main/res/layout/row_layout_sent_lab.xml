@@ -100,14 +100,96 @@
                 android:layout_height="match_parent">
 
                 <TextView
+                    android:id="@+id/componentSL"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="component"
+                    card_view:layout_constraintBottom_toBottomOf="parent"
+                    card_view:layout_constraintEnd_toEndOf="parent"
+                    card_view:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/resultValueSL"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="resultValue"
+                    android:paddingRight="5dp"
+                    android:paddingLeft="5dp"
+                    card_view:layout_constraintBottom_toBottomOf="parent"
+                    card_view:layout_constraintEnd_toStartOf="@+id/component"
+                    card_view:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/valueTypeSL"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ValueType"
+                    card_view:layout_constraintBottom_toBottomOf="parent"
+                    card_view:layout_constraintEnd_toStartOf="@+id/resultValueSL"
+                    card_view:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/MessageTextSL"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="MessageText"
+                    android:textSize="17sp"
+                    android:textColor="@color/black"
+                    card_view:layout_constraintBottom_toBottomOf="parent"
+                    card_view:layout_constraintEnd_toEndOf="parent"
+                    card_view:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/to"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="נשלח אל:"
+                    android:textColor="@color/stroke"
+                    card_view:layout_constraintBottom_toBottomOf="parent"
+                    card_view:layout_constraintEnd_toEndOf="parent"
+                    card_view:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
                     android:id="@+id/deptNameSL"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="DeptName"
-                    android:textColor="@color/stroke"
                     android:padding="5dp"
+                    android:text="DeptName"
+                    android:paddingRight="5dp"
+                    android:textColor="@color/stroke"
                     card_view:layout_constraintBottom_toBottomOf="parent"
-                    card_view:layout_constraintEnd_toEndOf="parent"
+                    card_view:layout_constraintEnd_toStartOf="@+id/to"
+                    card_view:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/sentBy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="נשלח ע'י:"
+                    android:textColor="@color/stroke"
+                    android:paddingLeft="5dp"
+                    card_view:layout_constraintBottom_toBottomOf="parent"
+                    card_view:layout_constraintStart_toEndOf="@+id/senderUserSL"
+                    card_view:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/senderUserSL"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="senderUser"
+                    android:textColor="@color/stroke"
+                    card_view:layout_constraintBottom_toBottomOf="parent"
+                    card_view:layout_constraintStart_toStartOf="parent"
                     card_view:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 

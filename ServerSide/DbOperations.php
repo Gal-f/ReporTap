@@ -183,6 +183,38 @@ class DbOperations
         }
         return $response;
     }
+    
+      function getNotActive(){
+        $response = array();
+        $stmt = $this->conn->prepare('SELECT `full_name`, `employee_ID`, `role`, `works_in_dept` FROM users WHERE `is_active`=0');
+		$stmt->execute();
+		$stmt->store_result();
+		$rows = $stmt->num_rows;
+		
+		 if ($stmt->num_rows > 0){
+		  
+		      while ($rows>0){
+		        $stmt->bind_result($fullName, $employeeNumber, $jobTitle, $deptID);
+                $stmt->fetch();
+                
+                $users[$stmt->num_rows-$rows] = array('full_name' => $fullName,
+				'employee_ID' => $employeeNumber,
+				'role' => $jobTitle,
+				'works_in_dept' => $deptID
+                );
+                $rows--;
+		      }
+		     $response['error'] = false;
+		     $response['message'] = "יש משתמשים הממתינים לאישור";
+		     $response['users']= $users;
+		 }
+		 else{
+		     $response['error'] = false;
+		     $response['message']="אין משתמשים הממתינים לאישור";
+		 }
+		 
+		 return $response;
+    }
 
     function send_message($sender, $department, $patientId, $patientName, $testType, $componentName, $isValueBool, $testResultValue, $isUrgent, $comments)
     {
@@ -514,6 +546,7 @@ class DbOperations
         return $response;
 
     }
+    /*
     function donelab($department)
     {
         $response = array();
@@ -557,7 +590,7 @@ class DbOperations
         }
         return $response;
 
-    }
+    }*/
 
     function donelab($department)
     {
@@ -643,4 +676,40 @@ class DbOperations
         return $response;
 
     }
+    function getdepttype($id)
+    {
+        $response = array();
+        $query="SELECT U.id, D.dept_type from users as U JOIN departments as D ON U.works_in_dept=D.ID where U.id = ? ";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("i", $id);
+
+        $stmt->execute();
+
+        $stmt->store_result();
+        $rows=$stmt->num_rows;
+
+        if ($stmt->num_rows > 0) {
+
+            while ($rows>0){
+                $stmt->bind_result($id, $deptType);
+                $stmt->fetch();
+
+                $deptTypeArr[$stmt->num_rows-$rows] = array('id' => $id,
+                'dept_type' => $deptType
+                );
+                $rows--;
+                //TODO add a 'recieve_time' to each message only the first time it is presented in the inboxdr
+            }
+            $response['error'] = false;
+            $response['message'] = 'new report for you';
+            $response['departmentType'] = $deptTypeArr;
+        } else {
+            $response['error'] = true;
+            $response['message'] = 'שגיאה בהצגת המחלקה';
+        }
+        return $response;
+
+
+    }
+
 }
