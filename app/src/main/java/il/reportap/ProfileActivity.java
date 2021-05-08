@@ -45,8 +45,10 @@ public class ProfileActivity extends OptionsMenu {
                 break;
             case 2:
                 textViewDepartment.setText("מחלקה: פנימית א");
+                break;
             case 6:
                 textViewDepartment.setText("מחלקה: הנהלה");
+                break;
         }
 
     }

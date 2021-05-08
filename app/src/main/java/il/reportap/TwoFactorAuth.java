@@ -9,7 +9,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -25,7 +24,7 @@ import java.util.HashMap;
 import java.util.Random;
 import java.util.concurrent.Executors;
 
-public class TwoFactorAuth extends AppCompatActivity {
+public class  TwoFactorAuth extends NavigateUser {
 
     private String otp;
     private User user;
@@ -130,8 +129,8 @@ public class TwoFactorAuth extends AppCompatActivity {
                              //storing the user in shared preferences
                             SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
                             finish();
-                            //TODO - navigate to lab inbox if this is a lab worker
-                            startActivity(new Intent(getApplicationContext(), InboxDoctor.class));
+                            //navigate the user to the relevant page
+                             goToClass(user.getDeptType());
                         }
                     }catch (Exception e) {
                     e.printStackTrace();

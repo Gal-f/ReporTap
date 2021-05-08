@@ -6,11 +6,11 @@ public class User implements Serializable {
 
     public boolean isActive;
     private int id;
-    private String employeeNumber, fullName, email, jobTitle, phoneNumber;
+    private String employeeNumber, fullName, email, jobTitle, phoneNumber, deptType;
     private int department;
 
 
-    public User(int id, String employeeNumber, String fullName, String email, String jobTitle, String phoneNumber, int department) {
+    public User(int id, String employeeNumber, String fullName, String email, String jobTitle, String phoneNumber, int department, String deptType) {
         this.id = id;
         this.employeeNumber = employeeNumber;
         this.fullName = fullName;
@@ -18,6 +18,7 @@ public class User implements Serializable {
         this.jobTitle = jobTitle;
         this.phoneNumber = phoneNumber;
         this.department = department;
+        this.deptType = deptType;
         this.isActive = false;
     }
 
@@ -65,4 +66,7 @@ public class User implements Serializable {
         return department;
     }
 
+    public String getDeptType() {
+        return deptType;
+    }
 }

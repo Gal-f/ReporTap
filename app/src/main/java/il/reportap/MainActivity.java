@@ -9,13 +9,11 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.loginregister.R;
@@ -25,7 +23,7 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends NavigateUser {
 
     EditText editTextEmployeeNumber, editTextPassword;
     ProgressBar progressBar;
@@ -39,23 +37,18 @@ public class MainActivity extends AppCompatActivity {
         editTextPassword = findViewById(R.id.editTextPassword);
         progressBar = findViewById(R.id.progressBar);
 
+
+        //if the user is already logged in
         if (SharedPrefManager.getInstance(this).isLoggedIn()) {
-            //check if the user's account has been approved
+            //check if the user's account has been approved by the system manager
             if (SharedPrefManager.getInstance(this).getUser().isActive) {
-                switch(SharedPrefManager.getInstance(this).getUser().getDepartment()){
-                    case 1:
-                        startActivity(new Intent(this, InboxLab.class));
-                        break;
-
-                    case 2:
-                        startActivity(new Intent(this, InboxDoctor.class));
-                        break;
-
-                    case 6:
-                        startActivity(new Intent(this, ApproveUsers.class));
-                        break;
+                try {
+                    goToClass(SharedPrefManager.getInstance(this).getUser().getDeptType());
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
                 }
             } else {
+                //navigate the user to his profile
                 startActivity(new Intent(this, ProfileActivity.class));
             }
             return;
@@ -81,8 +74,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(), RegisterActivity.class));
             }
         });
-
-
     }
 
     private void userLogin() {
@@ -120,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
                         //getting the user from the response
                         JSONObject userJson = obj.getJSONObject("user");
 
-                        //creating a new user object - names are identical to the columns in the db
+                        //creating a new user object - names are identical to the columns in the php code
                         User user = new User(
                                 userJson.getInt("id"),
                                 userJson.getString("employee_ID"),
@@ -128,48 +119,42 @@ public class MainActivity extends AppCompatActivity {
                                 userJson.getString("email"),
                                 userJson.getString("role"),
                                 userJson.getString("phone_number"),
-                                userJson.getInt("works_in_dept"));
+                                userJson.getInt("works_in_dept"),
+                                userJson.getString("dept_type"));
 
+                        //if the user has not completed the 2fa process
                         if (message.equals("משתמש לא מאומת")) {
                             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
                             finish();
                             Intent intent1 = new Intent(MainActivity.this, TwoFactorAuth.class);
                             intent1.putExtra("user", user);
                             startActivity(intent1);
+
+                        //check if the system manager has approved the user's account
                         } else if (!obj.getBoolean("isActive")) {
                             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
                             SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
                             finish();
-                            Intent intent2 = new Intent(MainActivity.this, ProfileActivity.class);
-                            startActivity(intent2);
+                            startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+
+                         //the user has finished the 2fa process and his account got the manager's approval
                         } else {
                             //storing the user in shared preferences and log him in
                             user.setActive(true);
                             SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
                             finish();
-                            //TODO - navigate to lab inbox if this is a lab worker
-                            if(user.getJobTitle().equals("מנהל מערכת")){
-                                startActivity(new Intent(getApplicationContext(), ApproveUsers.class));
-                            }
-                            else{
-                                startActivity(new Intent(getApplicationContext(), InboxDoctor.class));
-                            }
+                            goToClass(user.getDeptType());
                         }
                     } else {
                         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
                     }
-                } catch (JSONException e) {
+                } catch (JSONException | ClassNotFoundException e) {
                     e.printStackTrace();
                 }
             }
 
         },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
-                    }
-                })
+                error -> Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show())
         {
             @Nullable
             @Override
