@@ -64,6 +64,7 @@ public class AdapterActivitySentLab extends RecyclerView.Adapter<AdapterActivity
            else
            {
                holder.resultValue.setText(Float.toString(modelActivitySentLab.getTestResult()));
+               holder.resultType.setText(modelActivitySentLab.getMeasurementUnit());
            }
     }
 
