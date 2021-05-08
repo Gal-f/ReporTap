@@ -116,8 +116,7 @@ public class NewMessage extends OptionsMenu {
                 }
                 if (isTestValueBool)
                     if (boolResultSelection.getCheckedRadioButtonId() == -1){
-                        //boolResultSelection.setError("נא לבחור תוצאה לבדיקה"); //TODO Check if anything similar exists (there is no setError for RadioGroup
-                        Toast.makeText(getApplicationContext(), "נא לבחור תוצאה לבדיקה", Toast.LENGTH_LONG).show();
+                        ((RadioButton)findViewById(R.id.radioButtonBoolResult_Positive)).setError("נא לבחור תוצאה לבדיקה");
                         return;
 
                     }
@@ -328,7 +327,7 @@ public class NewMessage extends OptionsMenu {
         componentName.setAdapter(adapter3);
         componentName.setThreshold(1);
 
-        //TODO enforce only valid options from the list are selectable
+        //TODO inflate autocompletion list for patientID
     }
 
     public void fillTestValues(){

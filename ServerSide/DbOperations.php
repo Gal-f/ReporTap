@@ -240,38 +240,6 @@ class DbOperations
 		 return $response;
     }
 
-      function getNotActive(){
-        $response = array();
-        $stmt = $this->conn->prepare('SELECT `full_name`, `employee_ID`, `role`, `works_in_dept` FROM users WHERE `is_active`=0');
-		$stmt->execute();
-		$stmt->store_result();
-		$rows = $stmt->num_rows;
-
-		 if ($stmt->num_rows > 0){
-
-		      while ($rows>0){
-		        $stmt->bind_result($fullName, $employeeNumber, $jobTitle, $deptID);
-                $stmt->fetch();
-
-                $users[$stmt->num_rows-$rows] = array('full_name' => $fullName,
-				'employee_ID' => $employeeNumber,
-				'role' => $jobTitle,
-				'works_in_dept' => $deptID
-                );
-                $rows--;
-		      }
-		     $response['error'] = false;
-		     $response['message'] = "יש משתמשים הממתינים לאישור";
-		     $response['users']= $users;
-		 }
-		 else{
-		     $response['error'] = false;
-		     $response['message']="אין משתמשים הממתינים לאישור";
-		 }
-
-		 return $response;
-    }
-
     function approveUser($employeeNumber){
         $stmt = $this->conn->prepare('UPDATE users SET is_active=1 WHERE employee_ID ="'.$employeeNumber.'"');
         if ($stmt->execute()) {
@@ -514,7 +482,7 @@ class DbOperations
         }
 
         //3rd part - Get patients
-        $query = "SELECT ID, patients.name FROM patients";
+        $query = "SELECT patient_ID, full_name FROM patients";
         $stmt3 = $this->conn->prepare($query);
         $stmt3->execute();
         $stmt3->store_result();
