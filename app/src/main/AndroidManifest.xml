@@ -3,6 +3,7 @@
     package="com.example.loginregister">
     <!-- adding internet permission -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -31,7 +32,12 @@
         <activity android:name="il.reportap.InboxLab" />
         <activity android:name="il.reportap.DoneLab" />
         <activity android:name="il.reportap.SentLab" />
-
+        <service
+            android:name="il.reportap.MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+            </intent-filter>
+        </service>
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

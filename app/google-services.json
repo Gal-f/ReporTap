@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "563037313348",
+    "project_id": "reportap",
+    "storage_bucket": "reportap.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:563037313348:android:e66d61e36e296bf1cfdf11",
+        "android_client_info": {
+          "package_name": "il.reportap"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "563037313348-mie0io77tttmot4e7voak9jkhamp5i1d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDEBZUfP_lXdZezMtX6s_wxZxj9KCDqa2M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "563037313348-mie0io77tttmot4e7voak9jkhamp5i1d.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

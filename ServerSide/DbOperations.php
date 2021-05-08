@@ -240,38 +240,6 @@ class DbOperations
 		 return $response;
     }
 
-      function getNotActive(){
-        $response = array();
-        $stmt = $this->conn->prepare('SELECT `full_name`, `employee_ID`, `role`, `works_in_dept` FROM users WHERE `is_active`=0');
-		$stmt->execute();
-		$stmt->store_result();
-		$rows = $stmt->num_rows;
-
-		 if ($stmt->num_rows > 0){
-
-		      while ($rows>0){
-		        $stmt->bind_result($fullName, $employeeNumber, $jobTitle, $deptID);
-                $stmt->fetch();
-
-                $users[$stmt->num_rows-$rows] = array('full_name' => $fullName,
-				'employee_ID' => $employeeNumber,
-				'role' => $jobTitle,
-				'works_in_dept' => $deptID
-                );
-                $rows--;
-		      }
-		     $response['error'] = false;
-		     $response['message'] = "יש משתמשים הממתינים לאישור";
-		     $response['users']= $users;
-		 }
-		 else{
-		     $response['error'] = false;
-		     $response['message']="אין משתמשים הממתינים לאישור";
-		 }
-
-		 return $response;
-    }
-
     function approveUser($employeeNumber){
         $stmt = $this->conn->prepare('UPDATE users SET is_active=1 WHERE employee_ID ="'.$employeeNumber.'"');
         if ($stmt->execute()) {
@@ -286,15 +254,48 @@ class DbOperations
 
     function send_message($sender, $department, $patientId, $patientName, $testType, $componentName, $isValueBool, $testResultValue, $isUrgent, $comments)
     {
+        include 'vendor/apiKeys.php';
         $response = array();
         $message = array($department, $patientId, $patientName, $testType, $componentName, $isValueBool, $testResultValue, $isUrgent, $comments);
         $stmt = $this->conn->prepare("INSERT INTO `messages`(`patient_ID`, `test_type`, `component`, `is_value_boolean`, `test_result_value`, `text`, `is_urgent`, `sender_user`, `recipient_dept`) VALUES (?,?,?,?,?,?,?,?,?);");
         //TODO Change test_type from simple string to relation with test_types table
         $stmt->bind_param("sisidsiii", $patientId, $testType, $componentName, $isValueBool, $testResultValue, $comments, $isUrgent, $sender, $department); //If there's a problem with sqli query, try changing boolean columns to tinyint and use 'i' instead of 's' in the first parameter for bind_param.
         if ($stmt->execute()) {
+            //send notifications to the users via firebase api
+            #prep the bundle
+            $msg = array
+              (
+            'body'  => 'קיבלת הודעה חדשה ',
+            'title' => 'ReporTap New Message'
+              );
+            $fields = array
+                (
+                    //TODO make sure that only the recipient_dept workers get the message
+                    'to'        => '/topics/'.$department,
+                    'notification'  => $msg
+                );
+
+
+             $headers = array
+                (
+                    'Authorization: key='.$firebaseKey,
+                    'Content-Type: application/json'
+                );
+
+            $ch = curl_init();
+            curl_setopt( $ch,CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send' );
+            curl_setopt( $ch,CURLOPT_POST, true );
+            curl_setopt( $ch,CURLOPT_HTTPHEADER, $headers );
+            curl_setopt( $ch,CURLOPT_RETURNTRANSFER, true );
+            curl_setopt( $ch,CURLOPT_SSL_VERIFYPEER, false );
+            curl_setopt( $ch,CURLOPT_POSTFIELDS, json_encode( $fields ) );
+            $result = curl_exec($ch );
+            curl_close( $ch );
+
             $response['error'] = false;
             $response['message'] = 'Message sent successfully';
             $response['sent_message'] = $message;
+            $response['notification']=$result;
         } else {
             $response['error'] = true;
             $response['message'] = 'Error while sending the message';
@@ -464,7 +465,9 @@ class DbOperations
     function getDeptsAndTests()
     {
         $response = array();
-        $response['message'] = '';
+        $response['error'] = false; //Will contain 'true' if at least ONE of the three queries failed
+        $response['message'] = ''; //Will contain a concatinated string of the three successes or failures
+
         //1st part - Get Departments
         $query = "SELECT ID, departments.name FROM departments";
         $stmt = $this->conn->prepare($query);
@@ -486,29 +489,54 @@ class DbOperations
             $response['error'] = false;
             $response['message'] = 'Departments pulled successfully';
             $response['departments'] = $depts;
-            //2nd part - Get test types
-            $query = "SELECT ID, name, result_type FROM test_types";
-            $stmt2 = $this->conn->prepare($query);
-            $stmt2->execute();
-            $stmt2->store_result();
-
-            $rows = $stmt2->num_rows;
-            if ($rows == 0){
-                $response['error'] = true;
-                $response['message'] .= ', Unable to retrieve test types from the server';
-            } else {
-                while ($rows > 0){
-                    $stmt2->bind_result($testID, $testName, $resultType);
-                    $stmt2->fetch();
-
-                    $testsTypes[$stmt2->num_rows()-$rows] = array('testID' => $testID, 'testName' => $testName, 'resultType' => $resultType);
-                    $rows--;
-                }
-                $response['error'] = false;
-                $response['message'] .= ', Test types pulled successfully';
-                $response['testTypes'] = $testsTypes;
-            }
         }
+
+        //2nd part - Get test types
+        $query = "SELECT ID, name, result_type FROM test_types";
+        $stmt2 = $this->conn->prepare($query);
+        $stmt2->execute();
+        $stmt2->store_result();
+
+        $rows = $stmt2->num_rows;
+        if ($rows == 0){
+            $response['error'] = true;
+            $response['message'] .= ', Unable to retrieve test types from the server';
+        } else {
+            while ($rows > 0){
+                $stmt2->bind_result($testID, $testName, $resultType);
+                $stmt2->fetch();
+
+                $testsTypes[$stmt2->num_rows-$rows] = array('testID' => $testID, 'testName' => $testName, 'resultType' => $resultType);
+                $rows--;
+            }
+            //Not setting $response['error']=false since it might have recieved 'true' for a previous query. If it remained 'false' thus far, we keep it false.
+            $response['message'] .= ', Test types pulled successfully';
+            $response['testTypes'] = $testsTypes;
+        }
+
+        //3rd part - Get patients
+        $query = "SELECT patient_ID, full_name FROM patients";
+        $stmt3 = $this->conn->prepare($query);
+        $stmt3->execute();
+        $stmt3->store_result();
+
+        $rows = $stmt3->num_rows;
+        if ($rows == 0){
+            $response['error'] = true;
+            $response['message'] .= ', Unable to retrieve patients\' details from the server';
+        } else {
+            while ($rows > 0){
+                $stmt3->bind_result($patientID, $patientName);
+                $stmt3->fetch();
+
+                $patients[$stmt3->num_rows-$rows] = array('ID' => $patientID, 'name' => $patientName);
+                $rows--;
+            }
+            //Not setting $response['error']=false since it might have recieved 'true' for a previous query. If it remained 'false' thus far, we keep it false.
+            $response['message'] .= ', Patients\' details pulled successfully';
+            $response['patients'] = $patients;
+        }
+
         return $response;
     }
 

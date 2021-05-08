@@ -8,6 +8,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.android.volley.AuthFailureError;
@@ -17,6 +18,9 @@ import com.android.volley.Response;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.loginregister.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -139,6 +143,18 @@ public class MainActivity extends NavigateUser {
 
                          //the user has finished the 2fa process and his account got the manager's approval
                         } else {
+                            FirebaseMessaging.getInstance().subscribeToTopic(String.valueOf(user.getDepartment()))
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            String msg ="Done";
+                                            if (!task.isSuccessful()) {
+                                                msg = "Failed";
+                                            }
+                                            //Log.d(TAG, msg);
+                                            Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
                             //storing the user in shared preferences and log him in
                             user.setActive(true);
                             SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
