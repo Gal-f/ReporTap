@@ -254,15 +254,48 @@ class DbOperations
 
     function send_message($sender, $department, $patientId, $patientName, $testType, $componentName, $isValueBool, $testResultValue, $isUrgent, $comments)
     {
+        include 'vendor/apiKeys.php';
         $response = array();
         $message = array($department, $patientId, $patientName, $testType, $componentName, $isValueBool, $testResultValue, $isUrgent, $comments);
         $stmt = $this->conn->prepare("INSERT INTO `messages`(`patient_ID`, `test_type`, `component`, `is_value_boolean`, `test_result_value`, `text`, `is_urgent`, `sender_user`, `recipient_dept`) VALUES (?,?,?,?,?,?,?,?,?);");
         //TODO Change test_type from simple string to relation with test_types table
         $stmt->bind_param("sisidsiii", $patientId, $testType, $componentName, $isValueBool, $testResultValue, $comments, $isUrgent, $sender, $department); //If there's a problem with sqli query, try changing boolean columns to tinyint and use 'i' instead of 's' in the first parameter for bind_param.
         if ($stmt->execute()) {
+            //send notifications to the users via firebase api
+            #prep the bundle
+            $msg = array
+              (
+            'body'  => 'קיבלת הודעה חדשה ',
+            'title' => 'ReporTap New Message'
+              );
+            $fields = array
+                (
+                    //TODO make sure that only the recipient_dept workers get the message
+                    'to'        => '/topics/'.$department,
+                    'notification'  => $msg
+                );
+
+
+             $headers = array
+                (
+                    'Authorization: key='.$firebaseKey,
+                    'Content-Type: application/json'
+                );
+
+            $ch = curl_init();
+            curl_setopt( $ch,CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send' );
+            curl_setopt( $ch,CURLOPT_POST, true );
+            curl_setopt( $ch,CURLOPT_HTTPHEADER, $headers );
+            curl_setopt( $ch,CURLOPT_RETURNTRANSFER, true );
+            curl_setopt( $ch,CURLOPT_SSL_VERIFYPEER, false );
+            curl_setopt( $ch,CURLOPT_POSTFIELDS, json_encode( $fields ) );
+            $result = curl_exec($ch );
+            curl_close( $ch );
+
             $response['error'] = false;
             $response['message'] = 'Message sent successfully';
             $response['sent_message'] = $message;
+            $response['notification']=$result;
         } else {
             $response['error'] = true;
             $response['message'] = 'Error while sending the message';

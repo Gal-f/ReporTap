@@ -60,6 +60,7 @@ public class ApproveUsers extends OptionsMenu  {
                     try {
                         JSONObject usersObj = new JSONObject(response);
                         JSONArray usersArray = usersObj.getJSONArray("users");
+
                         errorMessage = usersObj.getString("message");
                         for (int i = 0; i < usersArray.length(); i++) {
                             JSONObject jObg = new JSONObject();
