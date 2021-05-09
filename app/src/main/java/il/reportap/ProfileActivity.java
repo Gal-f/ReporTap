@@ -21,6 +21,7 @@ public class ProfileActivity extends OptionsMenu {
         setContentView(R.layout.activity_profile);
 
         User user = SharedPrefManager.getInstance(this).getUser();
+        //TODO pull the user details from the server if isActive==false, in order to check if he had been approved by an admin
 
         textViewEmployeeNumber =  (TextView) findViewById(R.id.textViewEmployeeNumber);
         textViewFullName = (TextView) findViewById(R.id.textViewFullName);

@@ -490,7 +490,7 @@ class DbOperations
             $response['message'] = 'Departments pulled successfully';
             $response['departments'] = $depts;
         }
-
+        
         //2nd part - Get test types
         $query = "SELECT ID, name, result_type FROM test_types";
         $stmt2 = $this->conn->prepare($query);

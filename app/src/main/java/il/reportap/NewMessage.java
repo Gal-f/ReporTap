@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Pair;
 import android.view.View;
 import android.widget.AdapterView;
@@ -36,15 +37,16 @@ import java.util.Map;
 
 public class NewMessage extends OptionsMenu {
 
-    private AutoCompleteTextView recipient, testName, componentName;
-    private EditText patientId, patientName, measuredAmount, comments;
-    private RadioGroup boolResult;
+    private AutoCompleteTextView recipient, testName, componentName, patientId;
+    private EditText /*patientId,*/ patientName, measuredAmount, comments;
     private CheckBox isUrgent;
+    private RadioGroup boolResultSelection;
     private ProgressDialog progressDialog;
     private boolean success, isTestValueBool;
 
     private HashMap<String, Integer> deptMap;                     //Translates department name to it's corresponding ID
     private HashMap<String, Pair<Integer, String>> testTypeMap;   //Translates test type ID to it's corresponding name + result type (in this form: [name, [ID, resultType]] )
+    private HashMap<String, String> patientsMap;
     //TODO add a 'measurement unit' to testTypeMap and show it next to the measuredAmount EditText field
 
     @Override
@@ -53,23 +55,73 @@ public class NewMessage extends OptionsMenu {
         setContentView(R.layout.activity_new_message);
 
         this.recipient = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextViewTo);
-        this.patientId = (EditText) findViewById(R.id.editTextPatientIdNumber);
+        this.patientId = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextViewPatientIdNumber);
+        //this.patientId = (EditText) findViewById(R.id.editTextPatientIdNumber);
         this.patientName = (EditText) findViewById(R.id.editTextPatientName);
         this.testName = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextViewTestName);
         this.componentName = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextViewComponentName);
         this.measuredAmount = (EditText) findViewById(R.id.editTextMeasuredAmount);
+        this.boolResultSelection = (RadioGroup) findViewById(R.id.radioGroupBoolResult);
         this.isUrgent = (CheckBox) findViewById(R.id.checkBoxUrgent);
         this.comments = (EditText) findViewById(R.id.editTextTextMultiLineComments);
         this.progressDialog = new ProgressDialog(this);
 
-        //TODO Create auto-complete for patient ID? (optional)
-
         populateHashmaps(); // This populates the departments and test types from the DB and then adds them as options to the form.
-        //TODO extract function (populateHashmaps)
 
-        findViewById(R.id.buttonSendMessage).setOnClickListener(new View.OnClickListener() {
+        patientId.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {  // When selecting patient ID, show the patient's name accordingly
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedID = parent.getItemAtPosition(position).toString();
+                patientName.setText(patientsMap.get(selectedID));
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                patientId.setError("נא לבחור מספר זהות של מטופל קיים");
+                patientId.setText(""); // TODO Is this necessary?
+            }
+        }
+        );
+
+        findViewById(R.id.buttonSendMessage).setOnClickListener(new View.OnClickListener() {    // User clicked send
             @Override
             public void onClick(View v) {
+                // Input validations
+                if (TextUtils.isEmpty(recipient.getText().toString())) {
+                    recipient.setError("יש לבחור מחלקה נמענת");
+                    return;
+                }
+                if (!deptMap.containsKey(recipient.getText().toString())){
+                    recipient.setError("נא לבחור אחת מהמחלקות הקיימות");
+                    return;
+                }
+                if (patientId.length() != 9){
+                    patientId.setError("מספר זהות צריך לכלול 9 ספרות בדיוק");
+                    return;
+                }
+                if (!patientId.getText().toString().matches("[0-9]+")){
+                    patientId.setError("מספר זהות צריך לכלול ספרות בלבד");
+                    return;
+                }
+                if (!patientsMap.containsKey(patientId.getText().toString())){
+                    patientId.setError("המטופל לא קיים במערכת");
+                    return;
+                }
+                if (TextUtils.isEmpty(testName.getText().toString())){
+                    testName.setError("נא לבחור סוג בדיקה");
+                    return;
+                }
+                if (!testTypeMap.containsKey(testName.getText().toString())){
+                    testName.setError("נא לבחור בדיקה קיימת");
+                    return;
+                }
+                if (isTestValueBool)
+                    if (boolResultSelection.getCheckedRadioButtonId() == -1){
+                        ((RadioButton)findViewById(R.id.radioButtonBoolResult_Positive)).setError("נא לבחור תוצאה לבדיקה");
+                        return;
+
+                    }
+                //Component, Measured amount and Comments are not validated, to allow the lab crew more flexibility.
+
                 Send();
                 //TODO show a message if Send() succeeded or not
             }
@@ -95,7 +147,8 @@ public class NewMessage extends OptionsMenu {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String selectedTest = parent.getItemAtPosition(position).toString();
-                if (((Pair)testTypeMap.get(selectedTest)).second.equals("boolean")){
+                // If the test type is of a boolean result, set the result views to Radio selection instead of the Textviews.
+                if (((Pair)testTypeMap.get(selectedTest)).second.equals("boolean")){    // Check the test type in the map according to the test names
                     isTestValueBool = true;
                     findViewById(R.id.linearLayoutBoolResult).setVisibility(View.VISIBLE);
                     findViewById(R.id.linearLayoutMeasuredAmount).setVisibility(View.GONE);
@@ -136,11 +189,12 @@ public class NewMessage extends OptionsMenu {
         final String isUrgent = (this.isUrgent.isChecked()?"1":"0");
         final String comments = this.comments.getText().toString().trim();
 
-        // Set both numeric and boolean test results (as we can't define constants inside a condition) and use only one of them down the road
+        // Set both numeric and boolean test results (as we can't define constants inside a condition), and use only one of them down the road
         final String measuredAmount = this.measuredAmount.getText().toString().trim();
-        int selectedRadio = ((RadioGroup) findViewById(R.id.radioGroupBoolResult)).getCheckedRadioButtonId();
+        int selectedRadio = boolResultSelection.getCheckedRadioButtonId();
         RadioButton rb = findViewById(selectedRadio);
-        final String booleanResult = (rb != null ? (rb.getText().equals("חיובית")?"1":"0") : "");
+
+        final String booleanResult = (rb != null ? (rb.getText().equals("חיובית")?"1":"0") : ""); // TODO Check if rb is actually null when none is selected, otherwise change it to check if selectedRadio == -1
 
         success = false;
         progressDialog.setMessage("ההודעה שלך נשלחת.\nנא להמתין לאישור...");
@@ -154,12 +208,9 @@ public class NewMessage extends OptionsMenu {
                 try {
                     JSONObject jsonObject = new JSONObject(response);
                     errorMessage = jsonObject.getString("message");
-                    if(jsonObject.getBoolean("error")){ // If there was any error along the way //TODO add validations for correct inputs
-                        Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
-                    } else {
+                    if(!jsonObject.getBoolean("error")) // If there was any error along the way
                         success = true;
-                        Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
-                    }
+                    Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -212,18 +263,27 @@ public class NewMessage extends OptionsMenu {
             public void onResponse(String response) {
                 deptMap = new HashMap<String, Integer>();
                 testTypeMap = new HashMap<String, Pair<Integer, String>>();
+                patientsMap = new HashMap<String, String>();
 
                 try{
                     JSONObject entireResponse = new JSONObject(response);
                     JSONArray deptsArray = entireResponse.getJSONArray("departments");
-                    JSONArray testTypesArray = entireResponse.getJSONArray("testTypes");
+                    // Getting all departments
                     for (int i=0; i<deptsArray.length(); i++) {
                         JSONObject dept = deptsArray.getJSONObject(i);
                         deptMap.put(dept.getString("deptName"), dept.getInt("deptID"));
                     }
+                    // Getting all test types
+                    JSONArray testTypesArray = entireResponse.getJSONArray("testTypes");
                     for (int i=0; i<testTypesArray.length(); i++){
                         JSONObject testType = testTypesArray.getJSONObject(i);
                         testTypeMap.put(testType.getString("testName"), new Pair<>(testType.getInt("testID"), testType.getString("resultType")));
+                    }
+                    // Getting all patients
+                    JSONArray patientsArray = entireResponse.getJSONArray("patients");
+                    for (int i=0; i<patientsArray.length(); i++){
+                        JSONObject patient = patientsArray.getJSONObject(i);
+                        patientsMap.put(patient.getString("ID"), patient.getString("name"));
                     }
                     inflateAutocompleteOptions(); //Use the freshly populated hashmaps as options to select from in the form fields.
                     // The inflate call is done here in order to make sure the response for PopulateHashmaps() returned before calling inflateAutocompleteOptions().
@@ -267,7 +327,7 @@ public class NewMessage extends OptionsMenu {
         componentName.setAdapter(adapter3);
         componentName.setThreshold(1);
 
-        //TODO enforce only valid options from the list are selectable
+        //TODO inflate autocompletion list for patientID
     }
 
     public void fillTestValues(){

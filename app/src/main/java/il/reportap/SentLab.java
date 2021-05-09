@@ -79,7 +79,6 @@ public class SentLab extends OptionsMenu {
                                     jObg.getInt("test_result_value"),
                                     jObg.getString("full_name"));
                             modelActivitySentLabList.add(modelActivitySentLab);
-                            System.out.println(modelActivitySentLabList.get(i).getId());
                         }
 
 
