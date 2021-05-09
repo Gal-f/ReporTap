@@ -8,60 +8,19 @@
     tools:context="il.reportap.NewMessage"
     android:animateLayoutChanges="true">
 
+    <include layout="@layout/buttons_layout"/>
+
     <!-- Main layout -->
     <LinearLayout
         android:id="@+id/mainLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingTop="55dp"
         android:orientation="vertical"
         android:textDirection="rtl"
         android:layoutDirection="rtl"
         tools:ignore="MissingConstraints">
 
-        <!-- Navigation bar -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="0dp"
-            android:layoutDirection="rtl"
-            android:orientation="horizontal"
-            android:textDirection="rtl"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="MissingConstraints"
-            tools:layout_editor_absoluteX="1dp">
-            <Button
-                android:id="@+id/sentB"
-                android:layout_width="wrap_content"
-                android:layout_height="60dp"
-                android:layout_weight="1"
-                android:text="מסרים לטיפולי"
-                android:textColor="#020202"
-                app:backgroundTint="#FFFFFF"
-                app:strokeColor="#00BCD4"
-                app:strokeWidth="2dp" />
-
-            <Button
-                android:id="@+id/doneB"
-                android:layout_width="wrap_content"
-                android:layout_height="60dp"
-                android:layout_weight="1"
-                android:text="מסרים שטופלו"
-                android:textColor="#020202"
-                app:backgroundTint="#FFFFFF"
-                app:strokeColor="#00BCD4"
-                app:strokeWidth="2dp" />
-
-            <Button
-                android:id="@+id/toDoB"
-                android:layout_width="wrap_content"
-                android:layout_height="60dp"
-                android:layout_weight="1"
-                android:text="מסרים שנשלחו"
-                android:textColor="#020202"
-                app:backgroundTint="#FFFFFF"
-                app:strokeColor="#00BCD4"
-                app:strokeWidth="2dp" />
-        </LinearLayout>
 
         <!-- Page title -->
             <TextView
