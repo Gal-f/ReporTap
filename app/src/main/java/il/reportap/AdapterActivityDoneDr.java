@@ -2,6 +2,7 @@ package il.reportap;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -43,6 +45,16 @@ public class AdapterActivityDoneDr extends RecyclerView.Adapter<AdapterActivityD
             holder.text.setText(modelActivityDoneDr.getText());
             holder.confirmUser.setText(modelActivityDoneDr.getConfirmUser());
 
+            holder.messageID = modelActivityDoneDr.getId();
+            holder.cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, ViewMessage.class);
+                intent.putExtra("MESSAGE_ID", holder.messageID);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -53,10 +65,13 @@ public class AdapterActivityDoneDr extends RecyclerView.Adapter<AdapterActivityD
     public class ViewHolder extends RecyclerView.ViewHolder{
 
         public TextView sentTime, patientId,testName,text,confirmUser;
+        public Integer messageID;
+        public CardView cardView;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
+            cardView = (CardView)itemView.findViewById(R.id.card_view);
             sentTime = (TextView)itemView.findViewById(R.id.sentTime);
             patientId = (TextView)itemView.findViewById(R.id.patientId);
             testName = (TextView)itemView.findViewById(R.id.testName);

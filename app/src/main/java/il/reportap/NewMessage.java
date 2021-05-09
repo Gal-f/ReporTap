@@ -85,7 +85,7 @@ public class NewMessage extends OptionsMenu {
         findViewById(R.id.buttonSendMessage).setOnClickListener(new View.OnClickListener() {    // User clicked send
             @Override
             public void onClick(View v) {
-                // Input validations
+            // Input validations
                 if (TextUtils.isEmpty(recipient.getText().toString())) {
                     recipient.setError("יש לבחור מחלקה נמענת");
                     return;
@@ -118,7 +118,6 @@ public class NewMessage extends OptionsMenu {
                     if (boolResultSelection.getCheckedRadioButtonId() == -1){
                         ((RadioButton)findViewById(R.id.radioButtonBoolResult_Positive)).setError("נא לבחור תוצאה לבדיקה");
                         return;
-
                     }
                 //Component, Measured amount and Comments are not validated, to allow the lab crew more flexibility.
 
@@ -175,6 +174,29 @@ public class NewMessage extends OptionsMenu {
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(), "סריקת ברקוד לא זמינה עדיין בגירסה הזו...", Toast.LENGTH_LONG).show();
 
+            }
+        });
+
+        // Setting up the navigation buttons
+        findViewById(R.id.toDoB).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                startActivity(new Intent(getApplicationContext(), InboxDoctor.class));
+            }
+        });
+        findViewById(R.id.sentB).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                startActivity(new Intent(getApplicationContext(), SentDoctor.class));
+            }
+        });
+        findViewById(R.id.doneB).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                startActivity(new Intent(getApplicationContext(), DoneDoctor.class));
             }
         });
     }

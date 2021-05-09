@@ -5,6 +5,7 @@ import androidx.appcompat.app.AlertDialog;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
@@ -39,7 +40,7 @@ public class ViewMessage extends OptionsMenu {
 
     private Integer messageID, senderID, senderDept;
     private TextView sentTime, senderName, patientId, patientName, testName, componentName, measuredAmountValue, measurementUnit, boolValue, comments;
-    private boolean isTestValueBool;
+    private boolean isTestValueBool, wasRead;
     private ImageView isUrgent;
     private ImageButton wasReadButton, replyButton, forwardButton;
     private EditText editTextReplyText;
@@ -57,6 +58,8 @@ public class ViewMessage extends OptionsMenu {
         setContentView(R.layout.activity_view_message);
 
         this.progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("נא להמתין לטעינת הדיווח...");
+        progressDialog.show();
 
         this.sentTime = findViewById(R.id.textViewDateTime);
         this.senderName = findViewById(R.id.textViewSenderName_Dept);
@@ -70,6 +73,9 @@ public class ViewMessage extends OptionsMenu {
         this.comments = findViewById(R.id.textViewComments);
         this.isUrgent = findViewById(R.id.imageViewUrgent);
 
+        wasReadButton =  findViewById(R.id.imageButtonRead);
+        replyButton = findViewById(R.id.imageButtonReply);
+        forwardButton = findViewById(R.id.imageButtonForward);
         this.editTextReplyText = findViewById(R.id.EditTextReplyText);
         this.spinnerForwardTo = findViewById(R.id.SpinnerForwardTo);
 
@@ -77,10 +83,37 @@ public class ViewMessage extends OptionsMenu {
             messageID = getIntent().getIntExtra("MESSAGE_ID", 0);
             getMessage(this.messageID);         // Update all message fields from the DB according to the received message ID
         }
+        else {
+            Toast.makeText(getApplicationContext(), "שגיאה בקבלת מספר הדיווח.\nאנא נסו שוב מאוחר יותר.", Toast.LENGTH_LONG).show();
+        }
 
         //TODO add other test results for the same patient (nice to have for version #1)
 
         // this.isTestValueBool = ((Pair)testTypeMap.get(this.testName.getText())).second.equals("boolean"); //TODO skip this hashmap? isTestValueBool gets value in getMessage() already
+
+        // Setting up the navigation buttons
+        findViewById(R.id.toDoB).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                startActivity(new Intent(getApplicationContext(), InboxDoctor.class));
+            }
+        });
+        findViewById(R.id.sentB).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                startActivity(new Intent(getApplicationContext(), SentDoctor.class));
+            }
+        });
+        findViewById(R.id.doneB).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                startActivity(new Intent(getApplicationContext(), DoneDoctor.class));
+            }
+        });
+        progressDialog.hide();
     }
 
     public void populateHashmaps(){
@@ -124,10 +157,14 @@ public class ViewMessage extends OptionsMenu {
         //Define recipient list for forwarding
 
         ArrayList<String> departments = new ArrayList<>();
-        for (String dept : this.deptMap.keySet())
-            if (this.deptMap.get(dept) != SharedPrefManager.getInstance(getApplicationContext()).getUser().getDepartment())  // Add all possible departments except the user's department, to whom he can't forward
-                departments.add(dept);
-
+        try {
+            for (String dept : this.deptMap.keySet())
+                if (this.deptMap.get(dept) != SharedPrefManager.getInstance(getApplicationContext()).getUser().getDepartment())  // Add all possible departments except the user's department, to whom he can't forward
+                    departments.add(dept);
+        } catch (NullPointerException e) {
+            Toast.makeText(getApplicationContext(), "חלה שגיאה בהצגת המחלקות. אנא נסו שוב מאוחר יותר.", Toast.LENGTH_LONG).show();
+            e.printStackTrace();
+        }
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, departments);
         spinnerForwardTo.setAdapter(adapter);
         //TODO enforce only valid options from the list are selectable
@@ -154,7 +191,7 @@ public class ViewMessage extends OptionsMenu {
                         patientName.setText(requestedMessage.getString("patientName"));
                         testName.setText(requestedMessage.getString("testName"));
                         componentName.setText(requestedMessage.getString("componentName"));
-                        isTestValueBool = requestedMessage.getString("isValueBool").equals("1");
+                        isTestValueBool = requestedMessage.getString("isValueBool").equals("1");    //The 'equals' check is performed (here and for the next boolean variables) since the value returns as a string rather than boolean
                         if (isTestValueBool){
                             boolValue.setText((requestedMessage.getString("testResultValue")).equals("1") ? "חיובית" : "שלילית");
                         } else {
@@ -162,6 +199,11 @@ public class ViewMessage extends OptionsMenu {
                             measurementUnit.setText(requestedMessage.getString("measurementUnit"));
                         }
                         comments.setText(requestedMessage.getString("comments")); //TODO resize the textview to fit all the text
+                        wasRead = !requestedMessage.getString("confirmTime").equals("null");
+                        if (wasRead){
+                            wasReadButton.setImageResource(R.drawable.eyecheck2_bmp);
+                            wasReadButton.setClickable(false);
+                        }
                         if (requestedMessage.getString("isUrgent").equals("1")){
                             isUrgent.setImageResource(R.drawable.redexclamation_trans);
                             ((TextView)findViewById(R.id.textViewUrgent)).setText("דחוף");
@@ -210,9 +252,6 @@ public class ViewMessage extends OptionsMenu {
             findViewById(R.id.linearLayoutMeasuredAmount).setVisibility(View.VISIBLE);
         }
 
-        wasReadButton =  findViewById(R.id.imageButtonRead);
-        replyButton = findViewById(R.id.imageButtonReply);
-        forwardButton = findViewById(R.id.imageButtonForward);
         String userID = SharedPrefManager.getInstance(getApplicationContext()).getUser().getEmployeeNumber();
 
         wasReadButton.setOnClickListener(new View.OnClickListener() {
@@ -255,6 +294,7 @@ public class ViewMessage extends OptionsMenu {
                                 Toast.makeText(getApplicationContext(), jsonObject.getString("message"), Toast.LENGTH_LONG).show();
                                 if (jsonObject.getBoolean("alreadyMarked")) {    // If the message had already been marked by another user, the function will also return TRUE and disable the button to mark again
                                     successMarkRead = true;
+                                    wasRead = true;
                                     wasReadButton.setImageResource(R.drawable.eyecheck2_bmp);
                                     wasReadButton.setClickable(false);
                                 }

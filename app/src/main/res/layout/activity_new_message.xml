@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#E1DCDC"
+    android:background="@color/background"
     tools:context="il.reportap.NewMessage">
 
     <include layout="@layout/buttons_layout"/>
@@ -17,6 +17,8 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
+        android:paddingTop="55dp"
+
         tools:ignore="MissingConstraints">
 
         <LinearLayout
@@ -99,7 +101,9 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.3"
-                    android:src="@drawable/barcode" />
+                    android:paddingTop="5dp"
+                    android:src="@drawable/barcode"
+                    android:background="?android:selectableItemBackground" />
                 <TextView
                     android:id="@+id/textView7"
                     android:layout_width="0dp"
@@ -164,6 +168,8 @@
                     android:layout_weight="0.6"
                     android:ems="10"
                     android:inputType="textPersonName"
+                    android:hint="שם המטופל יופיע לאחר הקלדת ת.ז."
+                    android:textSize="12sp"
                     android:enabled="false" />
             </LinearLayout>
 
