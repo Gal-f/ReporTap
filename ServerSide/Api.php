@@ -8,18 +8,11 @@ $response['error'] = false;
 $response['message'] = "No action performed yet";
 
 require_once 'DbOperations.php';
-//require_once 'testFirebase.php';
-$notification = new testFirebase();
 $oper = new DbOperations(); //All operations with the DB are performed using this object
 
 if (isset($_GET['apicall'])) {
 
     switch ($_GET['apicall']) {
-
-      /*  case 'sendNotification':
-            $response = $notification->test();
-            break;
-            */
 
        case 'signup':
             $response = isTheseParametersAvailable(array('password', 'employee_ID', 'full_name', 'email', 'role', 'phone_number', 'works_in_dept'));

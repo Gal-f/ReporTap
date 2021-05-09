@@ -23,7 +23,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService{
                 .setContentTitle(title)
                 .setContentText(msg)
                 .setAutoCancel(true);
-
         NotificationManagerCompat manager = NotificationManagerCompat.from(this);
         manager.notify(101,builder.build());
 

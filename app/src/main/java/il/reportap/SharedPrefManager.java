@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
+import com.google.firebase.messaging.FirebaseMessaging;
+
 public class SharedPrefManager {
 
     //the constants
@@ -78,6 +80,8 @@ public class SharedPrefManager {
 
     //this method will logout the user 
     public void logout() {
+        //delete the token in order to stop the FCM notifications for users that logged out
+        FirebaseMessaging.getInstance().deleteToken();
         SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear();
