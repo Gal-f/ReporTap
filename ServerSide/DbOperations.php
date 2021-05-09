@@ -262,7 +262,7 @@ class DbOperations
         $stmt->bind_param("sisidsiii", $patientId, $testType, $componentName, $isValueBool, $testResultValue, $comments, $isUrgent, $sender, $department); //If there's a problem with sqli query, try changing boolean columns to tinyint and use 'i' instead of 's' in the first parameter for bind_param.
         if ($stmt->execute()) {
             //send notifications to the users via firebase api
-            #prep the bundle
+
             $msg = array
               (
             'body'  => 'קיבלת הודעה חדשה ',
@@ -270,7 +270,7 @@ class DbOperations
               );
             $fields = array
                 (
-                    //TODO make sure that only the recipient_dept workers get the message
+
                     'to'        => '/topics/'.$department,
                     'notification'  => $msg
                 );
