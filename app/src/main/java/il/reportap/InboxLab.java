@@ -33,7 +33,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class InboxLab extends OptionsMenu {
+public class InboxLab extends ButtonsOptions {
 
     private RecyclerView recyclerView;
     private AdapterActivityInboxLab adapter;
@@ -44,15 +44,7 @@ public class InboxLab extends OptionsMenu {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.inbox_lab);
-        Button btnI = (Button)findViewById(R.id.toDoB);
-        Button btnS = (Button)findViewById(R.id.sentB);
-        Button btnD = (Button)findViewById(R.id.doneB);
-        btnI.setText("תגובות לטיפולי");
-        btnS.setText("מסרים שנשלחו");
-        btnD.setText("מסרים שטופלו");
-        btnI.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.stroke));
-        btnI.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
-
+        colorButton(getClass().getSimpleName());
         recyclerView = (RecyclerView)findViewById(R.id.recyclerViewInboxL);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -70,7 +62,8 @@ public class InboxLab extends OptionsMenu {
 //                mySwipeToRefresh.setRefreshing(false);
 //            }
 //        });
-        btnS.setOnClickListener(new View.OnClickListener() {
+
+       btnS.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();

@@ -33,7 +33,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class InboxDoctor extends OptionsMenu {
+public class InboxDoctor extends ButtonsOptions {
 
     private RecyclerView recyclerView;
     private AdapterActivityInboxDr adapter;
@@ -45,15 +45,7 @@ public class InboxDoctor extends OptionsMenu {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.inbox_doctor);
-        Button btnI = (Button)findViewById(R.id.toDoB);
-        Button btnS = (Button)findViewById(R.id.sentB);
-        Button btnD = (Button)findViewById(R.id.doneB);
-        btnI.setText("מסרים לטיפולי");
-        btnS.setText("תגובות שנשלחו");
-        btnD.setText("תגובות שטופלו");
-        btnI.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.stroke));
-        btnI.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
-
+        colorButton(getClass().getSimpleName());
         recyclerView = (RecyclerView)findViewById(R.id.recyclerViewInbox);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

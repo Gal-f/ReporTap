@@ -29,7 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class SentLab extends OptionsMenu {
+public class SentLab extends ButtonsOptions {
 
     private RecyclerView recyclerView;
     private AdapterActivitySentLab adapter;
@@ -40,10 +40,7 @@ public class SentLab extends OptionsMenu {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sent_lab);
-        Button btn = (Button)findViewById(R.id.sentB);
-        btn.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.stroke));
-        btn.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
-
+        colorButton(getClass().getSimpleName());
         recyclerView = (RecyclerView)findViewById(R.id.recyclerViewSentL);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
