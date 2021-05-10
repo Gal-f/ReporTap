@@ -33,7 +33,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class DoneDoctor extends OptionsMenu {
+public class DoneDoctor extends ButtonsOptions {
 
     private RecyclerView recyclerView;
     private AdapterActivityDoneDr adapter;
@@ -44,10 +44,7 @@ public class DoneDoctor extends OptionsMenu {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.done_doctor);
-        Button btn = (Button)findViewById(R.id.doneB);
-        btn.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.stroke));
-        btn.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
-
+        colorButton(getClass().getSimpleName());
         recyclerView = (RecyclerView)findViewById(R.id.recyclerViewDone);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -57,14 +54,7 @@ public class DoneDoctor extends OptionsMenu {
 
         modelActivityDoneDrList = new ArrayList<>();
         myStringRequest();
-        SwipeRefreshLayout mySwipeToRefresh= (SwipeRefreshLayout)findViewById(R.id.swiperefresh);
-        mySwipeToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                myStringRequest();
-                mySwipeToRefresh.setRefreshing(false);
-            }
-        });
+
         Button btnS= (Button)findViewById(R.id.sentB);
         btnS.setOnClickListener(new View.OnClickListener() {
             @Override

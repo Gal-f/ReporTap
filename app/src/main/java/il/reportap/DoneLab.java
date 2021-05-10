@@ -29,7 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class DoneLab extends OptionsMenu {
+public class DoneLab extends ButtonsOptions {
 
     private RecyclerView recyclerView;
     private AdapterActivityInboxLab adapter;
@@ -40,10 +40,7 @@ public class DoneLab extends OptionsMenu {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.done_lab);
-        Button btn = (Button)findViewById(R.id.doneB);
-        btn.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.stroke));
-        btn.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
-
+        colorButton(getClass().getSimpleName());
         recyclerView = (RecyclerView)findViewById(R.id.recyclerViewDoneL);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
