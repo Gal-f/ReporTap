@@ -12,8 +12,6 @@ import androidx.annotation.Nullable;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.loginregister.R;
@@ -54,13 +52,9 @@ public class  TwoFactorAuth extends NavigateUser {
     public void sendOtp(View v) {
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
                 URLs.URL_SENDOTP,
+                //lambda expression
                 this::onResponse,
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(getApplicationContext(), "שגיאה בשליחת קוד האימות", Toast.LENGTH_LONG).show();
-                    }
-                })
+                error -> Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show())
         {
             @Nullable
             @Override
