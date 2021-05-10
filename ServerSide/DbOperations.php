@@ -63,7 +63,7 @@ class DbOperations
 							'dept_type' => $deptType
 						);
 
-						$stmt->close();
+						$stmt1->close();
 						//adding the user data in response
 						$response['error'] = false;
 						$response['message'] = 'משתמש נרשם בהצלחה';
@@ -207,20 +207,20 @@ class DbOperations
         }
         return $response;
     }
-    
+
       function getNotActive(){
         $response = array();
         $stmt = $this->conn->prepare('SELECT `full_name`, `employee_ID`, `role`, `works_in_dept` FROM users WHERE `is_active`=0');
 		$stmt->execute();
 		$stmt->store_result();
 		$rows = $stmt->num_rows;
-		
+
 		 if ($stmt->num_rows > 0){
-		  
+
 		      while ($rows>0){
 		        $stmt->bind_result($fullName, $employeeNumber, $jobTitle, $deptID);
                 $stmt->fetch();
-                
+
                 $users[$stmt->num_rows-$rows] = array('full_name' => $fullName,
 				'employee_ID' => $employeeNumber,
 				'role' => $jobTitle,
@@ -236,7 +236,7 @@ class DbOperations
 		     $response['error'] = false;
 		     $response['message']="אין משתמשים הממתינים לאישור";
 		 }
-		 
+
 		 return $response;
     }
 
@@ -420,7 +420,7 @@ class DbOperations
         //TODO Join Messages & Test-types tables on testType field, in order to get boolean or numeric value.
         // If this works, remove field is_value_bool from table Messages and change function send_message accordingly.
         $response = array();
-        $stmt = $this->conn->prepare("SELECT M.ID, M.sent_time, M.patient_ID, P.full_name, T.ID, T.name, T.measurement_unit, M.is_value_boolean, M.test_result_value, M.text, M.component, M.is_urgent, M.sender_user, U.full_name, U.works_in_dept, D.name FROM messages as M JOIN test_types as T ON M.test_type=T.ID JOIN users as U ON M.sender_user=U.employee_ID JOIN departments as D ON U.works_in_dept=D.ID JOIN patients as P ON M.patient_ID=P.patient_ID WHERE M.ID = ?");
+        $stmt = $this->conn->prepare("SELECT M.ID, M.sent_time, M.patient_ID, P.full_name, T.ID, T.name, T.measurement_unit, M.is_value_boolean, M.test_result_value, M.text, M.component, M.is_urgent, M.sender_user, U.full_name, U.works_in_dept, D.name, M.confirm_time FROM messages as M JOIN test_types as T ON M.test_type=T.ID JOIN users as U ON M.sender_user=U.employee_ID JOIN departments as D ON U.works_in_dept=D.ID JOIN patients as P ON M.patient_ID=P.patient_ID WHERE M.ID = ?");
         //TODO Join users on message.sender_user=users.ID and add to SELECT the user name and department, to be displayed in the message screen
         //TODO perform the last TODO again for patient name
         $stmt->bind_param("s", $messageID);
@@ -428,7 +428,7 @@ class DbOperations
         $stmt->store_result();
         if ($stmt->num_rows > 0){
             if ($stmt->num_rows < 2){
-                $stmt->bind_result($messageID, $sentTime, $patientId, $patientName, $testID, $testName, $measurementUnit, $isValueBool, $testResultValue, $comments, $componentName, $isUrgent, $sender, $senderName, $senderDept, $senderDeptName);
+                $stmt->bind_result($messageID, $sentTime, $patientId, $patientName, $testID, $testName, $measurementUnit, $isValueBool, $testResultValue, $comments, $componentName, $isUrgent, $sender, $senderName, $senderDept, $senderDeptName, $confirmTime);
                 $stmt->fetch();
                 $requestedMessage = array(
                     'messageID' => $messageID,
@@ -446,7 +446,8 @@ class DbOperations
                     'sender' => $sender,
                     'senderName' => $senderName,
                     'senderDept' => $senderDept,
-                    'senderDeptName' => $senderDeptName
+                    'senderDeptName' => $senderDeptName,
+                    'confirmTime' => $confirmTime
                 );
                 $response['error'] = false;
                 $response['message'] = 'Pulled message successfully';

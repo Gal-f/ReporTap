@@ -12,6 +12,8 @@ import androidx.annotation.Nullable;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.loginregister.R;
@@ -41,7 +43,7 @@ public class  TwoFactorAuth extends NavigateUser {
         Intent intent = getIntent();
         //generates random 6 digits code
         otp = new DecimalFormat("000000").format(new Random().nextInt(999999));
-        //get the user data from Register Activity/Login activity
+        //get the user's data from Register Activity/Login activity
         user = (User) getIntent().getSerializableExtra("user");
         dialog = (LinearLayout) findViewById(R.id.dialogPopUp);
         helloUser = findViewById(R.id.helloUser);
@@ -52,26 +54,14 @@ public class  TwoFactorAuth extends NavigateUser {
     public void sendOtp(View v) {
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
                 URLs.URL_SENDOTP,
-                //lambda expression
-                response -> {
-                    String errorMessage = "";
-                    try {
-                        JSONObject jsonObject = new JSONObject(response);
-                        errorMessage = jsonObject.getString("message");
-                        if (jsonObject.getBoolean("error")) { // If there was any error along the way
-                            Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
-                        } else {
-                            Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                this::onResponse,
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getApplicationContext(), "שגיאה בשליחת קוד האימות", Toast.LENGTH_LONG).show();
                     }
-                    finally{
-                        dialog.setVisibility(View.VISIBLE);
-                    }
-                },
-                //lambda expression
-                error -> Toast.makeText(TwoFactorAuth.this, error.getMessage(), Toast.LENGTH_LONG).show()) {
+                })
+        {
             @Nullable
             @Override
             protected HashMap<String, String> getParams() {
@@ -138,4 +128,20 @@ public class  TwoFactorAuth extends NavigateUser {
                 });
             }
         }
+
+    private void onResponse(String response) {
+        String errorMessage = "";
+        try {
+            JSONObject jsonObject = new JSONObject(response);
+            errorMessage = jsonObject.getString("message");
+            if (jsonObject.getBoolean("error")) { // If there was any error along the way
+                Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
+                dialog.setVisibility(View.VISIBLE);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
 }
