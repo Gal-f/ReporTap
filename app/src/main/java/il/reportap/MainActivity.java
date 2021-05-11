@@ -3,6 +3,7 @@ package il.reportap;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -143,16 +144,17 @@ public class MainActivity extends NavigateUser {
 
                          //the user has finished the 2fa process and his account got the manager's approval
                         } else {
+                            //subscribe the user to his department's channel in order to get relevant notifications
                             FirebaseMessaging.getInstance().subscribeToTopic(String.valueOf(user.getDepartment()))
                                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
+                                            //msg is for our needs only, we don't show it to the user.
                                             String msg ="Done";
                                             if (!task.isSuccessful()) {
                                                 msg = "Failed";
                                             }
-                                            //Log.d(TAG, msg);
-                                            Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
+                                            Log.d("user's subscription", msg);
                                         }
                                     });
                             //storing the user in shared preferences and log him in
