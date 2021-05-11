@@ -12,6 +12,8 @@ import androidx.annotation.Nullable;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.loginregister.R;
@@ -41,6 +43,7 @@ public class  TwoFactorAuth extends NavigateUser {
         Intent intent = getIntent();
         //generates random 6 digits code
         otp = new DecimalFormat("000000").format(new Random().nextInt(999999));
+        //get the user data from Register Activity/Login activity
         //get the user's data from Register Activity/Login activity
         user = (User) getIntent().getSerializableExtra("user");
         dialog = (LinearLayout) findViewById(R.id.dialogPopUp);
@@ -50,12 +53,31 @@ public class  TwoFactorAuth extends NavigateUser {
     }
 
     public void sendOtp(View v) {
-        StringRequest stringRequest = new StringRequest(Request.Method.POST,
-                URLs.URL_SENDOTP,
-                //lambda expression
-                this::onResponse,
-                error -> Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show())
-        {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URLs.URL_SENDOTP, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                String errorMessage = "";
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    errorMessage = jsonObject.getString("message");
+                    if (jsonObject.getBoolean("error")){ // If there was any error along the way
+                        Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
+                    } else {
+                        dialog.setVisibility(View.VISIBLE);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            },
+                new Response.ErrorListener() {
+                @Override
+                //any server error that is not handled in the php code
+                public void onErrorResponse(VolleyError error) {
+                    Toast.makeText(getApplicationContext(), "שגיאה בשליחת קוד האימות", Toast.LENGTH_LONG).show();
+                }
+            }) {
+
             @Nullable
             @Override
             protected HashMap<String, String> getParams() {
@@ -74,68 +96,51 @@ public class  TwoFactorAuth extends NavigateUser {
                 }
                 return params;
             }
-        };  RequestQueue requestQueue = Volley.newRequestQueue(this);
-            requestQueue.add(stringRequest);
+        };
+                RequestQueue requestQueue = Volley.newRequestQueue(this);
+                requestQueue.add(stringRequest);
     }
-
-
-        public void validateOTP(View view) {
-            String userOTP = editTextOTP.getText().toString();
-            if(!userOTP.equals(otp)){
-                Toast.makeText(this,
-                        "קוד שגוי, נסה שוב", Toast.LENGTH_LONG)
-                        .show();
-            }
-            else{
-                Executors.newSingleThreadExecutor().submit(() -> {
-                    RequestHandler secondRequestHandler = new RequestHandler();
-                    HashMap<String, Object> params = new HashMap<>();
-                    params.put("employee_ID", user.getEmployeeNumber());
-                    try{
-                        //converting response to json object
-                        JSONObject obj = new JSONObject(secondRequestHandler.sendPostRequest(URLs.URL_VREIFIEDUSER, params));
-                        String responseMessage = obj.getString("message");
-                        //if the user is still waiting for the manager confirmation
-                         if (!obj.getBoolean("isActive")) {
-                             SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
-                             runOnUiThread(new Runnable()
-                             {
-                                 public void run()
-                                 {
-                                     Toast.makeText(getApplicationContext(), responseMessage, Toast.LENGTH_LONG).show();
-                                     finish();
-                                     startActivity(new Intent(TwoFactorAuth.this, ProfileActivity.class));
-                                 }
-                             });
-                         //the user has been approved by the system manager
-                         } else {
-                             user.setActive(true);
-                             //storing the user in shared preferences
-                            SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
-                            finish();
-                            //navigate the user to the relevant page
-                             goToClass(user.getDeptType());
-                        }
-                    }catch (Exception e) {
-                    e.printStackTrace();
+                public void validateOTP(View view) {
+                    String userOTP = editTextOTP.getText().toString();
+                    if(!userOTP.equals(otp)){
+                        Toast.makeText(this,
+                                "קוד שגוי, נסה שוב", Toast.LENGTH_LONG)
+                                .show();
                     }
-                });
-            }
-        }
-
-    private void onResponse(String response) {
-        String errorMessage = "";
-        try {
-            JSONObject jsonObject = new JSONObject(response);
-            errorMessage = jsonObject.getString("message");
-            if (jsonObject.getBoolean("error")) { // If there was any error along the way
-                Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
-            } else {
-                Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
-                dialog.setVisibility(View.VISIBLE);
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
+                    else{
+                        Executors.newSingleThreadExecutor().submit(() -> {
+                            RequestHandler secondRequestHandler = new RequestHandler();
+                            HashMap<String, Object> params = new HashMap<>();
+                            params.put("employee_ID", user.getEmployeeNumber());
+                            try{
+                                //converting response to json object
+                                JSONObject obj = new JSONObject(secondRequestHandler.sendPostRequest(URLs.URL_VREIFIEDUSER, params));
+                                String responseMessage = obj.getString("message");
+                                //if the user is still waiting for the manager confirmation
+                                if (!obj.getBoolean("isActive")) {
+                                    SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
+                                    runOnUiThread(new Runnable()
+                                    {
+                                        public void run()
+                                        {
+                                            Toast.makeText(getApplicationContext(), responseMessage, Toast.LENGTH_LONG).show();
+                                            finish();
+                                            startActivity(new Intent(TwoFactorAuth.this, ProfileActivity.class));
+                                        }
+                                    });
+                                    //the user has been approved by the system manager
+                                } else {
+                                    user.setActive(true);
+                                    //storing the user in shared preferences
+                                    SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
+                                    finish();
+                                    //navigate the user to the relevant page
+                                    goToClass(user.getDeptType());
+                                }
+                            }catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        });
+                    }
+                }
 }
