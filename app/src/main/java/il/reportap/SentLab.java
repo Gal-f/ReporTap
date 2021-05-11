@@ -5,10 +5,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -39,9 +41,15 @@ public class SentLab extends ButtonsOptions {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.sent_lab);
-        colorButton(getClass().getSimpleName());
-        recyclerView = (RecyclerView)findViewById(R.id.recyclerViewSentL);
+        setContentView(R.layout.activity_inbox);
+        TextView desc = (TextView)findViewById(R.id.layoutDescription);
+        ImageView urgIc= (ImageView)findViewById(R.id.urgentIcon);
+        CheckBox chb = (CheckBox)findViewById(R.id.checkBox) ;
+        desc.setText(R.string.sentDescL);
+        urgIc.setVisibility(View.GONE);
+        chb.setVisibility(View.GONE);
+        colorButton(SharedPrefManager.getInstance(this).getUser().getDeptType(), getClass().getSimpleName());
+        recyclerView = (RecyclerView)findViewById(R.id.recyclerViewInbox);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         DividerItemDecoration divider = new DividerItemDecoration(getApplicationContext(), DividerItemDecoration.VERTICAL);
@@ -65,6 +73,7 @@ public class SentLab extends ButtonsOptions {
                             ModelActivitySentLab modelActivitySentLab = new ModelActivitySentLab(jObg.getInt("id"),
                                     jObg.getString("sent_time"),
                                     jObg.getString("patient_id"),
+                                    jObg.getString("full_name_p"),
                                     jObg.getString("name"),
                                     jObg.getInt("is_urgent"),
                                     jObg.getString("confirm_time"),

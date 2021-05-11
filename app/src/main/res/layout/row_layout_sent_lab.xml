@@ -5,7 +5,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/card_view"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="3dp"
+    android:layout_marginTop="3dp">
 
 
     <LinearLayout
@@ -44,10 +46,10 @@
                 android:id="@+id/mainLinearLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
                 android:background="@color/background"
                 android:orientation="vertical"
-                android:padding="5dp">
+                >
                 <!--
         items for a single row of RecyclerView
         -->
@@ -56,7 +58,8 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="5dp">
+                    android:paddingRight="2dp"
+                    android:paddingBottom="1dp">
 
                     <TextView
                         android:id="@+id/patientIdSL"
@@ -66,7 +69,6 @@
                         android:textColor="#000"
                         android:textSize="20sp"
                         card_view:layout_constraintBottom_toBottomOf="parent"
-                        card_view:layout_constraintEnd_toStartOf="@+id/sentTime"
                         card_view:layout_constraintStart_toStartOf="parent"
                         card_view:layout_constraintTop_toTopOf="parent" />
 
@@ -86,7 +88,17 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="5dp">
+                    android:paddingRight="2dp"
+                    android:paddingBottom="1dp">
+
+                    <TextView
+                        android:id="@+id/patientName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="patientName"
+                        card_view:layout_constraintBottom_toBottomOf="parent"
+                        card_view:layout_constraintStart_toStartOf="parent"
+                        card_view:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
                         android:id="@+id/testNameSL"
@@ -103,7 +115,9 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:paddingRight="2dp"
+                    android:paddingBottom="1dp">
 
                     <TextView
                         android:id="@+id/componentSL"
@@ -138,7 +152,9 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:paddingRight="2dp"
+                    >
 
                     <TextView
                         android:id="@+id/MessageTextSL"
@@ -157,16 +173,12 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-
-            android:orientation="horizontal">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/background">
+                android:background="@color/background"
+                android:paddingRight="7dp">
 
                 <TextView
                     android:id="@+id/to"
@@ -213,7 +225,7 @@
                     card_view:layout_constraintStart_toStartOf="parent"
                     card_view:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
-        </LinearLayout>
+
     </LinearLayout>
 
 

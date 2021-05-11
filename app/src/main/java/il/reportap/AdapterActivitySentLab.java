@@ -39,6 +39,7 @@ public class AdapterActivitySentLab extends RecyclerView.Adapter<AdapterActivity
 
             holder.sentTime.setText(modelActivitySentLab.getSentTime());
             holder.patientId.setText(modelActivitySentLab.getPatientId());
+            holder.patientName.setText(modelActivitySentLab.getFullNameP());
             holder.testName.setText(modelActivitySentLab.getTestName());
             holder.deptName.setText(modelActivitySentLab.getDeptName());
             holder.senderUser.setText(modelActivitySentLab.getFullName());
@@ -74,7 +75,7 @@ public class AdapterActivitySentLab extends RecyclerView.Adapter<AdapterActivity
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-        public TextView patientId, sentTime,deptName,testName, text, component, resultValue,resultType,senderUser;
+        public TextView patientId, sentTime,deptName,testName, text, component, resultValue,resultType,senderUser,patientName;
         public ImageView isUrgent, confirmTime;
 
         public ViewHolder(View itemView) {
@@ -91,6 +92,7 @@ public class AdapterActivitySentLab extends RecyclerView.Adapter<AdapterActivity
             resultValue=itemView.findViewById(R.id.resultValueSL);
             resultType=itemView.findViewById(R.id.valueTypeSL);
             senderUser=itemView.findViewById(R.id.senderUserSL);
+            patientName=itemView.findViewById(R.id.patientName);
 
         }
     }
