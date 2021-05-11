@@ -63,7 +63,7 @@ class DbOperations
 							'dept_type' => $deptType
 						);
 
-						$stmt->close();
+						$stmt1->close();
 						//adding the user data in response
 						$response['error'] = false;
 						$response['message'] = 'משתמש נרשם בהצלחה';
@@ -207,20 +207,20 @@ class DbOperations
         }
         return $response;
     }
-    
+
       function getNotActive(){
         $response = array();
         $stmt = $this->conn->prepare('SELECT `full_name`, `employee_ID`, `role`, `works_in_dept` FROM users WHERE `is_active`=0');
 		$stmt->execute();
 		$stmt->store_result();
 		$rows = $stmt->num_rows;
-		
+
 		 if ($stmt->num_rows > 0){
-		  
+
 		      while ($rows>0){
 		        $stmt->bind_result($fullName, $employeeNumber, $jobTitle, $deptID);
                 $stmt->fetch();
-                
+
                 $users[$stmt->num_rows-$rows] = array('full_name' => $fullName,
 				'employee_ID' => $employeeNumber,
 				'role' => $jobTitle,
@@ -236,7 +236,7 @@ class DbOperations
 		     $response['error'] = false;
 		     $response['message']="אין משתמשים הממתינים לאישור";
 		 }
-		 
+
 		 return $response;
     }
 

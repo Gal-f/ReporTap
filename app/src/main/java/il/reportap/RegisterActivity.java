@@ -63,14 +63,11 @@ public class RegisterActivity extends AppCompatActivity {
         spinnerJobTitle.setAdapter(adapter2);
 
         findViewById(R.id.buttonRegister).setOnClickListener(view -> {
-            //if user pressed on button register
-            //here we will register the user to server
             registerUser();
         });
 
         findViewById(R.id.textViewLogin).setOnClickListener(view -> {
-            //if user pressed on login
-            //we will open the login screen
+            //if the user pressed on login button we will open the login screen
             finish();
             startActivity(new Intent(RegisterActivity.this, MainActivity.class));
         });

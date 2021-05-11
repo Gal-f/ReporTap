@@ -41,7 +41,7 @@ public class  TwoFactorAuth extends NavigateUser {
         Intent intent = getIntent();
         //generates random 6 digits code
         otp = new DecimalFormat("000000").format(new Random().nextInt(999999));
-        //get the user data from Register Activity/Login activity
+        //get the user's data from Register Activity/Login activity
         user = (User) getIntent().getSerializableExtra("user");
         dialog = (LinearLayout) findViewById(R.id.dialogPopUp);
         helloUser = findViewById(R.id.helloUser);
@@ -53,25 +53,9 @@ public class  TwoFactorAuth extends NavigateUser {
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
                 URLs.URL_SENDOTP,
                 //lambda expression
-                response -> {
-                    String errorMessage = "";
-                    try {
-                        JSONObject jsonObject = new JSONObject(response);
-                        errorMessage = jsonObject.getString("message");
-                        if (jsonObject.getBoolean("error")) { // If there was any error along the way
-                            Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
-                        } else {
-                            Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    finally{
-                        dialog.setVisibility(View.VISIBLE);
-                    }
-                },
-                //lambda expression
-                error -> Toast.makeText(TwoFactorAuth.this, error.getMessage(), Toast.LENGTH_LONG).show()) {
+                this::onResponse,
+                error -> Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show())
+        {
             @Nullable
             @Override
             protected HashMap<String, String> getParams() {
@@ -138,4 +122,20 @@ public class  TwoFactorAuth extends NavigateUser {
                 });
             }
         }
+
+    private void onResponse(String response) {
+        String errorMessage = "";
+        try {
+            JSONObject jsonObject = new JSONObject(response);
+            errorMessage = jsonObject.getString("message");
+            if (jsonObject.getBoolean("error")) { // If there was any error along the way
+                Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
+                dialog.setVisibility(View.VISIBLE);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
 }
