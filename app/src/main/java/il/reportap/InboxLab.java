@@ -2,20 +2,17 @@ package il.reportap;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -43,9 +40,15 @@ public class InboxLab extends ButtonsOptions {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.inbox_lab);
-        colorButton(getClass().getSimpleName());
-        recyclerView = (RecyclerView)findViewById(R.id.recyclerViewInboxL);
+        setContentView(R.layout.activity_inbox);
+        colorButton(SharedPrefManager.getInstance(this).getUser().getDeptType(), getClass().getSimpleName());
+        TextView desc = (TextView)findViewById(R.id.layoutDescription);
+        ImageView urgIc= (ImageView)findViewById(R.id.urgentIcon);
+        CheckBox chb = (CheckBox)findViewById(R.id.checkBox) ;
+        desc.setText(R.string.inboxDescL);
+        urgIc.setVisibility(View.GONE);
+        chb.setVisibility(View.GONE);
+        recyclerView = (RecyclerView)findViewById(R.id.recyclerViewInbox);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         DividerItemDecoration divider = new DividerItemDecoration(getApplicationContext(), DividerItemDecoration.VERTICAL);

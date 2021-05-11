@@ -2,9 +2,9 @@ package il.reportap;
 
 public class ModelActivitySentLab {
     private Integer id, isUrgent, isValueBool, testResult;
-    private String patientId,sentTime,deptName,testName, confirmTime, text, measurementUnit, component, fullName;
+    private String patientId,sentTime,deptName,testName, confirmTime, text, measurementUnit, component, fullName,fullNameP;
 
-    public ModelActivitySentLab(Integer id, String sent_time, String patient_id, String test_name, Integer isUrgent , String confirm_time, String dept_name,
+    public ModelActivitySentLab(Integer id, String sent_time, String patient_id,String fullNameP, String test_name, Integer isUrgent , String confirm_time, String dept_name,
                                 String text, String measurementUnit, String component, Integer isValueBool, Integer testResult,
                                 String fullName) {
         this.id = id;
@@ -20,6 +20,7 @@ public class ModelActivitySentLab {
         this.isValueBool=isValueBool;
         this.testResult=testResult;
         this.fullName=fullName;
+        this.fullNameP=fullNameP;
 
     }
 
@@ -74,4 +75,6 @@ public class ModelActivitySentLab {
     public String getFullName() {
         return fullName;
     }
+
+    public String getFullNameP(){ return fullNameP; }
 }

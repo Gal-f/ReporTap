@@ -5,12 +5,12 @@
     android:id="@+id/linearLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#E1DCDC"
     android:baselineAligned="false"
-    tools:context="il.reportap.InboxDoctor">
-
-
+    tools:context="il.reportap.InboxDoctor"
+    android:background="#E1DCDC">
     <include layout="@layout/buttons_layout"/>
+
+
 
 
         <LinearLayout
@@ -23,28 +23,36 @@
             app:layout_constraintTop_toTopOf="parent"
             android:orientation="vertical">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/linearLayout4"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:paddingLeft="80dp"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:orientation="horizontal">
 
+                <ImageView
+                    android:id="@+id/urgentIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    app:srcCompat="@drawable/ic_urgent" />
+
+                <CheckBox
+                    android:id="@+id/checkBox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:paddingRight="2dp"
+                    android:text="@string/inboxEmerg" />
 
                 <TextView
-                    android:id="@+id/textView"
+                    android:id="@+id/layoutDescription"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingRight="10dp"
-                    android:text="@string/sentDesc"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:layout_height="match_parent"
+                    android:text="@string/inboxDesc" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
 
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerViewSentDr"
+                android:id="@+id/recyclerViewInbox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior" />

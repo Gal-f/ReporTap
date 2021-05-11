@@ -8,30 +8,31 @@ import com.example.loginregister.R;
 
 public class ButtonsOptions extends OptionsMenu {
 
-    String dept;
+    String deptType, deptName;
     Button btnI, btnS, btnD;
 
-    public void colorButton(String deptname) {
+    public void colorButton(String deptType,String deptName) {
         btnI = (Button) findViewById(R.id.toDoB);
         btnS = (Button) findViewById(R.id.sentB);
         btnD = (Button) findViewById(R.id.doneB);
         Button temp;
-        this.dept = deptname;
-        if (dept.equals("InboxLab") || dept.equals("SentLab") || dept.equals("DoneLab")) {
+        this.deptType = deptType;
+        this.deptName=deptName;
+        if (deptType.equals("lab")) {
             btnI.setText("תגובות לטיפולי");
             btnS.setText("מסרים שנשלחו");
             btnD.setText("תגובות שטופלו");
         }
-        else {
+        else if (deptType.equals("medical_dept")) {
             btnI.setText("מסרים לטיפולי");
             btnS.setText("תגובות שנשלחו");
             btnD.setText("מסרים שטופלו");
         }
 
-        if (dept.equals("InboxLab") || dept.equals("InboxDoctor")) {
+        if (deptName.equals("InboxLab") || deptName.equals("InboxDoctor")) {
                 temp = btnI;
             }
-        else if (dept.equals("SentLab") || dept.equals("SentDoctor")) {
+        else if (deptName.equals("SentLab") || deptName.equals("SentDoctor")) {
                 temp = btnS;
             } else {
                 temp = btnD;
