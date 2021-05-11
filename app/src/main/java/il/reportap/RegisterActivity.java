@@ -110,6 +110,13 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         }
 
+        //at least 6 digits, one english letter and one number
+        if(!password.matches("^(?=.*?[a-z])(?=.*?[0-9]).{6,}$")){
+            editTextPassword.setError("סיסמה צריכה להכיל לפחות 6 תווים, אות באנגלית וספרה");
+            editTextPassword.requestFocus();
+            return;
+        }
+
         if (TextUtils.isEmpty(fullName)) {
             editTextFullName.setError("יש להזין שם מלא");
             editTextFullName.requestFocus();
