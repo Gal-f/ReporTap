@@ -339,7 +339,7 @@ public class NewMessage extends ButtonsOptions {
 
         ArrayList<String> patients = new ArrayList<>();
         for (String patient : this.patientsMap.keySet())
-            departments.add(patient);
+            patients.add(patient);
         ArrayAdapter<String> adapter4 = new ArrayAdapter<>(this, android.R.layout.select_dialog_item, patients);
         patientId.setAdapter(adapter4);
         patientId.setThreshold(1);
