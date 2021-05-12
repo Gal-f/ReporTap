@@ -11,14 +11,13 @@
 
     <ScrollView
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:paddingTop="55dp">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:paddingTop="55dp"
-
         tools:ignore="MissingConstraints">
 
         <LinearLayout
@@ -241,13 +240,14 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.2"
                     android:text="רכיב:" />
-                <AutoCompleteTextView
-                    android:id="@+id/autoCompleteTextViewComponentName"
+
+                <EditText
+                    android:id="@+id/editTextComponentName"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.6"
-                    android:hint="התחילו להקליד רכיב"
-                    android:textSize="16dp" />
+                    android:hint="הקלידו רכיב (לא חובה)"
+                    android:textSize="16sp"/>
             </LinearLayout>
 
             <LinearLayout

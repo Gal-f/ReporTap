@@ -36,7 +36,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ViewMessage extends OptionsMenu {
+public class ViewMessage extends ButtonsOptions {
 
     private Integer messageID, senderID, senderDept;
     private TextView sentTime, senderName, patientId, patientName, testName, componentName, measuredAmountValue, measurementUnit, boolValue, comments;
@@ -277,7 +277,7 @@ public class ViewMessage extends OptionsMenu {
         });
     }
 
-    public void markAsRead(Integer messageID, String userID){
+    public void markAsRead(Integer messageID, String userID){ // This method doesn't return a value (impossible to return inside an onClick() method) but changes the global variable successMarkRead according to success.
         DialogInterface.OnClickListener confirmedMarkAsReadListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -291,8 +291,8 @@ public class ViewMessage extends OptionsMenu {
                             JSONObject jsonObject = new JSONObject(response);
                             successMarkRead = !jsonObject.getBoolean("error");
                             if (!successMarkRead) {
-                                Toast.makeText(getApplicationContext(), jsonObject.getString("message"), Toast.LENGTH_LONG).show();
-                                if (jsonObject.getBoolean("alreadyMarked")) {    // If the message had already been marked by another user, the function will also return TRUE and disable the button to mark again
+                                Toast.makeText(getApplicationContext(), jsonObject.getString("message"), Toast.LENGTH_LONG).show(); // Show a message whether the operation succeeded or the error message
+                                if (jsonObject.getBoolean("alreadyMarked")) {    // If the message had already been marked by another user, the function will also mark success TRUE and disable the button to mark again
                                     successMarkRead = true;
                                     wasRead = true;
                                     wasReadButton.setImageResource(R.drawable.eyecheck2_bmp);

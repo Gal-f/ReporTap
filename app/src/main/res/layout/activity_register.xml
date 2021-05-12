@@ -9,9 +9,6 @@
     android:gravity="center"
     tools:context="il.reportap.RegisterActivity">
 
-<ScrollView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -19,13 +16,15 @@
         android:orientation="vertical"
         android:padding="10dp"
         android:gravity="center_vertical"
-        android:layout_gravity="center_vertical">
+        android:layout_gravity="center_vertical"
+        android:weightSum="1">
 
 
         <EditText
             android:id="@+id/editTextEmployeeNumber"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="0.1"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:fontFamily="sans-serif"
@@ -35,7 +34,8 @@
         <EditText
             android:id="@+id/editTextPassword"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="0.1"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:fontFamily="sans-serif"
@@ -48,7 +48,8 @@
         <EditText
             android:id="@+id/editTextFullName"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="0.1"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:fontFamily="sans-serif"
@@ -58,7 +59,8 @@
         <EditText
             android:id="@+id/editTextEmail"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="0.1"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:fontFamily="sans-serif"
@@ -68,7 +70,8 @@
         <EditText
             android:id="@+id/editTextPhoneNumber"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="0.1"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:fontFamily="sans-serif"
@@ -80,7 +83,8 @@
         <Spinner
             android:id="@+id/spinnerDepartment"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="0.1"
             android:background="@android:drawable/btn_dropdown"
             android:spinnerMode="dropdown"
             android:textAlignment="textEnd"
@@ -89,7 +93,8 @@
         <Spinner
             android:id="@+id/spinnerJobTitle"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="0.1"
             android:background="@android:drawable/btn_dropdown"
             android:spinnerMode="dropdown"
             android:textAlignment="textEnd"
@@ -98,7 +103,8 @@
         <Button
             android:id="@+id/buttonRegister"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="0.1"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:text="הרשם" />
@@ -106,7 +112,8 @@
         <TextView
             android:id="@+id/textViewLogin"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="0.1"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:gravity="center_horizontal"
@@ -115,7 +122,7 @@
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
 
     </LinearLayout>
-</ScrollView>
+
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"

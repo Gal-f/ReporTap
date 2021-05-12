@@ -35,10 +35,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class NewMessage extends OptionsMenu {
+public class NewMessage extends ButtonsOptions {
 
-    private AutoCompleteTextView recipient, testName, componentName, patientId;
-    private EditText /*patientId,*/ patientName, measuredAmount, comments;
+    private AutoCompleteTextView recipient, testName, patientId;
+    private EditText patientName, componentName, measuredAmount, comments;
     private CheckBox isUrgent;
     private RadioGroup boolResultSelection;
     private ProgressDialog progressDialog;
@@ -56,10 +56,9 @@ public class NewMessage extends OptionsMenu {
 
         this.recipient = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextViewTo);
         this.patientId = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextViewPatientIdNumber);
-        //this.patientId = (EditText) findViewById(R.id.editTextPatientIdNumber);
         this.patientName = (EditText) findViewById(R.id.editTextPatientName);
         this.testName = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextViewTestName);
-        this.componentName = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextViewComponentName);
+        this.componentName = (EditText) findViewById(R.id.editTextComponentName);
         this.measuredAmount = (EditText) findViewById(R.id.editTextMeasuredAmount);
         this.boolResultSelection = (RadioGroup) findViewById(R.id.radioGroupBoolResult);
         this.isUrgent = (CheckBox) findViewById(R.id.checkBoxUrgent);
@@ -68,19 +67,13 @@ public class NewMessage extends OptionsMenu {
 
         populateHashmaps(); // This populates the departments and test types from the DB and then adds them as options to the form.
 
-        patientId.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {  // When selecting patient ID, show the patient's name accordingly
+        patientId.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String selectedID = parent.getItemAtPosition(position).toString();
                 patientName.setText(patientsMap.get(selectedID));
             }
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                patientId.setError("נא לבחור מספר זהות של מטופל קיים");
-                patientId.setText(""); // TODO Is this necessary?
-            }
-        }
-        );
+        });
 
         findViewById(R.id.buttonSendMessage).setOnClickListener(new View.OnClickListener() {    // User clicked send
             @Override
@@ -239,7 +232,7 @@ public class NewMessage extends OptionsMenu {
                 finally {
                     finish();
                     Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
-                    startActivity(new Intent(NewMessage.this, InboxDoctor.class));  // Redirect after the message is sent
+                    startActivity(new Intent(NewMessage.this, InboxLab.class));  // Redirect after the message is sent
                 }
             }
         },
@@ -344,11 +337,12 @@ public class NewMessage extends OptionsMenu {
         testName.setAdapter(adapter2);
         testName.setThreshold(1);
 
-        String[] components = new String[]{"חיידק","בקטריה", "שניבוריג"};   //TODO Make this list dynamic with DB table?
-        ArrayAdapter<String> adapter3 = new ArrayAdapter<>(this, android.R.layout.select_dialog_item, components);
-        componentName.setAdapter(adapter3);
-        componentName.setThreshold(1);
-
+        ArrayList<String> patients = new ArrayList<>();
+        for (String patient : this.patientsMap.keySet())
+            departments.add(patient);
+        ArrayAdapter<String> adapter4 = new ArrayAdapter<>(this, android.R.layout.select_dialog_item, patients);
+        patientId.setAdapter(adapter4);
+        patientId.setThreshold(1);
         //TODO inflate autocompletion list for patientID
     }
 

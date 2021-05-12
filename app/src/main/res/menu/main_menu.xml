@@ -42,5 +42,18 @@
         app:showAsAction="always"
         />
 
+    <item
+        android:title="InboxDr"
+        android:id="@+id/inbox_dr"
+        android:contentDescription="inbox dr"
+        app:showAsAction="always"
+        />
+    <item
+        android:title="InboxLab"
+        android:id="@+id/inbox_lab"
+        android:contentDescription="inbox lab"
+        app:showAsAction="always"
+        />
+
 </menu>
 
