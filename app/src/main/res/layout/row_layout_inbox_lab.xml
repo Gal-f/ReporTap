@@ -155,7 +155,7 @@
                 android:layout_height="match_parent"
                 card_view:layout_constraintLeft_toLeftOf="parent"
                 card_view:layout_constraintTop_toTopOf="parent"
-                android:visibility="visible">
+                android:visibility="gone">
             <TextView
                 android:id="@+id/textViewMarkReadLine1"
                 android:layout_width="wrap_content"
