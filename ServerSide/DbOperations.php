@@ -63,7 +63,7 @@ class DbOperations
 							'dept_type' => $deptType
 						);
 
-						$stmt1->close();
+						$stmt->close();
 						//adding the user data in response
 						$response['error'] = false;
 						$response['message'] = 'משתמש נרשם בהצלחה';
@@ -207,20 +207,20 @@ class DbOperations
         }
         return $response;
     }
-
+    
       function getNotActive(){
         $response = array();
         $stmt = $this->conn->prepare('SELECT `full_name`, `employee_ID`, `role`, `works_in_dept` FROM users WHERE `is_active`=0');
 		$stmt->execute();
 		$stmt->store_result();
 		$rows = $stmt->num_rows;
-
+		
 		 if ($stmt->num_rows > 0){
-
+		  
 		      while ($rows>0){
 		        $stmt->bind_result($fullName, $employeeNumber, $jobTitle, $deptID);
                 $stmt->fetch();
-
+                
                 $users[$stmt->num_rows-$rows] = array('full_name' => $fullName,
 				'employee_ID' => $employeeNumber,
 				'role' => $jobTitle,
@@ -236,7 +236,7 @@ class DbOperations
 		     $response['error'] = false;
 		     $response['message']="אין משתמשים הממתינים לאישור";
 		 }
-
+		 
 		 return $response;
     }
 
@@ -541,13 +541,19 @@ class DbOperations
         return $response;
     }
 
-    function markAsRead($messageID, $userID){
+    function markAsRead($messageID, $userID, $isResponse){
         $response = array();
         // Query to add a confirmation user and time
+        if (!$isResponse)
         $stmtMark = $this->conn->prepare("UPDATE messages SET confirm_time = CURRENT_TIMESTAMP, confirm_user = ? WHERE messages.ID = ?;");
+        else 
+        $stmtMark = $this->conn->prepare("UPDATE responses SET confirm_time = CURRENT_TIMESTAMP, confirm_user = ? WHERE responses.ID = ?;");
         $stmtMark->bind_param("si", $userID, $messageID);
         // Query to check whether the message had already been marked by another user
+        if (!$isResponse)
         $stmtCheck = $this->conn->prepare("SELECT confirm_user FROM messages WHERE confirm_user IS NULL AND ID = ?");
+        else
+        $stmtCheck = $this->conn->prepare("SELECT confirm_user FROM responses WHERE confirm_user IS NULL AND ID = ?");
         $stmtCheck->bind_param("i",$messageID);
         $stmtCheck->execute();
         $stmtCheck->store_result();

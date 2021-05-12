@@ -136,9 +136,9 @@ if (isset($_GET['apicall'])) {
         break;
 
         case 'markAsRead':
-            $response = isTheseParametersAvailable(array('messageID', 'userID'));
+            $response = isTheseParametersAvailable(array('messageID', 'userID', 'isResponse'));
             if (!$response['error']){
-               $response = $oper->markAsRead($_POST['messageID'], $_POST['userID']);
+               $response = $oper->markAsRead($_POST['messageID'], $_POST['userID'], $_POST['isResponse']);
             }
         break;
 

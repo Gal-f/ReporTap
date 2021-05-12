@@ -111,7 +111,8 @@ public class DoneLab extends ButtonsOptions {
                                     jObg.getInt("is_value_bool"),
                                     Float.valueOf((float) jObg.getDouble("result_value")),
                                     jObg.getString("full_name"),
-                                    jObg.getString("dept_name"));
+                                    jObg.getString("dept_name"),
+                                    true);
                             modelActivityInboxLabList.add(modelActivityInboxLab);
                         }
 

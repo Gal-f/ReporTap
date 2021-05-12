@@ -321,6 +321,7 @@ public class ViewMessage extends ButtonsOptions {
                         Map<String, String> params = new HashMap<>();
                         params.put("messageID",messageID.toString());
                         params.put("userID",userID);
+                        params.put("isResponse", "false");
                         return params;
                     }
                 };

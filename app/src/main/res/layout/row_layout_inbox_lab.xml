@@ -5,7 +5,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/card_view"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:inputType="textNoSuggestions"
+    android:animateLayoutChanges="true">
 
 
     <LinearLayout
@@ -63,6 +65,28 @@
                 card_view:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/eyeCheckedIL"
+            android:layout_width="62dp"
+            android:layout_height="wrap_content"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"
+            android:tooltipText="לחצו כדי לסמן כנקרא"
+            android:layout_marginHorizontal="5dp"
+            android:hapticFeedbackEnabled="true"
+            android:background="?android:selectableItemBackground"
+            android:padding="5dp"
+            card_view:srcCompat="@drawable/eye"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -118,11 +142,53 @@
                 card_view:layout_constraintTop_toTopOf="parent"
                 tools:ignore="MissingConstraints" />
         </androidx.constraintlayout.widget.ConstraintLayout>
-
+        </LinearLayout>
+    </LinearLayout>
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="5dp">
+            <!-- Confirmation box -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/confirmationBox"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                card_view:layout_constraintLeft_toLeftOf="parent"
+                card_view:layout_constraintTop_toTopOf="parent"
+                android:visibility="gone">
+            <TextView
+                android:id="@+id/textViewMarkReadLine1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                card_view:layout_constraintTop_toTopOf="parent"
+                card_view:layout_constraintLeft_toLeftOf="parent"
+                android:text="האם לסמן שהדיווח נקרא?"/>
+            <TextView
+                android:id="@+id/textViewMarkReadLine2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                card_view:layout_constraintTop_toBottomOf="@id/textViewMarkReadLine1"
+                card_view:layout_constraintLeft_toLeftOf="parent"
+                android:text="לא ניתן לבטל טיפול בדיווח"
+                android:textStyle="bold"/>
+            <Button
+                android:id="@+id/buttonConfirmMarkRead"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="אישור"
+                card_view:layout_constraintTop_toBottomOf="@id/textViewMarkReadLine2"
+                card_view:layout_constraintLeft_toLeftOf="parent"/>
+            <Button
+                android:id="@+id/buttonCancelMarkRead"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ביטול"
+                card_view:layout_constraintTop_toBottomOf="@id/textViewMarkReadLine2"
+                card_view:layout_constraintLeft_toRightOf="@id/buttonConfirmMarkRead"
+                android:layout_marginLeft="5dp"
+                android:backgroundTint="@color/disabled_background"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            <!-- End Confirmation box -->
 
             <TextView
                 android:id="@+id/senderdept"
