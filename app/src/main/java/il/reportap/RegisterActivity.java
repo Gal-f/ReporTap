@@ -3,6 +3,7 @@ package il.reportap;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Pair;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -20,24 +21,23 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.loginregister.R;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 
 public class RegisterActivity extends AppCompatActivity {
 
-    EditText editTextPassword, editTextEmployeeNumber,
+    private EditText editTextPassword, editTextEmployeeNumber,
             editTextFullName, editTextPhoneNumber, editTextEmail;
-    Spinner spinnerDepartment, spinnerJobTitle;
-    ProgressBar progressBar;
+    private Spinner spinnerDepartment, spinnerJobTitle;
+    private ProgressBar progressBar;
 
-    HashMap<String, Integer> deptData = new HashMap<String, Integer>() {{ //TODO connect this to the depts DB table
-        put("מעבדה מיקרוביולוגית", 1);
-        put("פנימית א", 2);
-    }};
+    private HashMap<String, Integer> deptMap;                     //Translates department name to it's corresponding ID
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +52,8 @@ public class RegisterActivity extends AppCompatActivity {
         editTextPhoneNumber = findViewById(R.id.editTextPhoneNumber);
         spinnerDepartment = findViewById(R.id.spinnerDepartment);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
+
+        populateHashmaps(); // This populates the departments list from the DB and then adds them as options to the form.
 
         //define spinners options   //TODO connect the following 2 to the DB tables
         String[] departments = new String[]{"בחר מחלקה", "מעבדה מיקרוביולוגית", "פנימית א"};
@@ -178,7 +180,7 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
         //for saving the id of the chosen department as a foreign key in the user record
-        final Integer deptID = deptData.get(department);
+        final Integer deptID = deptMap.get(department);
 
 
         progressBar.setVisibility(View.VISIBLE);
@@ -244,6 +246,49 @@ public class RegisterActivity extends AppCompatActivity {
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
+    }
+
+    private void populateHashmaps(){
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, URLs.URL_GET_DEPTS_N_TESTS, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                deptMap = new HashMap<String, Integer>();
+                try{
+                    JSONObject entireResponse = new JSONObject(response);
+                    JSONArray deptsArray = entireResponse.getJSONArray("departments");
+                    for (int i=0; i<deptsArray.length(); i++) {
+                        JSONObject dept = deptsArray.getJSONObject(i);
+                        deptMap.put(dept.getString("deptName"), dept.getInt("deptID"));
+                    }
+                    inflateAutocompleteOptions(); //Use the freshly populated hashmap as options to select from in the form fields.
+                    // The inflate call is done here in order to make sure the response for PopulateHashmaps() returned before calling inflateAutocompleteOptions().
+                }
+                catch (JSONException e){
+                    Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
+                }
+            }
+        },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                        error.printStackTrace();
+                    }
+                });
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
+    }
+
+    public void inflateAutocompleteOptions(){
+        //Define autocomplete field options
+
+        ArrayList<String> departments = new ArrayList<>();
+        for (String dept : this.deptMap.keySet())
+            departments.add(dept);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.select_dialog_item, departments);
+        spinnerDepartment.setAdapter(adapter);
     }
 }
 
