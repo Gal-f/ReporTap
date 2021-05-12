@@ -115,7 +115,6 @@ public class NewMessage extends ButtonsOptions {
                 //Component, Measured amount and Comments are not validated, to allow the lab crew more flexibility.
 
                 Send();
-                //TODO show a message if Send() succeeded or not
             }
         });
 
@@ -339,11 +338,10 @@ public class NewMessage extends ButtonsOptions {
 
         ArrayList<String> patients = new ArrayList<>();
         for (String patient : this.patientsMap.keySet())
-            departments.add(patient);
+            patients.add(patient);
         ArrayAdapter<String> adapter4 = new ArrayAdapter<>(this, android.R.layout.select_dialog_item, patients);
         patientId.setAdapter(adapter4);
         patientId.setThreshold(1);
-        //TODO inflate autocompletion list for patientID
     }
 
     public void fillTestValues(){
