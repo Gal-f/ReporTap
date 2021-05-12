@@ -1,13 +1,16 @@
 package il.reportap;
 
+import java.time.LocalDateTime;
+
 public class ModelActivityInboxLab {
     private Integer id,messageId,isValueBool;
     private String sentTime,patientId,testName,text,measurement,component, fullName, dept;
     private Float resultValue;
+    private Boolean wasRead;
 
     public ModelActivityInboxLab(Integer id,Integer messageId, String sentTime, String patientId, String testName,
                                  String text, String measurement, String component, Integer isValueBool, Float resultValue,
-                                 String fullName, String dept) {
+                                 String fullName, String dept, Boolean wasRead) {
         this.id = id;
         this.messageId=messageId;
         this.sentTime = sentTime;
@@ -20,6 +23,7 @@ public class ModelActivityInboxLab {
         this.resultValue=resultValue;
         this.fullName=fullName;
         this.dept=dept;
+        this.wasRead=wasRead;
     }
 
     public Integer getId(){return id;}
@@ -31,6 +35,7 @@ public class ModelActivityInboxLab {
     public String getPatientId() {
         return patientId;
     }
+
     public String getTestName() {
         return testName;
     }
@@ -66,5 +71,8 @@ public class ModelActivityInboxLab {
     public String getDept() {
         return dept;
     }
+
+    public Boolean getWasRead() { return wasRead; }
+
 }
 

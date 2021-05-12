@@ -109,7 +109,8 @@ public class InboxLab extends ButtonsOptions {
                                     jObg.getInt("is_value_bool"),
                                     Float.valueOf((float) jObg.getDouble("result_value")),
                                     jObg.getString("full_name"),
-                                    jObg.getString("dept_name"));
+                                    jObg.getString("dept_name"),
+                                    false);
                             modelActivityInboxLabList.add(modelActivityInboxLab);
                         }
 
