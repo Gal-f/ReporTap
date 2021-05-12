@@ -36,6 +36,11 @@ public class OptionsMenu extends AppCompatActivity {
             case R.id.view_message:
                 startActivity(new Intent(this, ViewMessage.class));
                 break;
+            case R.id.inbox_dr:
+                startActivity(new Intent(this, InboxDoctor.class));
+                break;
+            case R.id.inbox_lab:
+                startActivity(new Intent(this, InboxLab.class));
 
             default:
                 throw new IllegalStateException("Unexpected value: " + (item.getItemId()));
