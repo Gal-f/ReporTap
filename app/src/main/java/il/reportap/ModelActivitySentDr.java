@@ -2,43 +2,48 @@ package il.reportap;
 
 public class ModelActivitySentDr {
     private Integer id;
-    private String patient_id,sent_time,text,sender_name,test_name, confirm_time;
+    private String patientId,patientName,sentTime,text,senderName,testName, confirmTime;
 
-    public ModelActivitySentDr(Integer id, String sent_time, String text,String sender_name, String patient_id,  String test_name, String confirm_time) {
+    public ModelActivitySentDr(Integer id, String sent_time,String patient_name, String text,String sender_name, String patient_id,  String test_name, String confirm_time) {
         this.id = id;
-        this.patient_id = patient_id;
-        this.sent_time = sent_time;
+        this.patientId = patient_id;
+        this.sentTime = sent_time;
         this.text = text;
-        this.sender_name = sender_name;
-        this.test_name = test_name;
-        this.confirm_time = confirm_time;
+        this.senderName = sender_name;
+        this.testName = test_name;
+        this.confirmTime = confirm_time;
+        this.patientName=patient_name;
     }
 
     public Integer getId() {
         return id;
     }
 
-    public String getPatient_id() {
-        return patient_id;
+    public String getPatientId() {
+        return patientId;
     }
 
-    public String getSent_time() {
-        return sent_time;
+    public String getSentTime() {
+        return sentTime;
     }
 
     public String getText() {
         return text;
     }
 
-    public String getSender_name() {
-        return sender_name;
+    public String getSenderName() {
+        return senderName;
     }
 
-    public String getTest_name() {
-        return test_name;
+    public String getTestName() {
+        return testName;
     }
 
-    public String getConfirm_time() {
-        return confirm_time;
+    public String getConfirmTime() {
+        return confirmTime;
     }
+    public String getPatientName() {
+        return patientName;
+    }
+
 }
