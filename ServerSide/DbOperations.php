@@ -210,7 +210,7 @@ class DbOperations
     
       function getNotActive(){
         $response = array();
-        $stmt = $this->conn->prepare('SELECT `full_name`, `employee_ID`, `role`, `works_in_dept` FROM users WHERE `is_active`=0');
+        $stmt = $this->conn->prepare('SELECT `full_name`, `employee_ID`, `role`, `works_in_dept` FROM users WHERE `is_active`=0 order by `registration_date` DESC' );
 		$stmt->execute();
 		$stmt->store_result();
 		$rows = $stmt->num_rows;
