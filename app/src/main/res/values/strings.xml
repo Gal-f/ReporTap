@@ -1,16 +1,15 @@
 <resources>
     <string name="app_name">ReporTap</string>
-    <string name="inboxDesc">מסרים שנשלחו למחלקה שלך וטרם טופלו. בחרו במסר כדי לצפות בפרטים, לסמן טופל או כדי לשלוח תגובה או בקשה מהמעבדה</string>
-    <string name="inboxDescL">תגובות שנשלחו למעבדה שלך וטרם טופלו. בחרו בתגובה כדי לצפות בפרטים ולאשר את קבלתה</string>
+    <string name="inboxDesc">מסרים שנשלחו למחלקה שלך וטרם טופלו. בחרו במסר כדי לצפות בפרטים, לסמן טופל או כדי לשלוח תגובה או בקשה למעבדה</string>
+    <string name="inboxDescL">תגובות שנשלחו למעבדה שלך וטרם טופלו. </string>
     <string name="sentDesc">מסרים שנשלחו על-ידך או על-ידי אנשי המחלקה שלך. ניתן לראות האם סומנו כ"מטופלים" על-ידי הנמען</string>
     <string name="doneDesc">מסרים שסומנו כ"מטופלים" על-ידך או על-ידי אחד מאנשי המחלקה שלך</string>
-    <string name="doneDescL">תגובות שסומנו כ"מטופלים" על-ידך או על-ידי אחד מעובדי המעבדה שלך</string>
+    <string name="doneDescL">תגובות שסומנו כ"מטופלות" על-ידך או על-ידי אחד מעובדי המעבדה שלך</string>
     <string name="inboxEmerg">להציג
         רק דחופים?</string>
     <string name="done">מסרים שטופלו</string>
     <string name="toDo">מסרים לטיפולי</string>
     <string name="sent">מסרים שנשלחו</string>
-    <string name="popUpString">בקשתך ליצירת פרופיל הועברה. כשהפרופיל שלך יאושר או ידחה ע"י מנהל המערכת, עדכון יתקבל בהודעת אסאמאס.</string>
     <string name="title_activity_navigation">NavigationActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -47,5 +46,11 @@
     <string name="enterCode">נא להזין את קוד האימות</string>
     <string name="sendOTP">שלח</string>
     <string name="notApprovedYet">המשתמש טרם אושר עי מנהל המערכת.</string>
-    <string name="explainUser">רק משתמשים רשומים יכולים להשתמש באפליקציה. לעזרה יש לפנות למנהל המערכת</string>
+    <string name="explainUser">רק משתמשים רשומים יכולים להשתמש באפליקציה. לאחר אישור המנהל יש להתנתק ולהתחבר מחדש.</string>
+    <string name="managerDelete">
+        על מנת למחוק משתמש יש להזין את מספר העובד שלו.
+      <br>
+         לתשומת ליבך, פעולה זו אינה ניתנת לביטול.
+      </br>
+   </string>
 </resources>

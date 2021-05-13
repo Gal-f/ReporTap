@@ -3,7 +3,6 @@ package il.reportap;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Pair;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -54,11 +53,6 @@ public class RegisterActivity extends AppCompatActivity {
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
         populateHashmaps(); // This populates the departments list from the DB and then adds them as options to the form.
-
-        //define spinners options   //TODO connect the following 2 to the DB tables
-        String[] departments = new String[]{"בחר מחלקה", "מעבדה מיקרוביולוגית", "פנימית א"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, departments);
-        spinnerDepartment.setAdapter(adapter);
 
         String[] roles = new String[]{"בחר תפקיד", "מנהל.ת מחלקה", "עובד.ת מעבדה", "רופא.ה", "עובד.ת אדמיניסטרציה", "אח.ות"};
         ArrayAdapter<String> adapter2 = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, roles);
@@ -284,10 +278,11 @@ public class RegisterActivity extends AppCompatActivity {
         //Define autocomplete field options
 
         ArrayList<String> departments = new ArrayList<>();
+        departments.add("בחר מחלקה");
         for (String dept : this.deptMap.keySet())
             departments.add(dept);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.select_dialog_item, departments);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, departments);
         spinnerDepartment.setAdapter(adapter);
     }
 }
