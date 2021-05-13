@@ -72,13 +72,13 @@ public class SentDoctor extends ButtonsOptions {
                             jObg= repArray.getJSONObject(i);
                             ModelActivitySentDr modelActivitySentDr = new ModelActivitySentDr(jObg.getInt("id"),
                                     jObg.getString("sent_time"),
+                                    jObg.getString("full_name_p"),
                                     jObg.getString("text"),
                                     jObg.getString("sender_name"),
                                     jObg.getString("patient_id"),
                                     jObg.getString("name"),
                                     jObg.getString("confirm_time"));
                             modelActivitySentDrList.add(modelActivitySentDr);
-                            System.out.println(modelActivitySentDrList.get(i).getId());
                         }
 
 

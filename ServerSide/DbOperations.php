@@ -342,7 +342,7 @@ class DbOperations
     }
     function sentdr($works_in_dept){
         $response = array();
-        $query="SELECT R.ID, R.sent_time, R.text, U.full_name, M.patient_ID, T.name, (CASE WHEN R.confirm_time IS NULL THEN 0 ELSE R.confirm_time END) AS confirm_time FROM responses as R JOIN messages M on R.response_to_messageID=M.ID JOIN users as U ON R.sender_user=U.employee_ID JOIN test_types as T ON M.test_type=T.ID   WHERE U.works_in_dept = ? order by R.sent_time desc ";
+        $query="SELECT R.ID, R.sent_time, R.text, U.full_name, M.patient_ID,P.full_name, T.name, (CASE WHEN R.confirm_time IS NULL THEN 0 ELSE R.confirm_time END) AS confirm_time FROM responses as R JOIN messages M on R.response_to_messageID=M.ID JOIN users as U ON R.sender_user=U.employee_ID JOIN test_types as T ON M.test_type=T.ID JOIN patients as P ON M.patient_ID=P.patient_ID WHERE U.works_in_dept = ? order by R.sent_time desc ";
         $stmt = $this->conn->prepare($query);
         $stmt->bind_param("i", $works_in_dept);
 
@@ -354,7 +354,7 @@ class DbOperations
         if ($stmt->num_rows > 0) {
 
             while ($rows>0){
-                $stmt->bind_result($id, $sentTime, $text,$fullNameU, $patientId, $testName, $confirmTime);
+                $stmt->bind_result($id, $sentTime, $text,$fullNameU, $patientId, $fullNameP, $testName, $confirmTime);
                 $stmt->fetch();
 
                 $report[$stmt->num_rows-$rows] = array('id' =>$id,
@@ -362,6 +362,7 @@ class DbOperations
                     'text' =>$text,
                     'sender_name' => $fullNameU,
                     'patient_id' => $patientId,
+                    'full_name_p' => $fullNameP,
                     'name' => $testName,
                     'confirm_time' => $confirmTime,
                 );
@@ -699,7 +700,7 @@ class DbOperations
     function sentlab($department)
     {
         $response = array();
-        $query="SELECT M.ID, M.sent_time, M.patient_ID, T.name, M.is_urgent,CASE WHEN M.confirm_time IS NULL THEN 0 ELSE M.confirm_time END AS confirm_time, D.name, M.text, T.measurement_unit, M.component, CASE WHEN M.is_value_boolean IS NULL THEN 0 ELSE M.is_value_boolean END AS is_value_boolean,M.test_result_value, U.full_name FROM messages as M JOIN test_types as T ON M.test_type=T.ID JOIN departments as D ON M.recipient_dept=D.ID JOIN users as U ON M.sender_user=U.employee_ID WHERE U.works_in_dept = ? order by M.sent_time desc";
+        $query="SELECT M.ID, M.sent_time, M.patient_ID,P.full_name, T.name, M.is_urgent,CASE WHEN M.confirm_time IS NULL THEN 0 ELSE M.confirm_time END AS confirm_time, D.name, M.text, T.measurement_unit, M.component, CASE WHEN M.is_value_boolean IS NULL THEN 0 ELSE M.is_value_boolean END AS is_value_boolean,M.test_result_value, U.full_name FROM messages as M JOIN test_types as T ON M.test_type=T.ID JOIN departments as D ON M.recipient_dept=D.ID JOIN users as U ON M.sender_user=U.employee_ID JOIN patients as P ON M.patient_ID=P.patient_ID WHERE U.works_in_dept = ? order by M.sent_time desc";
         $stmt = $this->conn->prepare($query);
         $stmt->bind_param("i", $department);
 
@@ -711,12 +712,13 @@ class DbOperations
         if ($stmt->num_rows > 0) {
 
             while ($rows>0){
-                $stmt->bind_result($id, $sentTime, $patientId, $testName,$isUrgent, $confirmTime,$deptName, $text, $measUnit, $component, $isValBool, $testResult, $fullNameU);
+                $stmt->bind_result($id, $sentTime, $patientId,$fullNameP, $testName,$isUrgent, $confirmTime,$deptName, $text, $measUnit, $component, $isValBool, $testResult, $fullNameU);
                 $stmt->fetch();
 
                 $report[$stmt->num_rows-$rows] = array('id' =>$id,
                     'sent_time' => $sentTime,
                     'patient_id' => $patientId,
+                    'full_name_p' => $fullNameP,
                     'name' => $testName,
                     'is_urgent' => $isUrgent,
                     'confirm_time' => $confirmTime,

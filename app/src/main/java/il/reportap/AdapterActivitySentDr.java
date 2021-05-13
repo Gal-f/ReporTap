@@ -37,12 +37,13 @@ public class AdapterActivitySentDr extends RecyclerView.Adapter<AdapterActivityS
     public void onBindViewHolder(ViewHolder holder, int position) {
             ModelActivitySentDr modelActivitySentDr = modelActivitySentDrList.get(position);
 
-            holder.sentTime.setText(modelActivitySentDr.getSent_time());
-            holder.patientId.setText(modelActivitySentDr.getPatient_id());
-            holder.testName.setText(modelActivitySentDr.getTest_name());
+            holder.sentTime.setText(modelActivitySentDr.getSentTime());
+            holder.patientId.setText(modelActivitySentDr.getPatientId());
+            holder.testName.setText(modelActivitySentDr.getTestName());
             holder.text.setText(modelActivitySentDr.getText());
-            holder.senderName.setText(modelActivitySentDr.getSender_name());
-            if (!modelActivitySentDr.getConfirm_time().equals("0"))
+            holder.senderName.setText(modelActivitySentDr.getSenderName());
+            holder.patientName.setText(modelActivitySentDr.getPatientName());
+            if (!modelActivitySentDr.getConfirmTime().equals("0"))
             {
                 holder.isChecked.setImageResource(R.drawable.eyecheck2_bmp);
             }
@@ -54,7 +55,7 @@ public class AdapterActivitySentDr extends RecyclerView.Adapter<AdapterActivityS
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-        public TextView patientId, text, sentTime,senderName,testName;
+        public TextView patientId, text, sentTime,senderName,testName, patientName;
         public ImageView isChecked;
 
         public ViewHolder(View itemView) {
@@ -66,6 +67,7 @@ public class AdapterActivitySentDr extends RecyclerView.Adapter<AdapterActivityS
             text = itemView.findViewById(R.id.RepText);
             isChecked= itemView.findViewById(R.id.isChecked);
             senderName= itemView.findViewById(R.id.senderName);
+            patientName=itemView.findViewById(R.id.patientName);
         }
     }
 }
