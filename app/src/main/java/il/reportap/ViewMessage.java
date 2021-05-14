@@ -16,8 +16,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -113,6 +115,17 @@ public class ViewMessage extends ButtonsOptions {
                 startActivity(new Intent(getApplicationContext(), DoneDoctor.class));
             }
         });
+
+        // Handling back-button action - return to inbox and refresh
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                finish();
+                startActivity(new Intent(getApplicationContext(), InboxDoctor.class));
+            }
+        };
+        this.getOnBackPressedDispatcher().addCallback(this, callback);
+
         progressDialog.hide();
     }
 
@@ -406,7 +419,7 @@ public class ViewMessage extends ButtonsOptions {
     }
 
     public void forward(Integer messageID, String userID){
-        populateHashmaps(); //TODO move this to inside forward() ?
+        populateHashmaps();
         findViewById(R.id.forwardPopupDialog).setVisibility(View.VISIBLE);    // Show popup dialog
         findViewById(R.id.ButtonCancelForward).setOnClickListener(v -> {      // User canceled forward
             findViewById(R.id.forwardPopupDialog).setVisibility(View.INVISIBLE);
