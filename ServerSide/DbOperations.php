@@ -542,7 +542,8 @@ class DbOperations
         return $response;
     }
 
-    function markAsRead($messageID, $userID, $isResponse){
+    function markAsRead($messageID, $userID, $isResponseStr){
+        $isResponse = (strtolower($isResponseStr) === "true");  // Convert the string recieved to a boolean value
         $response = array();
         // Query to add a confirmation user and time
         if (!$isResponse)
