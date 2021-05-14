@@ -23,16 +23,19 @@
             app:layout_constraintTop_toTopOf="parent"
             android:orientation="vertical">
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/linearLayout4"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:orientation="horizontal">
+
+                android:layout_height="wrap_content">
 
                 <ImageView
                     android:id="@+id/urgentIcon"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
                     app:srcCompat="@drawable/ic_urgent" />
 
                 <CheckBox
@@ -40,15 +43,21 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:paddingRight="2dp"
-                    android:text="@string/inboxEmerg" />
+                    android:text="@string/inboxEmerg"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/urgentIcon"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/layoutDescription"
-                    android:layout_width="wrap_content"
+                    android:layout_width="237dp"
                     android:layout_height="match_parent"
-                    android:text="@string/inboxDesc" />
+                    android:text="@string/inboxDesc"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
 
             <androidx.recyclerview.widget.RecyclerView
