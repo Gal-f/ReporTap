@@ -11,10 +11,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.loginregister.R;
 
 public class OptionsMenu extends AppCompatActivity {
+    Menu optionsMenu;
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
+        optionsMenu = menu;
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu,menu);
+        if(SharedPrefManager.getInstance(this).getUser().getDeptType().equals("lab")){
+            /*
+            sendMessage = findViewById(R.id.sendMessage);
+            sendMessage.setVisible(true);*/
+            MenuItem sendMessage = optionsMenu.findItem(R.id.sendMessage);
+            sendMessage.setVisible(true);
+        }
         return true;
     }
 
@@ -27,20 +37,12 @@ public class OptionsMenu extends AppCompatActivity {
           //  case R.id.settings:
             //    startActivity(new Intent(this, SettingsActivity.class));
               //  break;
+            case R.id.sendMessage:
+                startActivity(new Intent(getApplicationContext(), NewMessage.class));
+                break;
             case R.id.logout:
                 SharedPrefManager.getInstance(getApplicationContext()).logout();
                 break;
-            case R.id.send_message:
-                startActivity(new Intent(getApplicationContext(), NewMessage.class));
-                break;
-            case R.id.view_message:
-                startActivity(new Intent(this, ViewMessage.class));
-                break;
-            case R.id.inbox_dr:
-                startActivity(new Intent(this, InboxDoctor.class));
-                break;
-            case R.id.inbox_lab:
-                startActivity(new Intent(this, InboxLab.class));
 
             default:
                 throw new IllegalStateException("Unexpected value: " + (item.getItemId()));
