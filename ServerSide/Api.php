@@ -65,12 +65,27 @@ if (isset($_GET['apicall'])) {
         break;
 
         case 'approveUser':
-             $response = isTheseParametersAvailable('employee_ID');
-            if(!$response['error']){
+           // $response = isTheseParametersAvailable('employee_ID');
+          //  if(!$response['error']){
+			 if (isset($_POST['employee_ID'])){
                  $employeeNumber = $_POST['employee_ID'];
                  $response = $oper->approveUser($employeeNumber);
             }
             break;
+
+		case 'deleteUser':
+		    if (isset($_POST['employee_ID'])){
+                 $employeeNumber = $_POST['employee_ID'];
+                 $response = $oper->deleteUser($employeeNumber);
+            }
+            break;
+
+		case 'getIsActive':
+		if (isset($_POST['employee_ID'])){
+			 $employeeNumber = $_POST['employee_ID'];
+			 $response = $oper->getIsActive($employeeNumber);
+		}
+		break;
 
 
         case 'newMessage':
@@ -166,6 +181,8 @@ if (isset($_GET['apicall'])) {
 }
 
 echo json_encode($response); //Return all 'response' fields in JSON format
+
+
 
 function isTheseParametersAvailable($params) //TODO alter this func to return $response instead of a boolean, in order not to use global variables (and accordingly, the conditions to "if(isTheseParametersAvailable['error'])").
 {

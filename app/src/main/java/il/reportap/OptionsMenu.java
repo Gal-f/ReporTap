@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -38,7 +39,12 @@ public class OptionsMenu extends AppCompatActivity {
             //    startActivity(new Intent(this, SettingsActivity.class));
               //  break;
             case R.id.sendMessage:
-                startActivity(new Intent(getApplicationContext(), NewMessage.class));
+                if(SharedPrefManager.getInstance(this).getUser().isActive){
+                    startActivity(new Intent(getApplicationContext(), NewMessage.class));
+                }
+                else{
+                    Toast.makeText(getApplicationContext(), "יש להמתין לאישור מנהל המערכת כדי לשלוח הודעות", Toast.LENGTH_LONG).show();
+                }
                 break;
             case R.id.logout:
                 SharedPrefManager.getInstance(getApplicationContext()).logout();

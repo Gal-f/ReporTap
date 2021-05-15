@@ -21,6 +21,11 @@
         app:showAsAction="always" />
 
     <item
+        android:title="logo"
+        android:icon="@drawable/logo_menu"
+        app:showAsAction="always" />
+
+    <item
         android:title="שלח מסר"
         android:id="@+id/sendMessage"
         android:contentDescription="sendMessage"

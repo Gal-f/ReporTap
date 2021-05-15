@@ -156,50 +156,55 @@ class DbOperations
      function login($employeeNumber, $password)
     {
         $response = array();
-        $stmt = $this->conn->prepare("SELECT id, employee_ID, full_name, email, role, phone_number, works_in_dept, is_active, otp_verified FROM users WHERE employee_ID = ? AND password = ?");
+        $stmt = $this->conn->prepare("SELECT id, employee_ID, full_name, email, role, phone_number, works_in_dept, is_active, otp_verified, is_deleted FROM users WHERE employee_ID = ? AND password = ?");
 		$stmt->bind_param("ss", $employeeNumber, $password);
         $stmt->execute();
         $stmt->store_result();
 
 		//if there is a user with this employee number and password in the db
         if ($stmt->num_rows > 0) {
-			$stmt->bind_result($id, $employeeNumber, $fullName, $email, $jobTitle, $phoneNumber, $deptID, $isActive, $otp_verified);
+			$stmt->bind_result($id, $employeeNumber, $fullName, $email, $jobTitle, $phoneNumber, $deptID, $isActive, $otp_verified, $is_deleted);
 			$stmt->fetch();
-
-			$query="SELECT `dept_type` FROM `departments` WHERE `ID` = ? ";
-			$stmt1 = $this->conn->prepare($query);
-			$stmt1->bind_param("i", $deptID);
-			$stmt1->execute();
-			$stmt1->store_result();
-			$stmt1->bind_result($deptType);
-			$stmt1->fetch();
-
-			$user = array(
-				'id' => $id,
-				'employee_ID' => $employeeNumber,
-				'full_name' => $fullName,
-				'email' => $email,
-				'role' => $jobTitle,
-				'phone_number' => $phoneNumber,
-				'works_in_dept' => $deptID,
-				'dept_type'=>$deptType
-				);
-			$response['error'] = false;
-			$response['user'] = $user;
-			//check whether the user completed the 2fa or not
-			if($otp_verified){
-				//check whether the system administrator approved the user's account
-				if($isActive){
-					$response['message'] = 'התחברות בוצעה בהצלחה';
-					$response['isActive'] = true;
-				}
-				else{
-					$response['message'] = 'המשתמש ממתין לאישור מנהל';
-					$response['isActive'] = false;
-				}
+			if($is_deleted){
+				$response['error'] = true;
+				$response['message'] = 'חשבונך הושעה, לעזרה יש לפנות למנהל המערכת';
 			}
 			else{
-				 $response['message'] = 'משתמש לא מאומת';
+				$query="SELECT `dept_type` FROM `departments` WHERE `ID` = ? ";
+				$stmt1 = $this->conn->prepare($query);
+				$stmt1->bind_param("i", $deptID);
+				$stmt1->execute();
+				$stmt1->store_result();
+				$stmt1->bind_result($deptType);
+				$stmt1->fetch();
+
+				$user = array(
+					'id' => $id,
+					'employee_ID' => $employeeNumber,
+					'full_name' => $fullName,
+					'email' => $email,
+					'role' => $jobTitle,
+					'phone_number' => $phoneNumber,
+					'works_in_dept' => $deptID,
+					'dept_type'=>$deptType
+					);
+				$response['error'] = false;
+				$response['user'] = $user;
+				//check whether the user completed the 2fa or not
+				if($otp_verified){
+					//check whether the system administrator approved the user's account
+					if($isActive){
+						$response['message'] = 'התחברות בוצעה בהצלחה';
+						$response['isActive'] = true;
+					}
+					else{
+						$response['message'] = 'המשתמש ממתין לאישור מנהל';
+						$response['isActive'] = false;
+					}
+				}
+				else{
+					 $response['message'] = 'משתמש לא מאומת';
+				}
 			}
         } else {
             $response['error'] = true;
@@ -207,20 +212,20 @@ class DbOperations
         }
         return $response;
     }
-    
+
       function getNotActive(){
         $response = array();
         $stmt = $this->conn->prepare('SELECT `full_name`, `employee_ID`, `role`, `works_in_dept` FROM users WHERE `is_active`=0 order by `registration_date` DESC' );
 		$stmt->execute();
 		$stmt->store_result();
 		$rows = $stmt->num_rows;
-		
+
 		 if ($stmt->num_rows > 0){
-		  
+
 		      while ($rows>0){
 		        $stmt->bind_result($fullName, $employeeNumber, $jobTitle, $deptID);
                 $stmt->fetch();
-                
+
                 $users[$stmt->num_rows-$rows] = array('full_name' => $fullName,
 				'employee_ID' => $employeeNumber,
 				'role' => $jobTitle,
@@ -236,11 +241,12 @@ class DbOperations
 		     $response['error'] = false;
 		     $response['message']="אין משתמשים הממתינים לאישור";
 		 }
-		 
+
 		 return $response;
     }
 
     function approveUser($employeeNumber){
+		$response = array();
         $stmt = $this->conn->prepare('UPDATE users SET is_active=1 WHERE employee_ID ="'.$employeeNumber.'"');
         if ($stmt->execute()) {
             $response['error'] = false;
@@ -249,6 +255,52 @@ class DbOperations
             $response['error'] = true;
             $response['message'] = 'Error while updating the record';
         }
+        return $response;
+    }
+
+	function deleteUser($employeeNumber){
+
+        $response = array();
+		//because the admin user enters the employee number and dosen't choose it from a list, we should validate the input.
+        $stmt = $this->conn->prepare('SELECT id FROM users WHERE employee_ID = "'.$employeeNumber.'"');
+        $stmt->execute();
+        $stmt->store_result();
+
+        //if there is a user with this employee number
+        if ($stmt->num_rows > 0) {
+			$stmt->close();
+			$stmt1 = $this->conn->prepare('UPDATE `users` SET `is_deleted`= 1 WHERE `employee_ID` = "'.$employeeNumber.'" ');
+			 if ($stmt1->execute()) {
+				$response['error'] = false;
+				$response['message'] = 'משתמש נמחק בהצלחה';
+			} else {
+				$response['error'] = true;
+				$response['message'] = 'שגיאה בביצוע הפעולה';
+			}
+		}
+		 else {
+			$response['error'] = true;
+			$response['message'] = 'לא קיים משתמש עם מספר העובד שהוזן';
+		 }
+        return $response;
+	}
+
+	 function getIsActive($employeeNumber){
+		$response = array();
+		$query = $this->conn->prepare('SELECT is_active FROM users WHERE employee_ID ="'.$employeeNumber.'"');
+		if ($query->execute()) {
+			$query->bind_result($isActive);
+			$response['error'] = false;
+			if($isActive){
+				$response['isActive'] = true;
+			}
+			else{
+				$response['isActive'] = false;
+			}
+		}else {
+			$response['error'] = true;
+			$response['message'] = 'לא ניתן לבדוק אם המשתמש פעיל כעת';
+		}
         return $response;
     }
 
@@ -577,19 +629,50 @@ class DbOperations
         return $response;
     }
 
-    function send_reply($sender, $department, $messageID, $text){
-        $response = array();
-        $stmt = $this->conn->prepare("INSERT INTO responses(response_to_messageID, responses.text, sender_user, recipient_dept) VALUES (?,?,?,?);");
-        $stmt->bind_param("ssss", $messageID, $text, $sender, $department);
-        if ($stmt->execute()) {
-            $response['error'] = false;
-            $response['message'] = 'Response sent successfully';
-        } else {
-            $response['error'] = true;
-            $response['message'] = 'Error while sending the response';
-        }
-        return $response;
-    }
+   function send_reply($sender, $department, $messageID, $text){
+   		include 'vendor/apiKeys.php';
+           $response = array();
+           $stmt = $this->conn->prepare("INSERT INTO responses(response_to_messageID, responses.text, sender_user, recipient_dept) VALUES (?,?,?,?);");
+           $stmt->bind_param("ssss", $messageID, $text, $sender, $department);
+           if ($stmt->execute()) {
+   			//send notifications to the users via firebase api
+               $msg = array
+                 (
+               'body'  => 'קיבלת תגובה חדשה',
+               'title' => 'ReporTap New Message'
+                 );
+               $fields = array
+                   (
+
+                       'to'        => '/topics/'.$department,
+                       'notification'  => $msg
+                   );
+
+
+                $headers = array
+                   (
+                       'Authorization: key='.$firebaseKey,
+                       'Content-Type: application/json'
+                   );
+
+               $ch = curl_init();
+               curl_setopt( $ch,CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send' );
+               curl_setopt( $ch,CURLOPT_POST, true );
+               curl_setopt( $ch,CURLOPT_HTTPHEADER, $headers );
+               curl_setopt( $ch,CURLOPT_RETURNTRANSFER, true );
+               curl_setopt( $ch,CURLOPT_SSL_VERIFYPEER, false );
+               curl_setopt( $ch,CURLOPT_POSTFIELDS, json_encode( $fields ) );
+               $result = curl_exec($ch );
+               curl_close( $ch );
+
+               $response['error'] = false;
+               $response['message'] = 'Response sent successfully';
+           } else {
+               $response['error'] = true;
+               $response['message'] = 'Error while sending the response';
+           }
+           return $response;
+       }
 
     function forward_message($messageID, $department, $userID){
         $response = array();
