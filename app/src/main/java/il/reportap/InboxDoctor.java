@@ -14,6 +14,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -83,14 +84,15 @@ public class InboxDoctor extends ButtonsOptions {
             }
 
         });
-//        SwipeRefreshLayout mySwipeToRefresh= (SwipeRefreshLayout)findViewById(R.id.swiperefresh);
-//        mySwipeToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-//            @Override
-//            public void onRefresh() {
-//                myStringRequest();
-//                mySwipeToRefresh.setRefreshing(false);
-//            }
-//        });
+        SwipeRefreshLayout mySwipeToRefresh= (SwipeRefreshLayout)findViewById(R.id.swipeToRefresh);
+        mySwipeToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                modelActivityInboxDrList.clear();
+                myStringRequest();
+                mySwipeToRefresh.setRefreshing(false);
+            }
+        });
         btnS.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

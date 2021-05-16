@@ -90,6 +90,16 @@
                     android:layout_height="match_parent">
 
                     <TextView
+                        android:id="@+id/testNameSL"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="testName"
+                        android:layout_marginLeft="5dp"
+                        android:layout_alignParentEnd="true"
+                        android:textColor="#000"
+                        android:textSize="18sp" />
+
+                    <TextView
                         android:id="@+id/patientName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -97,15 +107,7 @@
                         android:layout_alignParentLeft="true"
                         android:textColor="@color/horizontal_line_blue" />
 
-                    <TextView
-                        android:id="@+id/testNameSL"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="testName"
-                        android:layout_marginLeft="150dp"
-                        android:layout_alignParentRight="true"
-                        android:textColor="#000"
-                        android:textSize="20sp" />
+
                 </RelativeLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
