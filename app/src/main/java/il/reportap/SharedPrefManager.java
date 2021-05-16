@@ -18,7 +18,8 @@ public class SharedPrefManager {
     private static final String KEY_PHONENUMBER = "keyphonemumber";
     private static final String KEY_DEPT = "keydepartment";
     private static final String KEY_ACTIVE = "keyactive";
-    private static final String KEY_DEPTTYPE= "keydepttype";
+    private static final String KEY_DEPTTYPE = "keydepttype";
+    private static final String KEY_DEPTNAME = "keydeptname";
 
     private static SharedPrefManager mInstance;
     private static Context mCtx;
@@ -45,9 +46,10 @@ public class SharedPrefManager {
         editor.putString(KEY_EMAIL, user.getEmail());
         editor.putString(KEY_JOBTITLE, user.getJobTitle());
         editor.putString(KEY_PHONENUMBER, user.getPhoneNumber());
-        editor.putInt(KEY_DEPT, user.getDepartment());
+        editor.putInt(KEY_DEPT, user.getDeptID());
         editor.putBoolean(KEY_ACTIVE, user.isActive());
         editor.putString(KEY_DEPTTYPE, user.getDeptType());
+        editor.putString(KEY_DEPTNAME, user.getDeptName());
         editor.apply();
     }
 
@@ -68,11 +70,12 @@ public class SharedPrefManager {
                 sharedPreferences.getString(KEY_JOBTITLE, null),
                 sharedPreferences.getString(KEY_PHONENUMBER, null),
                 sharedPreferences.getInt(KEY_DEPT, -1),
-                sharedPreferences.getString(KEY_DEPTTYPE, null)
-
+                sharedPreferences.getString(KEY_DEPTTYPE, null),
+                sharedPreferences.getString(KEY_DEPTNAME, null)
         );
+
         //if the user has been approved by the system manager
-        if(sharedPreferences.getBoolean(KEY_ACTIVE, false)){
+        if (sharedPreferences.getBoolean(KEY_ACTIVE, false)) {
             user.setActive(true);
         }
         return user;
@@ -90,6 +93,15 @@ public class SharedPrefManager {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         mCtx.startActivity(intent);
     }
+
+
+    public void updateIsActive(boolean isActive){
+        SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(KEY_ACTIVE, isActive);
+        editor.apply();
+    }
+
 }
 
  

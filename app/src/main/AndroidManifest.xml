@@ -13,7 +13,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ReporTap"
         android:usesCleartextTraffic="true">
-        <activity android:name="il.reportap.ApproveUsers"/>
+        <activity android:name="il.reportap.DeleteUsers"></activity>
+        <activity android:name="il.reportap.ApproveUsers" />
         <activity android:name="il.reportap.TwoFactorAuth" />
         <activity android:name="il.reportap.ViewMessage" />
         <activity android:name="il.reportap.InboxDoctor" />
@@ -32,12 +33,13 @@
         <activity android:name="il.reportap.InboxLab" />
         <activity android:name="il.reportap.DoneLab" />
         <activity android:name="il.reportap.SentLab" />
-        <service
-            android:name="il.reportap.MyFirebaseMessagingService">
+
+        <service android:name="il.reportap.MyFirebaseMessagingService">
             <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
+
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

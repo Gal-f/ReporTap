@@ -64,13 +64,27 @@ if (isset($_GET['apicall'])) {
                 $response = $oper->getNotActive();
         break;
 
-        case 'approveUser':
-             $response = isTheseParametersAvailable('employee_ID');
-            if(!$response['error']){
+       case 'approveUser':
+			 if (isset($_POST['employee_ID'])){
                  $employeeNumber = $_POST['employee_ID'];
                  $response = $oper->approveUser($employeeNumber);
             }
             break;
+
+		case 'deleteUser':
+		    if (isset($_POST['employee_ID'])){
+                 $employeeNumber = $_POST['employee_ID'];
+                 $response = $oper->deleteUser($employeeNumber);
+            }
+            break;
+
+		case 'getIsActive':
+		if (isset($_POST['employee_ID'])){
+			 $employeeNumber = $_POST['employee_ID'];
+			 $response = $oper->getIsActive($employeeNumber);
+		}
+		break;
+
 
 
         case 'newMessage':

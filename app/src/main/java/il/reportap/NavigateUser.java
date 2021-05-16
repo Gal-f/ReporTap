@@ -14,6 +14,7 @@ public class NavigateUser extends AppCompatActivity {
             else if(deptType.equals("medical_dept")){
                 goToClass = "il.reportap.InboxDoctor";
             }
+            //admin user
             else{
                 goToClass = "il.reportap.ApproveUsers";
             }

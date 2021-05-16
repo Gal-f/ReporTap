@@ -1,10 +1,12 @@
 package il.reportap;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +35,8 @@ public class ApproveUsers extends OptionsMenu  {
 
     RecyclerView usersRecyclerView;
     private List<User> usersList;
+    LinearLayout chooseOperation;
+    TextView greeting, choose;
 
     @SuppressLint("UseCompatLoadingForDrawables")
     @Override
@@ -46,40 +50,44 @@ public class ApproveUsers extends OptionsMenu  {
         divider.setDrawable(getDrawable(R.drawable.dividerbig));
         usersRecyclerView.addItemDecoration(divider);
         usersList = new ArrayList<>();
+        chooseOperation =  (LinearLayout) findViewById(R.id.chooseOperation);
+        greeting = findViewById(R.id.helloUser);
+        greeting.setText("שלום "+SharedPrefManager.getInstance(this).getUser().getFullName()+", כיף שחזרת!");
+        choose = findViewById(R.id.choose);
         getUsersList();
 
     }
 
     public void getUsersList () {
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
-                URLs.URL_SYSTEMMANAGER,
-                //lambda expression
-                response -> {
-                    String errorMessage = "";
+            URLs.URL_SYSTEMMANAGER,
+            //lambda expression
+            response -> {
+                String errorMessage = "";
 
-                    try {
-                        JSONObject usersObj = new JSONObject(response);
-                        JSONArray usersArray = usersObj.getJSONArray("users");
+                try {
+                    JSONObject usersObj = new JSONObject(response);
+                    JSONArray usersArray = usersObj.getJSONArray("users");
 
-                        errorMessage = usersObj.getString("message");
-                        for (int i = 0; i < usersArray.length(); i++) {
-                            JSONObject jObg = new JSONObject();
-                            jObg = usersArray.getJSONObject(i);
-                            User user = new User(
-                                    jObg.getString("full_name"),
-                                    jObg.getString("employee_ID"),
-                                    jObg.getString("role"),
-                                    jObg.getInt("works_in_dept")
-                            );
-                            usersList.add(user);
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                    errorMessage = usersObj.getString("message");
+                    for (int i = 0; i < usersArray.length(); i++) {
+                        JSONObject jObg = new JSONObject();
+                        jObg = usersArray.getJSONObject(i);
+                        User user = new User(
+                                jObg.getString("full_name"),
+                                jObg.getString("employee_ID"),
+                                jObg.getString("role"),
+                                jObg.getInt("works_in_dept")
+                        );
+                        usersList.add(user);
                     }
-                    usersRecyclerView.setAdapter(new UsersAdapter(usersList));
-                },
-                //lambda expression
-                error -> Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show()) {
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                usersRecyclerView.setAdapter(new UsersAdapter(usersList));
+            },
+            //lambda expression
+            error -> Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show()) {
         };
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
@@ -88,7 +96,14 @@ public class ApproveUsers extends OptionsMenu  {
 
     }
 
+    public void goApproveUsers(View view) {
+        chooseOperation.setVisibility(View.GONE);
+        usersRecyclerView.setVisibility(View.VISIBLE);
+    }
 
+    public void deleteUsers(View view) {
+        startActivity(new Intent(getApplicationContext(), DeleteUsers.class));
+    }
 
 
     class UsersAdapter extends RecyclerView.Adapter<UserViewHolder>{
@@ -177,13 +192,7 @@ public class ApproveUsers extends OptionsMenu  {
             fullName.setText("שם: " + user.getFullName());
             employeeID.setText("מספר עובד: " +user.getEmployeeNumber());
             jobTitle.setText("תפקיד: " +user.getJobTitle());
-            switch( user.getDepartment()){
-                case 1:
-                    department.setText("מחלקה: מעבדה מיקרוביולוגית");
-                case 2:
-                    department.setText("מחלקה: פנימית א ");
-            }
-
+            department.setText("מחלקה: " +user.getDeptName());
             itemView.findViewById(R.id.buttonApprove).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

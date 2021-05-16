@@ -19,7 +19,6 @@ import android.widget.Toast;
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -172,7 +171,7 @@ public class ViewMessage extends ButtonsOptions {
         ArrayList<String> departments = new ArrayList<>();
         try {
             for (String dept : this.deptMap.keySet())
-                if (this.deptMap.get(dept) != SharedPrefManager.getInstance(getApplicationContext()).getUser().getDepartment())  // Add all possible departments except the user's department, to whom he can't forward
+                if (this.deptMap.get(dept) != SharedPrefManager.getInstance(getApplicationContext()).getUser().getDeptID())  // Add all possible departments except the user's department, to whom he can't forward
                     departments.add(dept);
         } catch (NullPointerException e) {
             Toast.makeText(getApplicationContext(), "חלה שגיאה בהצגת המחלקות. אנא נסו שוב מאוחר יותר.", Toast.LENGTH_LONG).show();

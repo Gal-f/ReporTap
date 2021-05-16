@@ -45,12 +45,20 @@
     <string name="validateCode">נדרש לאמת אותו כדי להשלים את ההרשמה.</string>
     <string name="enterCode">נא להזין את קוד האימות</string>
     <string name="sendOTP">שלח</string>
-    <string name="notApprovedYet">המשתמש טרם אושר עי מנהל המערכת.</string>
-    <string name="explainUser">רק משתמשים רשומים יכולים להשתמש באפליקציה. לאחר אישור המנהל יש להתנתק ולהתחבר מחדש.</string>
+    <string name="notApprovedYet">
+        <![CDATA[<p>
+               המשתמש טרם אושר ע"י מנהל המערכת.
+               <br />
+                רק משתמשים רשומים יכולים להשתמש באפליקציה.
+                <br />
+                לעזרה יש לפנות למנהל.
+        </p>]]>
+    </string>
     <string name="managerDelete">
-        על מנת למחוק משתמש יש להזין את מספר העובד שלו.
-      <br>
-         לתשומת ליבך, פעולה זו אינה ניתנת לביטול.
-      </br>
+        <![CDATA[<p>
+               על מנת למחוק משתמש יש להזין את מספר העובד שלו.
+               <br />
+                לתשומת ליבך, פעולה זו אינה ניתנת לביטול.
+        </p>]]>
    </string>
 </resources>

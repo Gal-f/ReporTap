@@ -204,8 +204,9 @@ public class RegisterActivity extends AppCompatActivity {
                                 userJson.getString("role"),
                                 userJson.getString("phone_number"),
                                 userJson.getInt("works_in_dept"),
-                                userJson.getString("dept_type"));
-
+                                userJson.getString("dept_type"),
+                                userJson.getString(department) //not a value that returns from the server response
+                                );
                         Intent intent = new Intent(RegisterActivity.this, TwoFactorAuth.class);
                         intent.putExtra("user", user);
                         startActivity(intent);
