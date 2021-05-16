@@ -18,8 +18,8 @@ public class SharedPrefManager {
     private static final String KEY_PHONENUMBER = "keyphonemumber";
     private static final String KEY_DEPT = "keydepartment";
     private static final String KEY_ACTIVE = "keyactive";
-    private static final String KEY_DEPTTYPE= "keydepttype";
-    private static final String KEY_DEPTNAME= "keydeptname";
+    private static final String KEY_DEPTTYPE = "keydepttype";
+    private static final String KEY_DEPTNAME = "keydeptname";
 
     private static SharedPrefManager mInstance;
     private static Context mCtx;
@@ -75,7 +75,7 @@ public class SharedPrefManager {
         );
 
         //if the user has been approved by the system manager
-        if(sharedPreferences.getBoolean(KEY_ACTIVE, false)){
+        if (sharedPreferences.getBoolean(KEY_ACTIVE, false)) {
             user.setActive(true);
         }
         return user;
@@ -93,6 +93,15 @@ public class SharedPrefManager {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         mCtx.startActivity(intent);
     }
+
+
+    public void updateIsActive(boolean isActive){
+        SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(KEY_ACTIVE, isActive);
+        editor.apply();
+    }
+
 }
 
  

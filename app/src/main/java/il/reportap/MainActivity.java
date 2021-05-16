@@ -29,12 +29,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.Map;
+
 
 public class MainActivity extends NavigateUser {
 
     private EditText editTextEmployeeNumber, editTextPassword;
     private ProgressBar progressBar;
     private HashMap<Integer, String> deptMap;
+    private boolean isActive;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,24 +49,6 @@ public class MainActivity extends NavigateUser {
         progressBar = findViewById(R.id.progressBar);
         deptMap = new HashMap<Integer, String>();
         populateHashmap();
-
-
-        //if the user is already logged in
-        if (SharedPrefManager.getInstance(this).isLoggedIn()) {
-            //check if the user's account has been approved by the system manager
-            if (SharedPrefManager.getInstance(this).getUser().isActive) {
-               try {
-                    goToClass(SharedPrefManager.getInstance(this).getUser().getDeptType());
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                //navigate the user to his profile
-                startActivity(new Intent(this, ProfileActivity.class));
-            }
-            return;
-
-        }
 
 
         //if user presses on login
@@ -84,6 +69,28 @@ public class MainActivity extends NavigateUser {
                 startActivity(new Intent(getApplicationContext(), RegisterActivity.class));
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (SharedPrefManager.getInstance(this).isLoggedIn()) {
+            //check if the user's account has been approved by the system manager
+            User user = SharedPrefManager.getInstance(this).getUser();
+            checkActive(user);
+            if(isActive){
+                user.setActive(true);
+                SharedPrefManager.getInstance(getApplicationContext()).updateIsActive(true);
+                try{
+                    goToClass(SharedPrefManager.getInstance(getApplicationContext()).getUser().getDeptType());
+                }catch (ClassNotFoundException classNotFoundException) {
+                    classNotFoundException.printStackTrace();
+                }
+            } else {
+                //navigate the user to his profile
+                startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+            }
+        }
     }
 
     private void userLogin() {
@@ -220,6 +227,45 @@ public class MainActivity extends NavigateUser {
                         error.printStackTrace();
                     }
                 });
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
+    }
+
+    private void checkActive(User user) {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URLs.URL_ISACTIVE, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                String message = "";
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    if(jsonObject.getBoolean("error")) {
+                        message = jsonObject.getString("message");
+                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+                    }
+                    else{
+                        isActive = jsonObject.getBoolean("isActive");
+                    }
+                } catch (JSONException jsonException) {
+                    jsonException.printStackTrace();
+                }
+            }
+        },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                })
+        {
+            @Nullable
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String,String> params = new HashMap<>();
+                params.put("employee_ID", user.getEmployeeNumber());
+                return params;
+            }
+        };
+        //Queueing the request since the operation will take some time
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
     }
