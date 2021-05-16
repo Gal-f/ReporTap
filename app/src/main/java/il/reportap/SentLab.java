@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -56,6 +57,36 @@ public class SentLab extends ButtonsOptions {
         divider.setDrawable(getDrawable(R.drawable.dividerbig));
         recyclerView.addItemDecoration(divider);
         modelActivitySentLabList = new ArrayList<>();
+        myStringRequest();
+
+        SwipeRefreshLayout mySwipeToRefresh= (SwipeRefreshLayout)findViewById(R.id.swipeToRefresh);
+        mySwipeToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                modelActivitySentLabList.clear();
+                myStringRequest();
+                mySwipeToRefresh.setRefreshing(false);
+            }
+        });
+        Button btnD= (Button)findViewById(R.id.doneB);
+        btnD.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                startActivity(new Intent(getApplicationContext(), DoneLab.class));
+            }
+        });
+        Button btnI= (Button)findViewById(R.id.toDoB);
+        btnI.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                startActivity(new Intent(getApplicationContext(), InboxLab.class));
+            }
+        });
+    }
+
+    public void myStringRequest (){
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
                 URLs.URL_SENTLAB,
                 //lambda expression
@@ -113,23 +144,6 @@ public class SentLab extends ButtonsOptions {
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
-
-        Button btnD= (Button)findViewById(R.id.doneB);
-        btnD.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-                startActivity(new Intent(getApplicationContext(), DoneLab.class));
-            }
-        });
-        Button btnI= (Button)findViewById(R.id.toDoB);
-        btnI.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-                startActivity(new Intent(getApplicationContext(), InboxLab.class));
-            }
-        });
     }
 
 

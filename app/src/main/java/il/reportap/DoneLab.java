@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -58,14 +59,15 @@ public class DoneLab extends ButtonsOptions {
 
         modelActivityInboxLabList = new ArrayList<>();
         myStringRequest();
-//        SwipeRefreshLayout mySwipeToRefresh= (SwipeRefreshLayout)findViewById(R.id.swiperefresh);
-//        mySwipeToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-//            @Override
-//            public void onRefresh() {
-//                myStringRequest();
-//                mySwipeToRefresh.setRefreshing(false);
-//            }
-//        });
+        SwipeRefreshLayout mySwipeToRefresh= (SwipeRefreshLayout)findViewById(R.id.swipeToRefresh);
+        mySwipeToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                modelActivityInboxLabList.clear();
+                myStringRequest();
+                mySwipeToRefresh.setRefreshing(false);
+            }
+        });
         Button btnS= (Button)findViewById(R.id.sentB);
         btnS.setOnClickListener(new View.OnClickListener() {
             @Override

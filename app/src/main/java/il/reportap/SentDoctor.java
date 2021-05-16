@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -56,6 +57,39 @@ public class SentDoctor extends ButtonsOptions {
         divider.setDrawable(getDrawable(R.drawable.dividerbig));
         recyclerView.addItemDecoration(divider);
         modelActivitySentDrList = new ArrayList<>();
+        myStringRequest();
+
+        SwipeRefreshLayout mySwipeToRefresh= (SwipeRefreshLayout)findViewById(R.id.swipeToRefresh);
+        mySwipeToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                modelActivitySentDrList.clear();
+                myStringRequest();
+                mySwipeToRefresh.setRefreshing(false);
+            }
+        });
+
+        Button btnD= (Button)findViewById(R.id.doneB);
+        btnD.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                startActivity(new Intent(getApplicationContext(), DoneDoctor.class));
+            }
+        });
+        Button btnI= (Button)findViewById(R.id.toDoB);
+        btnI.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                startActivity(new Intent(getApplicationContext(), InboxDoctor.class));
+            }
+        });
+
+
+    }
+
+    public void myStringRequest() {
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
                 URLs.URL_SENTDR,
                 //lambda expression
@@ -107,26 +141,7 @@ public class SentDoctor extends ButtonsOptions {
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
-
-        Button btnD= (Button)findViewById(R.id.doneB);
-        btnD.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-                startActivity(new Intent(getApplicationContext(), DoneDoctor.class));
-            }
-        });
-        Button btnI= (Button)findViewById(R.id.toDoB);
-        btnI.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-                startActivity(new Intent(getApplicationContext(), InboxDoctor.class));
-            }
-        });
     }
-
-
 
 
 }
