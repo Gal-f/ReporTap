@@ -22,6 +22,7 @@
 
     <item
         android:title="logo"
+        android:id="@+id/logo"
         android:icon="@drawable/logo_menu"
         app:showAsAction="always" />
 

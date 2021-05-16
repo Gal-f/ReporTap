@@ -99,7 +99,7 @@ public class SentDoctor extends ButtonsOptions {
             @Override
             protected Map<String,String> getParams() throws AuthFailureError {
                 Map<String,String> params = new HashMap<>();
-                params.put("works_in_dept", String.valueOf(SharedPrefManager.getInstance(getApplicationContext()).getUser().getDepartment()));
+                params.put("works_in_dept", String.valueOf(SharedPrefManager.getInstance(getApplicationContext()).getUser().getDeptID()));
                 System.out.println(params.get("works_in_dept"));
                 return params;
             }

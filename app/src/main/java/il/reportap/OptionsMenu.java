@@ -7,11 +7,10 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.loginregister.R;
 
-public class OptionsMenu extends AppCompatActivity {
+public class OptionsMenu extends NavigateUser {
     Menu optionsMenu;
 
     @Override
@@ -19,11 +18,10 @@ public class OptionsMenu extends AppCompatActivity {
         optionsMenu = menu;
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu,menu);
-        if(SharedPrefManager.getInstance(this).getUser().getDeptType().equals("lab")){
-            /*
-            sendMessage = findViewById(R.id.sendMessage);
-            sendMessage.setVisible(true);*/
-            MenuItem sendMessage = optionsMenu.findItem(R.id.sendMessage);
+        MenuItem sendMessage = optionsMenu.findItem(R.id.sendMessage);
+        //show the "Send message" button only to active lab workers
+        if(SharedPrefManager.getInstance(this).getUser().getDeptType().equals("lab") &&
+                SharedPrefManager.getInstance(this).getUser().isActive()){
             sendMessage.setVisible(true);
         }
         return true;
@@ -35,9 +33,6 @@ public class OptionsMenu extends AppCompatActivity {
             case R.id.profile:
                 startActivity(new Intent(this, ProfileActivity.class));
                 break;
-          //  case R.id.settings:
-            //    startActivity(new Intent(this, SettingsActivity.class));
-              //  break;
             case R.id.sendMessage:
                 if(SharedPrefManager.getInstance(this).getUser().isActive){
                     startActivity(new Intent(getApplicationContext(), NewMessage.class));
@@ -48,6 +43,16 @@ public class OptionsMenu extends AppCompatActivity {
                 break;
             case R.id.logout:
                 SharedPrefManager.getInstance(getApplicationContext()).logout();
+                break;
+
+            case R.id.logo:
+                if(SharedPrefManager.getInstance(this).getUser().isActive) {
+                    try {
+                        goToClass(SharedPrefManager.getInstance(this).getUser().getDeptType());
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }
                 break;
 
             default:

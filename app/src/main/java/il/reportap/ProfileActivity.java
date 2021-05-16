@@ -53,18 +53,7 @@ public class ProfileActivity extends OptionsMenu {
         textViewEmail.setText("אימייל: " + user.getEmail());
         textViewJobTitle.setText(user.getJobTitle());
         textViewPhoneNumber.setText("מספר טלפון: " + user.getPhoneNumber());
-        switch(user.getDepartment()){
-            case 1:
-                textViewDepartment.setText(" מחלקה: מעבדה מיקרוביולוגית");
-                break;
-            case 2:
-                textViewDepartment.setText("מחלקה: פנימית א");
-                break;
-            case 6:
-                textViewDepartment.setText("מחלקה: הנהלה");
-                break;
-        }
-
+        textViewDepartment.setText("מחלקה: " + user.getDeptName());
 
 
     }

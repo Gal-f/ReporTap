@@ -192,13 +192,7 @@ public class ApproveUsers extends OptionsMenu  {
             fullName.setText("שם: " + user.getFullName());
             employeeID.setText("מספר עובד: " +user.getEmployeeNumber());
             jobTitle.setText("תפקיד: " +user.getJobTitle());
-            switch( user.getDepartment()){
-                case 1:
-                    department.setText("מחלקה: מעבדה מיקרוביולוגית");
-                case 2:
-                    department.setText("מחלקה: פנימית א ");
-            }
-
+            department.setText("מחלקה: " +user.getDeptName());
             itemView.findViewById(R.id.buttonApprove).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

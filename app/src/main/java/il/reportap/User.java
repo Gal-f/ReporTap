@@ -6,27 +6,28 @@ public class User implements Serializable {
 
     public boolean isActive;
     private int id;
-    private String employeeNumber, fullName, email, jobTitle, phoneNumber, deptType;
-    private int department;
+    private String employeeNumber, fullName, email, jobTitle, phoneNumber, deptType, deptName;
+    private int deptID;
 
-
-    public User(int id, String employeeNumber, String fullName, String email, String jobTitle, String phoneNumber, int department, String deptType) {
+    public User(int id, String employeeNumber, String fullName, String email, String jobTitle, String phoneNumber,
+                int department, String deptType, String deptName) {
         this.id = id;
         this.employeeNumber = employeeNumber;
         this.fullName = fullName;
         this.email = email;
         this.jobTitle = jobTitle;
         this.phoneNumber = phoneNumber;
-        this.department = department;
+        this.deptID = department;
         this.deptType = deptType;
         this.isActive = false;
+        this.deptName = deptName;
     }
 
     public User(String full_name, String employee_id, String role, int works_in_dept) {
         this.fullName = full_name;
         this.employeeNumber = employee_id;
         this.jobTitle = role;
-        this.department = works_in_dept;
+        this.deptID = works_in_dept;
     }
 
 
@@ -62,11 +63,20 @@ public class User implements Serializable {
         return phoneNumber;
     }
 
-    public int getDepartment() {
-        return department;
+    public int getDeptID() {
+        return deptID;
     }
 
     public String getDeptType() {
         return deptType;
     }
+
+    public String getDeptName() {
+        return deptName;
+    }
+
+    public void setDeptName(String deptName) {
+        this.deptName = deptName;
+    }
+
 }
