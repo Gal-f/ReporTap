@@ -78,15 +78,6 @@ if (isset($_GET['apicall'])) {
             }
             break;
 
-		case 'getIsActive':
-		if (isset($_POST['employee_ID'])){
-			 $employeeNumber = $_POST['employee_ID'];
-			 $response = $oper->getIsActive($employeeNumber);
-		}
-		break;
-
-
-
         case 'newMessage':
             //TODO Don't ask for patientName, as it can be retrieved with patientId. Solve this by somehow presenting the patientName on the new message form, after typing the ID.
             $response = isTheseParametersAvailable(array('sender', 'department', 'patientId', 'patientName', 'testType', 'componentName', 'isValueBool', 'testResultValue', 'isUrgent', 'comments'));

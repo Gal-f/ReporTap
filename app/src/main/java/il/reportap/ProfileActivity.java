@@ -22,21 +22,19 @@ public class ProfileActivity extends OptionsMenu {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         user = SharedPrefManager.getInstance(this).getUser();
-        textViewEmployeeNumber =  (TextView) findViewById(R.id.textViewEmployeeNumber);
+        textViewEmployeeNumber = (TextView) findViewById(R.id.textViewEmployeeNumber);
         textViewFullName = (TextView) findViewById(R.id.textViewFullName);
         textViewEmail = (TextView) findViewById(R.id.textViewEmail);
         textViewJobTitle = (TextView) findViewById(R.id.textViewJobTitle);
-        textViewPhoneNumber =  (TextView) findViewById(R.id.textViewPhoneNumber);
-        textViewDepartment=  (TextView) findViewById(R.id.textViewDepartment);
-        isActive = user.isActive;
+        textViewPhoneNumber = (TextView) findViewById(R.id.textViewPhoneNumber);
+        textViewDepartment = (TextView) findViewById(R.id.textViewDepartment);
         notActive = findViewById(R.id.notActive);
-        if(!isActive){
+        isActive = user.isActive;
+        if (!isActive) {
             notActive.setVisibility(View.VISIBLE);
             notActiveUser = findViewById(R.id.textViewNotActive);
             notActiveUser.setText(Html.fromHtml(getString(R.string.notApprovedYet)));
-        }
-        else{
-            user.setActive(true);
+        } else {
             notActive.setVisibility(View.GONE);
         }
         //setting the values to the textviews
@@ -48,3 +46,4 @@ public class ProfileActivity extends OptionsMenu {
         textViewDepartment.setText("מחלקה: " + user.getDeptName());
     }
 }
+

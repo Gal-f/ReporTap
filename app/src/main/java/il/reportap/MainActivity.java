@@ -29,7 +29,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
-import java.util.Map;
 
 
 public class MainActivity extends NavigateUser {
@@ -48,8 +47,22 @@ public class MainActivity extends NavigateUser {
         editTextPassword = findViewById(R.id.editTextPassword);
         progressBar = findViewById(R.id.progressBar);
         deptMap = new HashMap<Integer, String>();
-        populateHashmap();
+        populateDeptMap();
 
+        if (SharedPrefManager.getInstance(this).isLoggedIn()) {
+            //check if the user's account has been approved by the system manager
+            User user = SharedPrefManager.getInstance(this).getUser();
+            if (user.isActive()) {
+                try {
+                    goToClass(user.getDeptType());
+                } catch (ClassNotFoundException classNotFoundException) {
+                    classNotFoundException.printStackTrace();
+                }
+            } else {
+                //navigate the user to his profile
+                startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+            }
+        }
 
         //if user presses on login
         //calling the login method
@@ -69,28 +82,6 @@ public class MainActivity extends NavigateUser {
                 startActivity(new Intent(getApplicationContext(), RegisterActivity.class));
             }
         });
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (SharedPrefManager.getInstance(this).isLoggedIn()) {
-            //check if the user's account has been approved by the system manager
-            User user = SharedPrefManager.getInstance(this).getUser();
-            checkActive(user);
-            if(isActive){
-                user.setActive(true);
-                SharedPrefManager.getInstance(getApplicationContext()).updateIsActive(true);
-                try{
-                    goToClass(SharedPrefManager.getInstance(getApplicationContext()).getUser().getDeptType());
-                }catch (ClassNotFoundException classNotFoundException) {
-                    classNotFoundException.printStackTrace();
-                }
-            } else {
-                //navigate the user to his profile
-                startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
-            }
-        }
     }
 
     private void userLogin() {
@@ -148,14 +139,14 @@ public class MainActivity extends NavigateUser {
                             intent1.putExtra("user", user);
                             startActivity(intent1);
 
-                        //check if the system manager has approved the user's account
+                            //check if the system manager has approved the user's account
                         } else if (!obj.getBoolean("isActive")) {
                             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
                             SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
                             finish();
                             startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
 
-                         //the user has finished the 2fa process and his account got the manager's approval
+                            //the user has finished the 2fa process and his account got the manager's approval
                         } else {
                             //subscribe the user to his department's channel in order to get relevant notifications
                             FirebaseMessaging.getInstance().subscribeToTopic(String.valueOf(user.getDeptID()))
@@ -163,7 +154,7 @@ public class MainActivity extends NavigateUser {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
                                             //msg is for our needs only, we don't show it to the user.
-                                            String msg ="Done";
+                                            String msg = "Done";
                                             if (!task.isSuccessful()) {
                                                 msg = "Failed";
                                             }
@@ -185,8 +176,7 @@ public class MainActivity extends NavigateUser {
             }
 
         },
-                error -> Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show())
-        {
+                error -> Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show()) {
             @Nullable
             @Override
             protected HashMap<String, String> getParams() throws AuthFailureError {
@@ -202,19 +192,19 @@ public class MainActivity extends NavigateUser {
         requestQueue.add(stringRequest);
     }
 
-    private void populateHashmap(){
+
+    private void populateDeptMap() {
         StringRequest stringRequest = new StringRequest(Request.Method.GET, URLs.URL_GET_DEPTS_N_TESTS, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                try{
+                try {
                     JSONObject entireResponse = new JSONObject(response);
                     JSONArray deptsArray = entireResponse.getJSONArray("departments");
-                    for (int i=0; i<deptsArray.length(); i++) {
+                    for (int i = 0; i < deptsArray.length(); i++) {
                         JSONObject dept = deptsArray.getJSONObject(i);
                         deptMap.put(dept.getInt("deptID"), dept.getString("deptName"));
                     }
-                }
-                catch (JSONException e){
+                } catch (JSONException e) {
                     Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                     e.printStackTrace();
                 }
@@ -230,44 +220,4 @@ public class MainActivity extends NavigateUser {
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
     }
-
-    private void checkActive(User user) {
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, URLs.URL_ISACTIVE, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                String message = "";
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
-                    if(jsonObject.getBoolean("error")) {
-                        message = jsonObject.getString("message");
-                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-                    }
-                    else{
-                        isActive = jsonObject.getBoolean("isActive");
-                    }
-                } catch (JSONException jsonException) {
-                    jsonException.printStackTrace();
-                }
-            }
-        },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
-                    }
-                })
-        {
-            @Nullable
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String,String> params = new HashMap<>();
-                params.put("employee_ID", user.getEmployeeNumber());
-                return params;
-            }
-        };
-        //Queueing the request since the operation will take some time
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(stringRequest);
-    }
-
 }
