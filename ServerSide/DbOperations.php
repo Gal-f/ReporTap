@@ -285,6 +285,8 @@ class DbOperations
         return $response;
 	}
 
+
+	/*
 	 function getIsActive($employeeNumber){
 		$response = array();
 		$query = $this->conn->prepare('SELECT is_active FROM users WHERE employee_ID = "'.$employeeNumber.'"');
@@ -304,7 +306,7 @@ class DbOperations
 			$response['message'] = 'לא ניתן לבדוק אם המשתמש פעיל כעת';
 		}
         return $response;
-    }
+    }*/
 
 
     function send_message($sender, $department, $patientId, $patientName, $testType, $componentName, $isValueBool, $testResultValue, $isUrgent, $comments)
@@ -859,6 +861,4 @@ class DbOperations
         return $response;
 
     }
-
-
 }
