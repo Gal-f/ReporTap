@@ -818,7 +818,7 @@ class DbOperations
     function sentlab($department)
     {
         $response = array();
-        $query="SELECT M.ID, M.sent_time, M.patient_ID,P.full_name, T.name, M.is_urgent,CASE WHEN M.confirm_time IS NULL THEN 0 ELSE M.confirm_time END AS confirm_time, D.name, M.text, T.measurement_unit, M.component, CASE WHEN M.is_value_boolean IS NULL THEN 0 ELSE M.is_value_boolean END AS is_value_boolean,M.test_result_value, U.full_name FROM messages as M JOIN test_types as T ON M.test_type=T.ID JOIN departments as D ON M.recipient_dept=D.ID JOIN users as U ON M.sender_user=U.employee_ID JOIN patients as P ON M.patient_ID=P.patient_ID WHERE U.works_in_dept = ? order by M.sent_time desc";
+        $query="SELECT M.ID, M.sent_time, M.patient_ID,P.full_name, T.name, M.is_urgent,CASE WHEN M.confirm_time IS NULL THEN 0 ELSE M.confirm_time END AS confirm_time, D.name, M.text, T.measurement_unit, M.component, CASE WHEN M.is_value_boolean IS NULL THEN 0 ELSE M.is_value_boolean END AS is_value_boolean,CASE WHEN M.test_result_value IS NULL THEN 0 ELSE M.test_result_value END AS test_result_value, U.full_name FROM messages as M JOIN test_types as T ON M.test_type=T.ID JOIN departments as D ON M.recipient_dept=D.ID JOIN users as U ON M.sender_user=U.employee_ID JOIN patients as P ON M.patient_ID=P.patient_ID WHERE U.works_in_dept = ? order by M.sent_time desc";
         $stmt = $this->conn->prepare($query);
         $stmt->bind_param("i", $department);
 
