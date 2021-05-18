@@ -19,6 +19,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.loginregister.R;
@@ -33,10 +35,11 @@ import java.util.List;
 
 public class ApproveUsers extends OptionsMenu  {
 
-    RecyclerView usersRecyclerView;
+    private RecyclerView usersRecyclerView;
     private List<User> usersList;
-    LinearLayout chooseOperation;
-    TextView greeting, choose;
+    private LinearLayout chooseOperation;
+    private TextView greeting, choose;
+    private HashMap<Integer, String> deptMap;
 
     @SuppressLint("UseCompatLoadingForDrawables")
     @Override
@@ -54,8 +57,38 @@ public class ApproveUsers extends OptionsMenu  {
         greeting = findViewById(R.id.helloUser);
         greeting.setText("שלום "+SharedPrefManager.getInstance(this).getUser().getFullName()+", כיף שחזרת!");
         choose = findViewById(R.id.choose);
+        deptMap = new HashMap<Integer, String>();
+        populateDeptMap();
         getUsersList();
 
+    }
+
+    private void populateDeptMap() {
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, URLs.URL_GET_DEPTS_N_TESTS, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject entireResponse = new JSONObject(response);
+                    JSONArray deptsArray = entireResponse.getJSONArray("departments");
+                    for (int i = 0; i < deptsArray.length(); i++) {
+                        JSONObject dept = deptsArray.getJSONObject(i);
+                        deptMap.put(dept.getInt("deptID"), dept.getString("deptName"));
+                    }
+                } catch (JSONException e) {
+                    Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
+                }
+            }
+        },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                        error.printStackTrace();
+                    }
+                });
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
     }
 
     public void getUsersList () {
@@ -78,6 +111,7 @@ public class ApproveUsers extends OptionsMenu  {
                                 jObg.getString("employee_ID"),
                                 jObg.getString("role"),
                                 jObg.getInt("works_in_dept")
+                                //deptMap.get( jObg.getInt("works_in_dept"))
                         );
                         usersList.add(user);
                     }
@@ -183,16 +217,13 @@ public class ApproveUsers extends OptionsMenu  {
 
             RequestQueue requestQueue = Volley.newRequestQueue(ApproveUsers.this);
             requestQueue.add(stringRequest);
-
-
-
         }
 
         public void bind(User user){
             fullName.setText("שם: " + user.getFullName());
             employeeID.setText("מספר עובד: " +user.getEmployeeNumber());
             jobTitle.setText("תפקיד: " +user.getJobTitle());
-            department.setText("מחלקה: " +user.getDeptName());
+            department.setText("מחלקה: " +deptMap.get(user.getDeptID()));
             itemView.findViewById(R.id.buttonApprove).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

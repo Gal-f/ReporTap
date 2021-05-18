@@ -36,7 +36,6 @@ public class MainActivity extends NavigateUser {
     private EditText editTextEmployeeNumber, editTextPassword;
     private ProgressBar progressBar;
     private HashMap<Integer, String> deptMap;
-    private boolean isActive;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

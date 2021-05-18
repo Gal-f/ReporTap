@@ -72,19 +72,19 @@
             android:layout_below="@+id/profile_layout"
             android:layout_centerInParent="true"
             android:background="#FFFFFF"
-            android:elevation="4dp"
             android:orientation="vertical"
             android:paddingLeft="4dp"
             android:paddingRight="4dp"
-            android:paddingBottom="4dp"
             android:visibility="gone">
 
 
             <TextView
                 android:id="@+id/textViewNotActive"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
                 android:fontFamily="@font/varela_round"
+                android:gravity="center_vertical"
                 android:text="@string/notApprovedYet"
                 android:textColor="@color/black"
                 android:textSize="16sp"

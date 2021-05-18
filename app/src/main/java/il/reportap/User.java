@@ -23,11 +23,11 @@ public class User implements Serializable {
         this.deptName = deptName;
     }
 
-    public User(String full_name, String employee_id, String role, int works_in_dept) {
+    public User(String full_name, String employee_id, String role, int deptID) {
         this.fullName = full_name;
         this.employeeNumber = employee_id;
         this.jobTitle = role;
-        this.deptID = works_in_dept;
+        this.deptID = deptID;
     }
 
 
