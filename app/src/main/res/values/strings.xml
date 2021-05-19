@@ -61,4 +61,8 @@
                 לתשומת ליבך, פעולה זו אינה ניתנת לביטול.
         </p>]]>
    </string>
+
+    <!-- View Message -->
+    <string name="medical_departments_type">medical_dept</string>
+    <string name="labs_department_type">lab</string>
 </resources>

@@ -528,7 +528,7 @@ class DbOperations
         $response['message'] = ''; //Will contain a concatinated string of the three successes or failures
 
         //1st part - Get Departments
-        $query = "SELECT ID, departments.name FROM departments";
+        $query = "SELECT ID, departments.name, dept_type FROM departments";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
         $stmt->store_result();
@@ -539,10 +539,10 @@ class DbOperations
             $response['message'] = 'Unable to retrieve departments from the server';
         } else {
             while ($rows > 0){
-                $stmt->bind_result($deptID, $deptName);
+                $stmt->bind_result($deptID, $deptName, $deptType);
                 $stmt->fetch();
 
-                $depts[$stmt->num_rows-$rows] = array('deptID' => $deptID, 'deptName' => $deptName);
+                $depts[$stmt->num_rows-$rows] = array('deptID' => $deptID, 'deptName' => $deptName, 'deptType' => $deptType);
                 $rows--;
             }
             $response['error'] = false;

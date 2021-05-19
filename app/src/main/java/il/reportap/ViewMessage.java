@@ -3,9 +3,11 @@ package il.reportap;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
+import android.text.TextUtils;
 import android.util.Pair;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -50,8 +52,6 @@ public class ViewMessage extends ButtonsOptions {
     private HashMap<String, Integer> deptMap;                     //Translates department name to it's corresponding ID
     private HashMap<String, Pair<Integer, String>> testTypeMap;   //Translates test type ID to it's corresponding name + result type (in this form: [name, [ID, resultType]] )
     private ProgressDialog progressDialog;
-
-    //TODO Define back-button to refresh the inbox rather then just go back to it's old state
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,7 +141,8 @@ public class ViewMessage extends ButtonsOptions {
                     JSONArray testTypesArray = entireResponse.getJSONArray("testTypes");
                     for (int i=0; i<deptsArray.length(); i++) {
                         JSONObject dept = deptsArray.getJSONObject(i);
-                        deptMap.put(dept.getString("deptName"), dept.getInt("deptID"));
+                        if (dept.getString("deptType").equals(getString(R.string.medical_departments_type)))    // Only get the medical departments as options to forward to
+                            deptMap.put(dept.getString("deptName"), dept.getInt("deptID"));
                     }
                     for (int i=0; i<testTypesArray.length(); i++){
                         JSONObject testType = testTypesArray.getJSONObject(i);
@@ -212,10 +213,8 @@ public class ViewMessage extends ButtonsOptions {
                         }
                         comments.setText(requestedMessage.getString("comments")); //TODO resize the textview to fit all the text
                         wasRead = !requestedMessage.getString("confirmTime").equals("null");
-                        if (wasRead){
-                            wasReadButton.setImageResource(R.drawable.eyecheck2_bmp);
-                            wasReadButton.setClickable(false);
-                        }
+                        if (wasRead)
+                            markWasReadButton();
                         if (requestedMessage.getString("isUrgent").equals("1")){
                             isUrgent.setImageResource(R.drawable.redexclamation_trans);
                             ((TextView)findViewById(R.id.textViewUrgent)).setText("דחוף");
@@ -255,7 +254,7 @@ public class ViewMessage extends ButtonsOptions {
         progressDialog.hide();
     }
 
-    public void updateFields(){
+    public void updateFields(){ // Update rest of the message fields and listeners which are dependent on receiving a server response
         if (isTestValueBool){
             findViewById(R.id.linearLayoutBoolResult).setVisibility(View.VISIBLE);
             findViewById(R.id.linearLayoutMeasuredAmount).setVisibility(View.GONE);
@@ -275,7 +274,6 @@ public class ViewMessage extends ButtonsOptions {
         replyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO validate input
                 reply(messageID, userID, senderDept);
 
             }
@@ -307,13 +305,11 @@ public class ViewMessage extends ButtonsOptions {
                                 if (jsonObject.getBoolean("alreadyMarked")) {    // If the message had already been marked by another user, the function will also mark success TRUE and disable the button to mark again
                                     successMarkRead = true;
                                     wasRead = true;
-                                    wasReadButton.setImageResource(R.drawable.eyecheck2_bmp);
-                                    wasReadButton.setClickable(false);
+                                    markWasReadButton();
                                 }
                             } else {
                                 Toast.makeText(getApplicationContext(), "ההודעה אושרה בהצלחה!", Toast.LENGTH_LONG).show();
-                                wasReadButton.setImageResource(R.drawable.eyecheck2_bmp);
-                                wasReadButton.setClickable(false);
+                                markWasReadButton();
                             }
                         } catch (JSONException e) {
                             Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
@@ -339,6 +335,7 @@ public class ViewMessage extends ButtonsOptions {
                 };
                 RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
                 requestQueue.add(stringRequest);
+                blockButtons(true, "המסר אושר במחלקה שלך, לא ניתן להעבירו למחלקה אחרת");
                 progressDialog.hide();
             }
         };
@@ -362,6 +359,11 @@ public class ViewMessage extends ButtonsOptions {
             editTextReplyText.setText("");
         });
         findViewById(R.id.ButtonSendReply).setOnClickListener(v -> {        // User sent reply
+            // Input validation
+            if (TextUtils.isEmpty(editTextReplyText.getText().toString())) {
+                editTextReplyText.setError("תוכן התגובה ריק");
+                return;
+            }
             progressDialog.setMessage("התגובה שלך נשלחת...");
             progressDialog.show();
 
@@ -381,8 +383,7 @@ public class ViewMessage extends ButtonsOptions {
                         } else {
                             //TODO mark as read
                             Toast.makeText(getApplicationContext(), "התגובה נשלחה בהצלחה!", Toast.LENGTH_LONG).show();
-                            wasReadButton.setImageResource(R.drawable.eyecheck2_bmp);
-                            wasReadButton.setClickable(false);
+                            markWasReadButton();
                         }
                     } catch (JSONException e) {
                         Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
@@ -408,6 +409,7 @@ public class ViewMessage extends ButtonsOptions {
                     return params;
                 }
             };
+            blockButtons(true, "המסר אושר במחלקה שלך, לא ניתן להעבירו למחלקה אחרת");
             findViewById(R.id.replyPopupDialog).setVisibility(View.INVISIBLE);
             ((EditText)findViewById(R.id.EditTextReplyText)).setText("");
             progressDialog.hide();
@@ -465,12 +467,37 @@ public class ViewMessage extends ButtonsOptions {
                     return params;
                 }
             };
+            blockButtons(false, "העברת את ההודעה למחלקה אחרת");
             findViewById(R.id.forwardPopupDialog).setVisibility(View.INVISIBLE);
             spinnerForwardTo.setSelection(0);
             progressDialog.hide();
             RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
             requestQueue.add(stringRequest);
         });
-        //TODO After forwarding: Exit back to inbox?/Grey out all the buttons?
+    }
+
+    public void markWasReadButton(){                                // Handles changing the mark-as-read button to a 'marked' state
+        this.wasReadButton.setImageResource(R.drawable.eyecheck2_bmp);
+        this.wasReadButton.setClickable(false);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+            this.wasReadButton.setTooltipText("נקרא");
+    }
+
+    public void blockButtons(Boolean wasRead, String message) {   // Handles blocking the reply, forward & mark-as-read buttons after forwarding, replying or marking-as-read
+        this.forwardButton.setClickable(false);
+        this.forwardButton.setColorFilter(getResources().getColor(R.color.disabled_background));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+            this.forwardButton.setTooltipText(message);
+        if (wasRead)    // If message was marked-as-read or replied-to, change mark-as-read button accordingly
+            markWasReadButton();
+        else {          // After marking as read or replying, it's still possible to reply, whereas after forwarding it's impossible
+            this.replyButton.setClickable(false);
+            this.replyButton.setColorFilter(getResources().getColor(R.color.disabled_background));
+            this.wasReadButton.setClickable(false);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                this.replyButton.setTooltipText(message);
+                this.wasReadButton.setTooltipText(message);
+            }
+        }
     }
 }

@@ -285,7 +285,8 @@ public class NewMessage extends ButtonsOptions {
                     // Getting all departments
                     for (int i=0; i<deptsArray.length(); i++) {
                         JSONObject dept = deptsArray.getJSONObject(i);
-                        deptMap.put(dept.getString("deptName"), dept.getInt("deptID"));
+                        if (dept.getString("deptType").equals(getString(R.string.medical_departments_type)))    // Only get the medical departments as options to forward to
+                            deptMap.put(dept.getString("deptName"), dept.getInt("deptID"));
                     }
                     // Getting all test types
                     JSONArray testTypesArray = entireResponse.getJSONArray("testTypes");
