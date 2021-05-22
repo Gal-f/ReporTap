@@ -6,27 +6,6 @@
 
 
     <item
-        android:title="profile"
-        android:id="@+id/profile"
-        android:contentDescription="logo"
-        android:icon="@drawable/profile"
-        app:showAsAction="always"
-        />
-
-    <item
-        android:title="settings"
-        android:id="@+id/settings"
-        android:icon="@drawable/settings"
-        android:visible="false"
-        app:showAsAction="always" />
-
-    <item
-        android:title="logo"
-        android:id="@+id/logo"
-        android:icon="@drawable/logo_menu"
-        app:showAsAction="always" />
-
-    <item
         android:title="שלח מסר"
         android:id="@+id/sendMessage"
         android:contentDescription="sendMessage"
@@ -40,6 +19,17 @@
         android:contentDescription="logout"
         app:showAsAction="always"
         />
+    <item
+        android:id="@+id/profile"
+        android:contentDescription="logo"
+        android:icon="@drawable/profile"
+        android:title="profile"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/logo"
+        android:icon="@drawable/logo_menu"
+        android:title="logo"
+        app:showAsAction="always" />
 
 </menu>
 

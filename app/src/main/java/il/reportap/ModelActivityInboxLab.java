@@ -1,7 +1,5 @@
 package il.reportap;
 
-import java.time.LocalDateTime;
-
 public class ModelActivityInboxLab {
     private Integer id,messageId,isValueBool;
     private String sentTime,patientId,testName,text,measurement,component, fullName, dept;
