@@ -281,8 +281,9 @@ public class RegisterActivity extends AppCompatActivity {
         ArrayList<String> departments = new ArrayList<>();
         departments.add("בחר מחלקה");
         for (String dept : this.deptMap.keySet())
-            departments.add(dept);
-
+            if(!dept.equals("הנהלה")){ //for now this is a department that represents only the system administrator
+                departments.add(dept);
+            }
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, departments);
         spinnerDepartment.setAdapter(adapter);
     }
