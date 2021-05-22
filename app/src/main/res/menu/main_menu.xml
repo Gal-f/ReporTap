@@ -23,12 +23,6 @@
         />
 
     <item
-        android:title=" "
-        android:id="@+id/spacer"
-        android:visible="true"
-        app:showAsAction="always"
-        />
-    <item
         android:title="פרופיל אישי"
         android:id="@+id/profile"
         android:contentDescription="פרופיל אישי"

@@ -1,10 +1,10 @@
 <resources>
     <string name="app_name">ReporTap</string>
-    <string name="inboxDesc">מסרים שנשלחו למחלקה שלך וטרם טופלו. בחרו במסר כדי לצפות בפרטים, לסמן טופל או כדי לשלוח תגובה או בקשה למעבדה</string>
-    <string name="inboxDescL">תגובות שנשלחו למעבדה שלך וטרם טופלו. ניתן לאשר תגובה שטופלה על-ידך באמצעות לחיצה על העין. </string>
-    <string name="sentDesc">מסרים שנשלחו על-ידך או על-ידי אנשי המחלקה שלך. ניתן לראות האם סומנו כ"מטופלים" על-ידי הנמען</string>
-    <string name="doneDesc">מסרים שסומנו כ"מטופלים" על-ידך או על-ידי אחד מאנשי המחלקה שלך. בחרו במסר כדי לצפות בתכולתו</string>
-    <string name="doneDescL">תגובות שסומנו כ"מטופלות" על-ידך או על-ידי אחד מעובדי המעבדה שלך.</string>
+    <string name="inboxDesc">מסרים שנשלחו למחלקה שלך וטרם טופלו.\nבחרו במסר כדי לצפות בפרטים, לסמן טופל או כדי לשלוח תגובה או בקשה למעבדה.</string>
+    <string name="inboxDescL">תגובות שנשלחו למעבדה שלך וטרם טופלו.\nניתן לסמן תגובה שטופלה באמצעות לחיצה על העין. </string>
+    <string name="sentDesc">מסרים שנשלחו על-ידך או על-ידי אנשי המחלקה שלך.\nניתן לראות האם סומנו כ\'מטופלים\' על-ידי הנמען.</string>
+    <string name="doneDesc">מסרים שסומנו כ\'מטופלים\' על-ידך או על-ידי אחד מאנשי המחלקה שלך. בחרו במסר כדי לצפות בתכולתו.</string>
+    <string name="doneDescL">תגובות שסומנו כ\'מטופלות\' על-ידך או על-ידי אחד מעובדי המעבדה שלך.</string>
     <string name="inboxEmerg"><![CDATA[<p>
      להציג
      <br/>
@@ -21,7 +21,7 @@
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
-    <string name="sentDescL">מסרים שנשלחו על-ידך או על-ידי אחד מעובדי המעבדה שלך. ניתן לראות האם סומנו כ"מטופלים" על-ידי הנמען</string>
+    <string name="sentDescL">מסרים שנשלחו על-ידך או על-ידי אחד מעובדי המעבדה שלך.\nניתן לראות האם סומנו כ\'מטופלים\' על-ידי הנמען</string>
 
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>

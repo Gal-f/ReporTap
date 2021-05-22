@@ -28,7 +28,8 @@
         <LinearLayout
             android:id="@+id/linearLayout4"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:textDirection="rtl">
 
             <ImageView
                 android:id="@+id/urgentIcon"
@@ -50,8 +51,9 @@
 
             <TextView
                 android:id="@+id/layoutDescription"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layoutDirection="rtl"
                 android:paddingRight="7dp"
                 android:text="@string/inboxDesc" />
 

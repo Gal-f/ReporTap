@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ImageView;
@@ -48,8 +49,10 @@ public class InboxLab extends ButtonsOptions {
         ImageView urgIc= (ImageView)findViewById(R.id.urgentIcon);
         CheckBox chb = (CheckBox)findViewById(R.id.checkBox) ;
         desc.setText(R.string.inboxDescL);
-        urgIc.setVisibility(View.INVISIBLE);
-        chb.setVisibility(View.INVISIBLE);
+        // Hiding the 'urgent' checkbox, which is irrelevant for comments' inbox
+        urgIc.setVisibility(View.GONE);
+        chb.setVisibility(View.GONE);
+
         TextView urgent = findViewById(R.id.checkBox);
         urgent.setText(Html.fromHtml(getString(R.string.inboxEmerg)));
         recyclerView = (RecyclerView)findViewById(R.id.recyclerViewInbox);
