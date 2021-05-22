@@ -23,7 +23,7 @@
             android:layout_weight="1"
             android:text="@string/sent"
             android:textColor="#020202"
-            app:backgroundTint="#FFFFFF"
+            app:backgroundTint="@color/white"
             app:strokeColor="@color/stroke"
             app:strokeWidth="2dp"
             android:layout_marginTop="-6dp"
