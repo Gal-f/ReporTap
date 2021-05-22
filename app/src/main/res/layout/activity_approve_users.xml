@@ -36,21 +36,24 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
-            android:text="מה ברצונך לבצע?" />
+            android:text="מה ברצונך לבצע?"
+            android:textSize="20sp" />
 
         <Button
             android:id="@+id/buttonApproveUsers"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="goApproveUsers"
-            android:text="אישור משתמשים " />
+            android:text="אישור משתמשים "
+            android:textSize="16sp" />
 
         <Button
             android:id="@+id/buttonRemoveUsers"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="deleteUsers"
-            android:text="השעיית משתמשים" />
+            android:text="השעיית משתמשים"
+            android:textSize="16sp" />
     </LinearLayout>
 
 
@@ -67,4 +70,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/noMoreUsers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="לא נותרו משתמשים הממתינים לאישורך"
+        android:textSize="16sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/users_recycleview"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.173" />
 </androidx.constraintlayout.widget.ConstraintLayout>
