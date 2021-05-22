@@ -46,6 +46,7 @@
         android:iconTint="@color/white"
         app:showAsAction="always"
         />
+
     <item
         android:title="התנתק"
         android:id="@+id/logout"

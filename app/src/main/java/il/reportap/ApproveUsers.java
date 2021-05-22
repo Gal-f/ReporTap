@@ -23,7 +23,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.loginregister.R;
+import com.il.reportap.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,7 +38,7 @@ public class ApproveUsers extends OptionsMenu  {
     private RecyclerView usersRecyclerView;
     private List<User> usersList;
     private LinearLayout chooseOperation;
-    private TextView greeting, choose;
+    private TextView greeting, choose, noMoreUsers;
     private HashMap<Integer, String> deptMap;
 
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -57,11 +57,24 @@ public class ApproveUsers extends OptionsMenu  {
         greeting = findViewById(R.id.helloUser);
         greeting.setText("שלום "+SharedPrefManager.getInstance(this).getUser().getFullName()+", כיף שחזרת!");
         choose = findViewById(R.id.choose);
+        noMoreUsers = findViewById(R.id.noMoreUsers);
         deptMap = new HashMap<Integer, String>();
         populateDeptMap();
-        getUsersList();
 
     }
+
+    @Override
+    public void onBackPressed()
+    {
+        usersRecyclerView.setVisibility(View.GONE);
+        final int visibility = noMoreUsers.getVisibility();
+        if(visibility == 0){ //this is visible
+            noMoreUsers.setVisibility(View.GONE);
+        }
+        chooseOperation.setVisibility(View.VISIBLE);
+        return;
+    }
+
 
     private void populateDeptMap() {
         StringRequest stringRequest = new StringRequest(Request.Method.GET, URLs.URL_GET_DEPTS_N_TESTS, new Response.Listener<String>() {
@@ -92,7 +105,7 @@ public class ApproveUsers extends OptionsMenu  {
     }
 
     public void getUsersList () {
-        StringRequest stringRequest = new StringRequest(Request.Method.POST,
+        StringRequest stringRequest = new StringRequest(Request.Method.GET,
             URLs.URL_SYSTEMMANAGER,
             //lambda expression
             response -> {
@@ -100,20 +113,24 @@ public class ApproveUsers extends OptionsMenu  {
 
                 try {
                     JSONObject usersObj = new JSONObject(response);
-                    JSONArray usersArray = usersObj.getJSONArray("users");
-
                     errorMessage = usersObj.getString("message");
-                    for (int i = 0; i < usersArray.length(); i++) {
-                        JSONObject jObg = new JSONObject();
-                        jObg = usersArray.getJSONObject(i);
-                        User user = new User(
-                                jObg.getString("full_name"),
-                                jObg.getString("employee_ID"),
-                                jObg.getString("role"),
-                                jObg.getInt("works_in_dept")
-                                //deptMap.get( jObg.getInt("works_in_dept"))
-                        );
-                        usersList.add(user);
+                    if(!usersObj.getBoolean("error")) {
+                        JSONArray usersArray = usersObj.getJSONArray("users");
+                        for (int i = 0; i < usersArray.length(); i++) {
+                            JSONObject jObg = new JSONObject();
+                            jObg = usersArray.getJSONObject(i);
+                            User user = new User(
+                                    jObg.getString("full_name"),
+                                    jObg.getString("employee_ID"),
+                                    jObg.getString("role"),
+                                    jObg.getInt("works_in_dept")
+                            );
+                            usersList.add(user);
+                        }
+                    }
+                    else{ //all the users are active
+                        noMoreUsers.setText(errorMessage);
+                        noMoreUsers.setVisibility(View.VISIBLE);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -133,6 +150,7 @@ public class ApproveUsers extends OptionsMenu  {
     public void goApproveUsers(View view) {
         chooseOperation.setVisibility(View.GONE);
         usersRecyclerView.setVisibility(View.VISIBLE);
+        getUsersList();
     }
 
     public void deleteUsers(View view) {
@@ -197,6 +215,9 @@ public class ApproveUsers extends OptionsMenu  {
                                 usersRecyclerView.removeViewAt(getAdapterPosition());
                                 usersRecyclerView.getAdapter().notifyItemRemoved(getAdapterPosition());
                                 usersRecyclerView.getAdapter().notifyItemRangeChanged(getAdapterPosition(), usersList.size());
+                                if(usersList.size() == 0){ //the admin approved all the users
+                                    noMoreUsers.setVisibility(View.VISIBLE);
+                                }
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

@@ -1,6 +1,5 @@
 package il.reportap;
 
-import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -27,7 +26,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.loginregister.R;
+import com.il.reportap.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;

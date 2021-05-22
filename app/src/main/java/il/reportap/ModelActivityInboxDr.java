@@ -12,9 +12,6 @@ public class ModelActivityInboxDr {
         this.testName = testName;
     }
 
-    public ModelActivityInboxDr() {
-    }
-
     public Integer getId(){return id;}
 
     public String getSentTime() {
