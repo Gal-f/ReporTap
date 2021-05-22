@@ -31,7 +31,7 @@
                     android:layout_width="62dp"
                     android:layout_height="40dp"
                     android:background="@color/background"
-                    card_view:srcCompat="@drawable/ic_urgent" />
+                    card_view:srcCompat="@drawable/greyexclamation_trans" />
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/eyeCheckedSL"

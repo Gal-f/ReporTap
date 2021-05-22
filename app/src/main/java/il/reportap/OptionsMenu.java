@@ -1,5 +1,6 @@
 package il.reportap;
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,6 +25,7 @@ public class OptionsMenu extends NavigateUser {
                 SharedPrefManager.getInstance(this).getUser().isActive()){
             sendMessage.setVisible(true);
         }
+        //getSupportActionBar().setDisplayShowTitleEnabled(false);    // Hide the app name on the action bar
         return true;
     }
 

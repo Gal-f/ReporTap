@@ -5,34 +5,28 @@
     >
 
 
-    <item
-        android:title="profile"
-        android:id="@+id/profile"
-        android:contentDescription="logo"
-        android:icon="@drawable/profile"
-        android:iconTint="@color/horizontal_line_blue"
-        app:showAsAction="always"
-        />
 
     <item
-        android:title="settings"
+        android:title="הגדרות"
         android:id="@+id/settings"
         android:icon="@drawable/settings"
+        android:contentDescription="הגדרות"
         android:visible="false"
         app:showAsAction="always" />
 
     <item
-        android:title="logo"
+        android:title="למסך הבית"
         android:id="@+id/logo"
-        android:icon="@drawable/logo_menu_bg_trns1"
+        android:icon="@drawable/logo_menu_bg_trns1_crp"
+        android:contentDescription="למסך הבית"
         app:showAsAction="always" />
 
     <item
-        android:title="שלח מסר"
+        android:title="שליחת מסר חדש"
         android:id="@+id/sendMessage"
-        android:icon="@drawable/ic_baseline_add_comment_24"
-        android:contentDescription="sendMessage"
-        android:iconTint="@color/horizontal_line_blue"
+        android:icon="@drawable/newmessage_icon_white_trns"
+        android:contentDescription="שליחת מסר חדש"
+        android:iconTint="@color/white"
         android:visible="true"
         app:showAsAction="always"
         />
@@ -43,12 +37,20 @@
         android:visible="true"
         app:showAsAction="always"
         />
-
+    <item
+        android:title="פרופיל אישי"
+        android:id="@+id/profile"
+        android:contentDescription="פרופיל אישי"
+        android:icon="@drawable/profile"
+        app:iconTint="@color/white"
+        android:iconTint="@color/white"
+        app:showAsAction="always"
+        />
     <item
         android:title="התנתק"
         android:id="@+id/logout"
-        android:icon="@drawable/shutdown_icon_trns"
-        android:contentDescription="logout"
+        android:icon="@drawable/shutdown_icon_white_trns"
+        android:contentDescription="התנתקות"
         app:showAsAction="always"
         />
 

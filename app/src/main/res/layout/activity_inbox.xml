@@ -31,12 +31,12 @@
 
                 <ImageView
                     android:id="@+id/urgentIcon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/ic_urgent" />
+                    app:srcCompat="@drawable/greyexclamation_trans" />
 
                 <CheckBox
                     android:id="@+id/checkBox"

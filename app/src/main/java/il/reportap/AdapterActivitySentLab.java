@@ -48,8 +48,7 @@ public class AdapterActivitySentLab extends RecyclerView.Adapter<AdapterActivity
                 holder.confirmTime.setImageResource(R.drawable.eyecheck2_bmp);
             }
            if (Integer.valueOf(modelActivitySentLab.getIsUrgent())==1) {
-            holder.isUrgent.setColorFilter(ContextCompat.getColor(context, R.color.red),
-                    PorterDuff.Mode.MULTIPLY);
+            holder.isUrgent.setImageResource(R.drawable.redexclamation_trans);
             }
            holder.text.setText(modelActivitySentLab.getText());
            holder.component.setText(modelActivitySentLab.getComponent());

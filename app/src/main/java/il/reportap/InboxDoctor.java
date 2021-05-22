@@ -69,14 +69,12 @@ public class InboxDoctor extends ButtonsOptions {
                     }
                     adapter = new AdapterActivityInboxDr(urgentList,getApplicationContext());
                     ImageView img = (ImageView)findViewById(R.id.urgentIcon);
-                    img.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.red),
-                            PorterDuff.Mode.MULTIPLY);
+                    img.setImageResource(R.drawable.redexclamation_trans);
                 }
                 else {
                     adapter = new AdapterActivityInboxDr(modelActivityInboxDrList,getApplicationContext());
                     ImageView img = (ImageView)findViewById(R.id.urgentIcon);
-                    img.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.gray),
-                            PorterDuff.Mode.MULTIPLY);
+                    img.setImageResource(R.drawable.greyexclamation_trans);
 
                 }
                 recyclerView.setAdapter(adapter);

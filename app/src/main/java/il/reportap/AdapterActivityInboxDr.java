@@ -42,8 +42,7 @@ public class AdapterActivityInboxDr extends RecyclerView.Adapter<AdapterActivity
             holder.patientId.setText(modelActivityInboxDr.getPatientId());
             holder.testName.setText(modelActivityInboxDr.getTestName());
             if (Integer.valueOf(modelActivityInboxDr.getIsUrgent())==1) {
-               holder.isUrgent.setColorFilter(ContextCompat.getColor(context, R.color.red),
-                       PorterDuff.Mode.MULTIPLY);
+               holder.isUrgent.setImageResource(R.drawable.redexclamation_trans);
             }
             holder.messageID = modelActivityInboxDr.getId();
             holder.cardView.setOnClickListener(new View.OnClickListener() {

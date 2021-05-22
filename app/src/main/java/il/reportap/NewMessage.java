@@ -3,6 +3,7 @@ package il.reportap;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Pair;
@@ -12,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -189,6 +191,15 @@ public class NewMessage extends ButtonsOptions {
             public void onClick(View v) {
                 finish();
                 startActivity(new Intent(getApplicationContext(), DoneDoctor.class));
+            }
+        });
+        findViewById(R.id.checkBoxUrgent).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (((CheckBox) findViewById(R.id.checkBoxUrgent)).isChecked())
+                    ((ImageView)findViewById(R.id.imageViewUrgent)).setImageResource(R.drawable.redexclamation_trans);
+                else
+                    ((ImageView)findViewById(R.id.imageViewUrgent)).setImageResource(R.drawable.greyexclamation_trans);
             }
         });
     }
