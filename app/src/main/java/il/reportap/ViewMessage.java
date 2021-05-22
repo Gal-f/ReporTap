@@ -268,7 +268,7 @@ public class ViewMessage extends ButtonsOptions {
         wasReadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                markAsRead(messageID, userID);
+                assignMarkAsReadConfirmation(messageID, userID);
             }
         });
         replyButton.setOnClickListener(new View.OnClickListener() {
@@ -281,65 +281,68 @@ public class ViewMessage extends ButtonsOptions {
         forwardButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO validate input
                 forward(messageID, userID);
             }
         });
     }
 
-    public void markAsRead(Integer messageID, String userID){ // This method doesn't return a value (impossible to return inside an onClick() method) but changes the global variable successMarkRead according to success.
-        DialogInterface.OnClickListener confirmedMarkAsReadListener = new DialogInterface.OnClickListener() {
+    public void markAsRead(Integer messageID, String userID, Boolean isReply){ // This method doesn't return a value (impossible to return inside an onClick() method) but changes the global variable wasRead according to success.
+        // If the trigger to marking-as-read is a reply, rather than a direct click on mark-as-read, marking confirmation messages aren't shown (reply messages are shown instead, in reply() method).
+        if (!isReply) {
+            progressDialog.setMessage("מעדכן שההודעה נקראה...");
+            progressDialog.show();
+        }
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URLs.URL_MARK_AS_READ, new Response.Listener<String>() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                progressDialog.setMessage("מעדכן שההודעה נקראה...");
-                progressDialog.show();
-                StringRequest stringRequest = new StringRequest(Request.Method.POST, URLs.URL_MARK_AS_READ, new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            Boolean successMarkRead = false;
-                            JSONObject jsonObject = new JSONObject(response);
-                            successMarkRead = !jsonObject.getBoolean("error");
-                            if (!successMarkRead) {
-                                Toast.makeText(getApplicationContext(), jsonObject.getString("message"), Toast.LENGTH_LONG).show(); // Show a message whether the operation succeeded or the error message
-                                if (jsonObject.getBoolean("alreadyMarked")) {    // If the message had already been marked by another user, the function will also mark success TRUE and disable the button to mark again
-                                    successMarkRead = true;
-                                    wasRead = true;
-                                    markWasReadButton();
-                                }
-                            } else {
-                                Toast.makeText(getApplicationContext(), "ההודעה אושרה בהצלחה!", Toast.LENGTH_LONG).show();
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    Boolean successMarkRead = !jsonObject.getBoolean("error");
+                    Boolean alreadyMarked = jsonObject.getBoolean("alreadyMarked");
+                    if (!isReply) {
+                        if (!successMarkRead) {
+                            Toast.makeText(getApplicationContext(), jsonObject.getString("message"), Toast.LENGTH_LONG).show(); // Show a message whether the operation succeeded or the error message
+                            if (alreadyMarked) {    // If the message had already been marked by another user, the function will also mark success TRUE and disable the button to mark again
+                                wasRead = true;
                                 markWasReadButton();
                             }
-                        } catch (JSONException e) {
-                            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-                            e.printStackTrace();
+                        } else {
+                            Toast.makeText(getApplicationContext(), "ההודעה אושרה בהצלחה!", Toast.LENGTH_LONG).show();
+                            markWasReadButton();
+                        }
+                    } else {    // If the trigger is a reply, marking success or 'already-checked' messages are irrelevant
+                        if (successMarkRead || alreadyMarked) {   // Whether the message was marked now or had been already marked makes no difference in the case of a reply, simply mark the button
+                            markWasReadButton();
+                            wasRead = true;
                         }
                     }
-                },
-                        new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
-                            }
-                        }) {
-                    @Nullable
+                } catch (JSONException e) {
+                    Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                    e.printStackTrace();
+                }
+            }
+        },
+                new Response.ErrorListener() {
                     @Override
-                    protected Map<String, String> getParams() throws AuthFailureError {
-                        Map<String, String> params = new HashMap<>();
-                        params.put("messageID",messageID.toString());
-                        params.put("userID",userID);
-                        params.put("isResponse", "false");
-                        return params;
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
                     }
-                };
-                RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-                requestQueue.add(stringRequest);
-                blockButtons(true, "המסר אושר במחלקה שלך, לא ניתן להעבירו למחלקה אחרת");
-                progressDialog.hide();
+                }) {
+            @Nullable
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("messageID",messageID.toString());
+                params.put("userID",userID);
+                params.put("isResponse", "false");
+                return params;
             }
         };
-        confirmMarkAsRead(messageID, userID, confirmedMarkAsReadListener);  // Show a confirmation dialog prior to marking the message as read
+        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+        requestQueue.add(stringRequest);
+        blockButtons(true, "המסר אושר במחלקה שלך, לא ניתן להעבירו למחלקה אחרת");
+        if (!isReply)
+            progressDialog.hide();
     }
 
     public void confirmMarkAsRead(Integer messageID, String userID, DialogInterface.OnClickListener confirmedMarkAsReadListener){
@@ -350,6 +353,16 @@ public class ViewMessage extends ButtonsOptions {
         builder.setNegativeButton("ביטול", null);                                               // User cancelled
         AlertDialog dialog = builder.show();
         dialog.show();
+    }
+
+    public void assignMarkAsReadConfirmation(Integer messageID, String userID){
+        DialogInterface.OnClickListener confirmedMarkAsReadListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                markAsRead(messageID, userID, false);
+            }
+        };
+        confirmMarkAsRead(messageID, userID, confirmedMarkAsReadListener);  // Show a confirmation dialog prior to marking the message as read
     }
 
     public void reply(Integer messageID, String userID, Integer dept){
@@ -381,9 +394,9 @@ public class ViewMessage extends ButtonsOptions {
                         if (jsonObject.getBoolean("error")) {
                             Toast.makeText(getApplicationContext(), jsonObject.getString("message"), Toast.LENGTH_LONG).show();
                         } else {
-                            //TODO mark as read
+                            markAsRead(messageID, userID, true);
+                            // blockButtons() is called from inside markAsRead().
                             Toast.makeText(getApplicationContext(), "התגובה נשלחה בהצלחה!", Toast.LENGTH_LONG).show();
-                            markWasReadButton();
                         }
                     } catch (JSONException e) {
                         Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
