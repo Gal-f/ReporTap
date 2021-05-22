@@ -241,7 +241,11 @@ public class NewMessage extends ButtonsOptions {
                 finally {
                     finish();
                     Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
-                    startActivity(new Intent(NewMessage.this, InboxLab.class));  // Redirect after the message is sent
+                    try {
+                        goToClass(SharedPrefManager.getInstance(getApplicationContext()).getUser().getDeptType()); // Redirect after the message is sent
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         },

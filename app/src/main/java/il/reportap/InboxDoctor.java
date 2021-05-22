@@ -4,9 +4,11 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -38,6 +40,7 @@ public class InboxDoctor extends ButtonsOptions {
     private AdapterActivityInboxDr adapter;
     private List<ModelActivityInboxDr> modelActivityInboxDrList;
     private List<ModelActivityInboxDr> urgentList;
+    private CheckBox desc;
 
     @SuppressLint("ResourceAsColor")
     @Override
@@ -48,6 +51,8 @@ public class InboxDoctor extends ButtonsOptions {
         recyclerView = (RecyclerView)findViewById(R.id.recyclerViewInbox);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        desc=findViewById(R.id.checkBox);
+        desc.setText(Html.fromHtml(getString(R.string.inboxEmerg)));
         DividerItemDecoration divider = new DividerItemDecoration(getApplicationContext(), DividerItemDecoration.VERTICAL);
         divider.setDrawable(getDrawable(R.drawable.dividerbig));
         recyclerView.addItemDecoration(divider);

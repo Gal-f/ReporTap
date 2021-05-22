@@ -4,16 +4,6 @@
     android:layoutDirection="rtl"
     >
 
-
-
-    <item
-        android:title="הגדרות"
-        android:id="@+id/settings"
-        android:icon="@drawable/settings"
-        android:contentDescription="הגדרות"
-        android:visible="false"
-        app:showAsAction="always" />
-
     <item
         android:title="למסך הבית"
         android:id="@+id/logo"
@@ -26,7 +16,8 @@
         android:id="@+id/sendMessage"
         android:icon="@drawable/newmessage_icon_white_trns"
         android:contentDescription="שליחת מסר חדש"
-        android:iconTint="@color/white"
+        android:iconTint="@color/stroke"
+        app:iconTint="@color/stroke"
         android:visible="true"
         app:showAsAction="always"
         />
@@ -42,8 +33,8 @@
         android:id="@+id/profile"
         android:contentDescription="פרופיל אישי"
         android:icon="@drawable/profile"
-        app:iconTint="@color/white"
-        android:iconTint="@color/white"
+        android:iconTint="@color/stroke"
+        app:iconTint="@color/stroke"
         app:showAsAction="always"
         />
 
@@ -52,6 +43,8 @@
         android:id="@+id/logout"
         android:icon="@drawable/shutdown_icon_white_trns"
         android:contentDescription="התנתקות"
+        android:iconTint="@color/stroke"
+        app:iconTint="@color/stroke"
         app:showAsAction="always"
         />
 
