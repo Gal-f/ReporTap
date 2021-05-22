@@ -10,6 +10,7 @@
         android:id="@+id/profile"
         android:contentDescription="logo"
         android:icon="@drawable/profile"
+        android:iconTint="@color/horizontal_line_blue"
         app:showAsAction="always"
         />
 
@@ -23,20 +24,30 @@
     <item
         android:title="logo"
         android:id="@+id/logo"
-        android:icon="@drawable/logo_menu"
+        android:icon="@drawable/logo_menu_bg_trns1"
         app:showAsAction="always" />
 
     <item
         android:title="שלח מסר"
         android:id="@+id/sendMessage"
+        android:icon="@drawable/ic_baseline_add_comment_24"
         android:contentDescription="sendMessage"
-        android:visible="false"
+        android:iconTint="@color/horizontal_line_blue"
+        android:visible="true"
+        app:showAsAction="always"
+        />
+
+    <item
+        android:title=" "
+        android:id="@+id/spacer"
+        android:visible="true"
         app:showAsAction="always"
         />
 
     <item
         android:title="התנתק"
         android:id="@+id/logout"
+        android:icon="@drawable/shutdown_icon_trns"
         android:contentDescription="logout"
         app:showAsAction="always"
         />
