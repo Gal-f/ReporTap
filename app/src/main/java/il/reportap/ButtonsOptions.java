@@ -34,11 +34,17 @@ public class ButtonsOptions extends OptionsMenu {
             }
         else if (deptName.equals("SentLab") || deptName.equals("SentDoctor")) {
                 temp = btnS;
-            } else {
+            }
+        else if (deptName.equals("DoneLab") || deptName.equals("DoneDoctor")) {
                 temp = btnD;
             }
-
-        temp.setBackgroundColor(ContextCompat.getColor(getApplicationContext(),R.color.stroke));
-        temp.setTextColor(ContextCompat.getColor(getApplicationContext(),R.color.white));
+        else
+        {
+           temp=null;
+        }
+        if (temp!=null) {
+            temp.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.stroke));
+            temp.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
+        }
 }
 }
