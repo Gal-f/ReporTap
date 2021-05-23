@@ -24,7 +24,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class DeleteUsers extends OptionsMenu {
+public class SuspendUsers extends OptionsMenu {
 
     private TextView explain;
     private EditText empNum;
@@ -32,7 +32,7 @@ public class DeleteUsers extends OptionsMenu {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_delete_users);
+        setContentView(R.layout.activity_suspend_users);
         explain = findViewById(R.id.explain);
         empNum = findViewById(R.id.userID);
         explain.setText(Html.fromHtml(getString(R.string.managerDelete)));
