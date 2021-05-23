@@ -154,7 +154,7 @@ public class ApproveUsers extends OptionsMenu  {
     }
 
     public void deleteUsers(View view) {
-        startActivity(new Intent(getApplicationContext(), DeleteUsers.class));
+        startActivity(new Intent(getApplicationContext(), SuspendUsers.class));
     }
 
 

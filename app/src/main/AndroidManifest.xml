@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ReporTap"
         android:usesCleartextTraffic="true">
-        <activity android:name="il.reportap.DeleteUsers"></activity>
+        <activity android:name="il.reportap.SuspendUsers"></activity>
         <activity android:name="il.reportap.ApproveUsers" />
         <activity android:name="il.reportap.TwoFactorAuth" />
         <activity android:name="il.reportap.ViewMessage" />
