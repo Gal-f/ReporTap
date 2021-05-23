@@ -62,8 +62,7 @@ public class AdapterActivityInboxLab extends RecyclerView.Adapter<AdapterActivit
         holder.testName.setText(modelActivityInboxLab.getTestName());
         holder.text.setText(modelActivityInboxLab.getText());
         holder.component.setText(modelActivityInboxLab.getComponent());
-        holder.fullName.setText(modelActivityInboxLab.getFullName());
-        holder.deptName.setText(modelActivityInboxLab.getDept());
+        holder.senderDetails.setText(String.format("%s | %s", modelActivityInboxLab.getFullName(), modelActivityInboxLab.getDept()));
         holder.measurement.setText(modelActivityInboxLab.getMeasurement());
         holder.responseID = modelActivityInboxLab.getId();
 
@@ -116,7 +115,7 @@ public class AdapterActivityInboxLab extends RecyclerView.Adapter<AdapterActivit
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView sentTime, patientId, testName, text, measurement, component, resultValue, fullName, deptName;
+        public TextView sentTime, patientId, testName, text, measurement, component, resultValue, senderDetails;
         public Integer responseID;
         public ImageButton wasReadButton;
         public ConstraintLayout confirmationBox;
@@ -133,8 +132,7 @@ public class AdapterActivityInboxLab extends RecyclerView.Adapter<AdapterActivit
             measurement = (TextView) itemView.findViewById(R.id.valueType);
             component = (TextView) itemView.findViewById(R.id.component);
             resultValue = (TextView) itemView.findViewById(R.id.resValue);
-            fullName = (TextView) itemView.findViewById(R.id.senderuser);
-            deptName = (TextView) itemView.findViewById(R.id.senderdept);
+            senderDetails = (TextView) itemView.findViewById(R.id.senderdetails);
             wasReadButton = (ImageButton) itemView.findViewById(R.id.eyeCheckedIL);
             confirmationBox = itemView.findViewById(R.id.confirmationBox);
             confirmRead = itemView.findViewById(R.id.buttonConfirmMarkRead);

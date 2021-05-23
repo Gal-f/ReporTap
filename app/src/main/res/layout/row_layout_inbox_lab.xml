@@ -65,85 +65,85 @@
                 card_view:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <ImageButton
-            android:id="@+id/eyeCheckedIL"
-            android:layout_width="62dp"
-            android:layout_height="wrap_content"
-            android:scaleType="fitCenter"
-            android:adjustViewBounds="true"
-            android:tooltipText="לחצו כדי לסמן כנקרא"
-            android:layout_marginHorizontal="5dp"
-            android:hapticFeedbackEnabled="true"
-            android:background="?android:selectableItemBackground"
-            android:padding="5dp"
-            card_view:srcCompat="@drawable/eye"/>
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:layout_editor_absoluteX="5dp"
-            tools:layout_editor_absoluteY="66dp">
+            android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/testNameL"
-                android:layout_width="wrap_content"
+            <ImageButton
+                android:id="@+id/eyeCheckedIL"
+                android:layout_width="62dp"
                 android:layout_height="wrap_content"
-                android:text="testName"
-                android:textColor="#000"
-                android:textSize="16sp"
-                card_view:layout_constraintBottom_toBottomOf="parent"
-                card_view:layout_constraintEnd_toEndOf="parent"
-                card_view:layout_constraintTop_toTopOf="parent"
-                tools:ignore="MissingConstraints" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                android:scaleType="fitCenter"
+                android:adjustViewBounds="true"
+                android:tooltipText="לחצו כדי לסמן כנקרא"
+                android:layout_marginHorizontal="5dp"
+                android:hapticFeedbackEnabled="true"
+                android:background="?android:selectableItemBackground"
+                android:padding="5dp"
+                card_view:srcCompat="@drawable/eye"/>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/component"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="component"
-                card_view:layout_constraintBottom_toBottomOf="parent"
-                card_view:layout_constraintEnd_toEndOf="parent"
-                card_view:layout_constraintTop_toTopOf="parent"
-                tools:ignore="MissingConstraints" />
+                android:orientation="vertical">
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    tools:layout_editor_absoluteX="5dp"
+                    tools:layout_editor_absoluteY="66dp">
 
-            <TextView
-                android:id="@+id/resValue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="resultValue"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
-                card_view:layout_constraintBottom_toBottomOf="parent"
-                card_view:layout_constraintEnd_toStartOf="@+id/component"
-                card_view:layout_constraintTop_toTopOf="parent"
-                tools:ignore="MissingConstraints" />
+                    <TextView
+                        android:id="@+id/testNameL"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="testName"
+                        android:textColor="#000"
+                        android:textSize="16sp"
+                        card_view:layout_constraintBottom_toBottomOf="parent"
+                        card_view:layout_constraintEnd_toEndOf="parent"
+                        card_view:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="MissingConstraints" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <TextView
-                android:id="@+id/valueType"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="valueType"
-                card_view:layout_constraintBottom_toBottomOf="parent"
-                card_view:layout_constraintEnd_toStartOf="@+id/resValue"
-                card_view:layout_constraintTop_toTopOf="parent"
-                tools:ignore="MissingConstraints" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/component"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="component"
+                        card_view:layout_constraintBottom_toBottomOf="parent"
+                        card_view:layout_constraintEnd_toEndOf="parent"
+                        card_view:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="MissingConstraints" />
+
+                    <TextView
+                        android:id="@+id/resValue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="resultValue"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
+                        card_view:layout_constraintBottom_toBottomOf="parent"
+                        card_view:layout_constraintEnd_toStartOf="@+id/component"
+                        card_view:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="MissingConstraints" />
+
+                    <TextView
+                        android:id="@+id/valueType"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="valueType"
+                        card_view:layout_constraintBottom_toBottomOf="parent"
+                        card_view:layout_constraintEnd_toStartOf="@+id/resValue"
+                        card_view:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="MissingConstraints" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -152,75 +152,63 @@
                 android:id="@+id/confirmationBox"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:textDirection="rtl"
                 card_view:layout_constraintLeft_toLeftOf="parent"
                 card_view:layout_constraintTop_toTopOf="parent"
                 android:visibility="gone">
-            <TextView
-                android:id="@+id/textViewMarkReadLine1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                card_view:layout_constraintTop_toTopOf="parent"
-                card_view:layout_constraintLeft_toLeftOf="parent"
-                android:text="האם לסמן שהדיווח נקרא?"/>
-            <TextView
-                android:id="@+id/textViewMarkReadLine2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                card_view:layout_constraintTop_toBottomOf="@id/textViewMarkReadLine1"
-                card_view:layout_constraintLeft_toLeftOf="parent"
-                android:text="לא ניתן לבטל טיפול בדיווח"
-                android:textStyle="bold"/>
-            <Button
-                android:id="@+id/buttonConfirmMarkRead"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="אישור"
-                card_view:layout_constraintTop_toBottomOf="@id/textViewMarkReadLine2"
-                card_view:layout_constraintLeft_toLeftOf="parent"/>
-            <Button
-                android:id="@+id/buttonCancelMarkRead"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="ביטול"
-                card_view:layout_constraintTop_toBottomOf="@id/textViewMarkReadLine2"
-                card_view:layout_constraintLeft_toRightOf="@id/buttonConfirmMarkRead"
-                android:layout_marginLeft="5dp"
-                android:backgroundTint="@color/disabled_background"/>
+                <TextView
+                    android:id="@+id/textViewMarkReadLine1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    card_view:layout_constraintTop_toTopOf="parent"
+                    card_view:layout_constraintLeft_toLeftOf="parent"
+                    android:text="האם לסמן שהדיווח נקרא?"/>
+                <TextView
+                    android:id="@+id/textViewMarkReadLine2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    card_view:layout_constraintTop_toBottomOf="@id/textViewMarkReadLine1"
+                    card_view:layout_constraintLeft_toLeftOf="parent"
+                    android:text="לא ניתן לבטל טיפול בדיווח"
+                    android:textStyle="bold"/>
+                <Button
+                    android:id="@+id/buttonConfirmMarkRead"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="אישור"
+                    card_view:layout_constraintTop_toBottomOf="@id/textViewMarkReadLine2"
+                    card_view:layout_constraintLeft_toLeftOf="parent"/>
+                <Button
+                    android:id="@+id/buttonCancelMarkRead"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ביטול"
+                    card_view:layout_constraintTop_toBottomOf="@id/textViewMarkReadLine2"
+                    card_view:layout_constraintLeft_toRightOf="@id/buttonConfirmMarkRead"
+                    android:layout_marginLeft="5dp"
+                    android:backgroundTint="@color/disabled_background"/>
             </androidx.constraintlayout.widget.ConstraintLayout>
             <!-- End Confirmation box -->
 
-            <TextView
-                android:id="@+id/senderdept"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="senderdept"
-                card_view:layout_constraintBottom_toBottomOf="parent"
-                card_view:layout_constraintEnd_toEndOf="parent"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayoutSenderDetails"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                card_view:layout_constraintLeft_toRightOf="@id/confirmationBox"
+                card_view:layout_constraintRight_toRightOf="parent"
                 card_view:layout_constraintTop_toTopOf="parent"
-                tools:ignore="MissingConstraints" />
-
-            <TextView
-                android:id="@+id/split"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
-                android:text="|"
-                android:textSize="25dp"
-                card_view:layout_constraintBottom_toBottomOf="parent"
-                card_view:layout_constraintEnd_toStartOf="@+id/senderdept"
-                card_view:layout_constraintTop_toTopOf="parent"
-                tools:ignore="MissingConstraints" />
-
-            <TextView
-                android:id="@+id/senderuser"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="senderuser"
-                card_view:layout_constraintBottom_toBottomOf="parent"
-                card_view:layout_constraintEnd_toStartOf="@+id/split"
-                card_view:layout_constraintTop_toTopOf="parent"
-                tools:ignore="MissingConstraints" />
+                card_view:layout_constraintWidth_default="spread"
+                card_view:layout_constraintHeight_default="wrap">
+                <TextView
+                    android:id="@+id/senderdetails"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textDirection="rtl"
+                    android:text="senderdetails"
+                    card_view:layout_constraintBottom_toBottomOf="parent"
+                    card_view:layout_constraintRight_toRightOf="parent"
+                    card_view:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
