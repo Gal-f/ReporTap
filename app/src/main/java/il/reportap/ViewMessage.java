@@ -212,9 +212,6 @@ public class ViewMessage extends ButtonsOptions {
                             measurementUnit.setText(requestedMessage.getString("measurementUnit"));
                         }
                         comments.setText(requestedMessage.getString("comments")); //TODO resize the textview to fit all the text
-                        wasRead = !requestedMessage.getString("confirmTime").equals("null");
-                        if (wasRead)
-                            markWasReadButton();
                         if (requestedMessage.getString("isUrgent").equals("1")){
                             isUrgent.setImageResource(R.drawable.redexclamation_trans);
                             ((TextView)findViewById(R.id.textViewUrgent)).setText("דחוף");
@@ -228,7 +225,12 @@ public class ViewMessage extends ButtonsOptions {
                                 isUrgent.setTooltipText("לא דחוף");
                             }
                         }
+
                         updateFields();
+
+                        wasRead = !requestedMessage.getString("confirmTime").equals("null");
+                        if (wasRead)
+                            markWasReadButton();
                     }
                 } catch (JSONException e) {
                     Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
@@ -268,6 +270,7 @@ public class ViewMessage extends ButtonsOptions {
         wasReadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 assignMarkAsReadConfirmation(messageID, userID);
             }
         });
@@ -491,9 +494,12 @@ public class ViewMessage extends ButtonsOptions {
 
     public void markWasReadButton(){                                // Handles changing the mark-as-read button to a 'marked' state
         this.wasReadButton.setImageResource(R.drawable.eyecheck2_bmp);
-        this.wasReadButton.setClickable(false);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
             this.wasReadButton.setTooltipText("נקרא");
+        // The following lines merely deal with an Android bug concerning a specific function when referenced from an assigned variable in specific situations
+        wasReadButton = null;   // Resetting the button reference due to a bug - this.wasReadButton.setClickable(false) doesn't work as expected though without the variant it does.
+        findViewById(R.id.imageButtonRead).setClickable(false);
+        wasReadButton = findViewById(R.id.imageButtonRead); // Setting back the reference for use in the other parts of the class
     }
 
     public void blockButtons(Boolean wasRead, String message) {   // Handles blocking the reply, forward & mark-as-read buttons after forwarding, replying or marking-as-read

@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -81,6 +82,15 @@ public class MainActivity extends NavigateUser {
                 startActivity(new Intent(getApplicationContext(), RegisterActivity.class));
             }
         });
+
+        // Disabling back-button action - To prevent logged-off users from getting back to the inbox screens
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                // Do nothing
+            }
+        };
+        this.getOnBackPressedDispatcher().addCallback(this, callback);
     }
 
     private void userLogin() {
