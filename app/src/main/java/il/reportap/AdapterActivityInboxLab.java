@@ -30,6 +30,7 @@ import com.il.reportap.R;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -97,14 +98,24 @@ public class AdapterActivityInboxLab extends RecyclerView.Adapter<AdapterActivit
             });
         }
         //End defining mark-as-read button response
-
+        if (modelActivityInboxLab.getMeasurement().equals("null"))
+            holder.measurement.setVisibility(View.GONE);
+        else holder.measurement.setText(modelActivityInboxLab.getMeasurement());
+        if (modelActivityInboxLab.getComponent().equals("null"))
+            holder.component.setVisibility(View.GONE);
+        else holder.component.setText(modelActivityInboxLab.getComponent());
         if (modelActivityInboxLab.getIsValueBool() == 1) {
             holder.measurement.setVisibility(View.INVISIBLE);
             if (Float.valueOf(modelActivityInboxLab.getResultValue()) == 1) {
-                holder.resultValue.setText(": חיובי");
-            } else holder.resultValue.setText(": שלילי");
+                holder.resultValue.setText("חיובי");
+            } else holder.resultValue.setText("שלילי");
         } else {
-            holder.resultValue.setText(Float.toString(modelActivityInboxLab.getResultValue()));
+            if (!modelActivityInboxLab.getResultValue().equals("0"))
+            {
+            DecimalFormat df = new DecimalFormat("###.###");
+            holder.resultValue.setText(df.format(Float.valueOf(modelActivityInboxLab.getResultValue())));
+            }
+            else holder.resultValue.setVisibility(View.GONE);
         }
     }
 
