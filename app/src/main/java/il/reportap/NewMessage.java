@@ -1,8 +1,6 @@
 package il.reportap;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Pair;
@@ -12,7 +10,6 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -170,6 +167,7 @@ public class NewMessage extends ButtonsOptions {
             }
         });
 
+        /*
         // Setting up the navigation buttons
         findViewById(R.id.toDoB).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -200,7 +198,7 @@ public class NewMessage extends ButtonsOptions {
                 else
                     ((ImageView)findViewById(R.id.imageViewUrgent)).setImageResource(R.drawable.greyexclamation_trans);
             }
-        });
+        });*/
     }
 
     public Boolean Send(){

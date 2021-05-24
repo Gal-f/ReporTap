@@ -185,7 +185,7 @@ public class MainActivity extends NavigateUser {
             }
 
         },
-                error -> Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show()) {
+                error -> Toast.makeText(getApplicationContext(), "שגיאה בביצוע הפעולה", Toast.LENGTH_LONG).show()) {
             @Nullable
             @Override
             protected HashMap<String, String> getParams() throws AuthFailureError {
