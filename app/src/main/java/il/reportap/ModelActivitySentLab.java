@@ -1,11 +1,11 @@
 package il.reportap;
 
 public class ModelActivitySentLab {
-    private Integer id, isUrgent, isValueBool, testResult;
-    private String patientId,sentTime,deptName,testName, confirmTime, text, measurementUnit, component, fullName,fullNameP;
+    private Integer id, isUrgent, isValueBool;
+    private String patientId,sentTime,deptName,testResult,testName, confirmTime, text, measurementUnit, component, fullName,fullNameP;
 
     public ModelActivitySentLab(Integer id, String sent_time, String patient_id,String fullNameP, String test_name, Integer isUrgent , String confirm_time, String dept_name,
-                                String text, String measurementUnit, String component, Integer isValueBool, Integer testResult,
+                                String text, String measurementUnit, String component, Integer isValueBool, String testResult,
                                 String fullName) {
         this.id = id;
         this.patientId = patient_id;
@@ -56,7 +56,7 @@ public class ModelActivitySentLab {
         return isValueBool;
     }
 
-    public Integer getTestResult() {
+    public String getTestResult() {
         return testResult;
     }
 

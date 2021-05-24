@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.il.reportap.R;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 public class AdapterActivitySentLab extends RecyclerView.Adapter<AdapterActivitySentLab.ViewHolder>{
@@ -50,21 +51,37 @@ public class AdapterActivitySentLab extends RecyclerView.Adapter<AdapterActivity
            if (Integer.valueOf(modelActivitySentLab.getIsUrgent())==1) {
             holder.isUrgent.setImageResource(R.drawable.redexclamation_trans);
             }
-           holder.text.setText(modelActivitySentLab.getText());
-           holder.component.setText(modelActivitySentLab.getComponent());
+           if (modelActivitySentLab.getText().equals("null"))
+           {
+               holder.text.setVisibility(View.GONE);
+           }
+           else holder.text.setText(modelActivitySentLab.getText());
+           if (modelActivitySentLab.getComponent().equals("null"))
+           {
+               holder.component.setVisibility(View.GONE);
+           }
+           else holder.component.setText(modelActivitySentLab.getComponent());
+           if (modelActivitySentLab.getMeasurementUnit().equals("null"))
+            {
+            holder.resultType.setVisibility(View.GONE);
+            }
+           else holder.resultType.setText(modelActivitySentLab.getMeasurementUnit());
            if(modelActivitySentLab.getIsValueBool()==1)
            {
-               holder.resultType.setVisibility(View.INVISIBLE);
+               holder.resultType.setVisibility(View.GONE);
                if(Float.valueOf(modelActivitySentLab.getTestResult())==1)
                {
-                   holder.resultValue.setText(": חיובי");
+                   holder.resultValue.setText("חיובי");
                }
-               else holder.resultValue.setText(": שלילי");
+               else holder.resultValue.setText("שלילי");
            }
            else
            {
-               holder.resultValue.setText(Float.toString(modelActivitySentLab.getTestResult()));
-               holder.resultType.setText(modelActivitySentLab.getMeasurementUnit());
+               if(!modelActivitySentLab.getTestResult().equals("0")) {
+                   DecimalFormat df = new DecimalFormat("###.###");
+                   holder.resultValue.setText(df.format(Float.valueOf(modelActivitySentLab.getTestResult())));
+               }
+               else holder.resultValue.setVisibility(View.GONE);
            }
     }
 

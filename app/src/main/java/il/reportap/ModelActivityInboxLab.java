@@ -2,12 +2,11 @@ package il.reportap;
 
 public class ModelActivityInboxLab {
     private Integer id,messageId,isValueBool;
-    private String sentTime,patientId,testName,text,measurement,component, fullName, dept;
-    private Float resultValue;
+    private String sentTime,patientId,testName,text,measurement,component, fullName, dept, resultValue;
     private Boolean wasRead;
 
     public ModelActivityInboxLab(Integer id,Integer messageId, String sentTime, String patientId, String testName,
-                                 String text, String measurement, String component, Integer isValueBool, Float resultValue,
+                                 String text, String measurement, String component, Integer isValueBool, String resultValue,
                                  String fullName, String dept, Boolean wasRead) {
         this.id = id;
         this.messageId=messageId;
@@ -58,7 +57,7 @@ public class ModelActivityInboxLab {
         return component;
     }
 
-    public Float getResultValue() {
+    public String getResultValue() {
         return resultValue;
     }
 

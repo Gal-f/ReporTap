@@ -113,7 +113,7 @@ public class SentLab extends ButtonsOptions {
                                     jObg.getString("measurement_unit"),
                                     jObg.getString("component"),
                                     jObg.getInt("is_value_boolean"),
-                                    jObg.getInt("test_result_value"),
+                                    jObg.getString("test_result_value"),
                                     jObg.getString("full_name"));
                             modelActivitySentLabList.add(modelActivitySentLab);
                         }
