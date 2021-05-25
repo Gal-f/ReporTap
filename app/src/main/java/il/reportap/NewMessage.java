@@ -1,6 +1,8 @@
 package il.reportap;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Pair;
@@ -10,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -173,23 +176,23 @@ public class NewMessage extends ButtonsOptions {
             @Override
             public void onClick(View v) {
                 finish();
-                startActivity(new Intent(getApplicationContext(), InboxDoctor.class));
+                startActivity(new Intent(getApplicationContext(), InboxLab.class));
             }
         });
         findViewById(R.id.sentB).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
-                startActivity(new Intent(getApplicationContext(), SentDoctor.class));
+                startActivity(new Intent(getApplicationContext(), SentLab.class));
             }
         });
         findViewById(R.id.doneB).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
-                startActivity(new Intent(getApplicationContext(), DoneDoctor.class));
+                startActivity(new Intent(getApplicationContext(), DoneLab.class));
             }
-        });
+        }); */
         findViewById(R.id.checkBoxUrgent).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -198,7 +201,7 @@ public class NewMessage extends ButtonsOptions {
                 else
                     ((ImageView)findViewById(R.id.imageViewUrgent)).setImageResource(R.drawable.greyexclamation_trans);
             }
-        });*/
+        });
     }
 
     public Boolean Send(){

@@ -101,7 +101,7 @@ public class AdapterActivityInboxLab extends RecyclerView.Adapter<AdapterActivit
         if (modelActivityInboxLab.getMeasurement().equals("null"))
             holder.measurement.setVisibility(View.GONE);
         else holder.measurement.setText(modelActivityInboxLab.getMeasurement());
-        if (modelActivityInboxLab.getComponent().equals("null"))
+        if (modelActivityInboxLab.getComponent().equals("null") || modelActivityInboxLab.getComponent().equals(""))
             holder.component.setVisibility(View.GONE);
         else holder.component.setText(modelActivityInboxLab.getComponent());
         if (modelActivityInboxLab.getIsValueBool() == 1) {

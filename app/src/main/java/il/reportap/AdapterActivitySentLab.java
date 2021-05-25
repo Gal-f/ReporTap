@@ -56,7 +56,7 @@ public class AdapterActivitySentLab extends RecyclerView.Adapter<AdapterActivity
                holder.text.setVisibility(View.GONE);
            }
            else holder.text.setText(modelActivitySentLab.getText());
-           if (modelActivitySentLab.getComponent().equals("null"))
+           if (modelActivitySentLab.getComponent().equals("null") || modelActivitySentLab.getComponent().equals(""))
            {
                holder.component.setVisibility(View.GONE);
            }

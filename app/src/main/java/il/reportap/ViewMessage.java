@@ -57,6 +57,7 @@ public class ViewMessage extends ButtonsOptions {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_message);
+        colorButton(SharedPrefManager.getInstance(this).getUser().getDeptType(), getClass().getSimpleName());
 
         this.progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("נא להמתין לטעינת הדיווח...");
@@ -203,7 +204,13 @@ public class ViewMessage extends ButtonsOptions {
                         patientId.setText(requestedMessage.getString("patientId"));
                         patientName.setText(requestedMessage.getString("patientName"));
                         testName.setText(requestedMessage.getString("testName"));
-                        componentName.setText(requestedMessage.getString("componentName"));
+                        String componentTemp = requestedMessage.getString("componentName");
+                        if (componentTemp.equals("") || componentTemp.equals("null")) {   //If there is no component in the test result, the field isn't shown
+                            componentName.setVisibility(View.GONE);
+                            findViewById(R.id.textViewComponentNameLabel).setVisibility(View.GONE);
+                        }
+                        else
+                            componentName.setText(componentTemp);
                         isTestValueBool = requestedMessage.getString("isValueBool").equals("1");    //The 'equals' check is performed (here and for the next boolean variables) since the value returns as a string rather than boolean
                         if (isTestValueBool){
                             boolValue.setText((requestedMessage.getString("testResultValue")).equals("1") ? "חיובית" : "שלילית");
@@ -211,7 +218,7 @@ public class ViewMessage extends ButtonsOptions {
                             measuredAmountValue.setText(requestedMessage.getString("testResultValue"));
                             measurementUnit.setText(requestedMessage.getString("measurementUnit"));
                         }
-                        comments.setText(requestedMessage.getString("comments")); //TODO resize the textview to fit all the text
+                        comments.setText(requestedMessage.getString("comments").equals("null") ? "" : requestedMessage.getString("comments"));  //Comments field is presented in any case, but if there are no comments it will be empty
                         if (requestedMessage.getString("isUrgent").equals("1")){
                             isUrgent.setImageResource(R.drawable.redexclamation_trans);
                             ((TextView)findViewById(R.id.textViewUrgent)).setText("דחוף");
