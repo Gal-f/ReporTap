@@ -49,7 +49,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:onClick="deleteUser"
-                android:text="מחק" />
+                android:text="השעה" />
         </LinearLayout>
     </ScrollView>
 

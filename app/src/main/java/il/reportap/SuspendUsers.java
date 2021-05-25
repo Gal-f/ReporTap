@@ -49,6 +49,9 @@ public class SuspendUsers extends OptionsMenu {
                     message = jsonObject.getString("message");
                     //message can be an error message or a success message
                     Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+                    if(!jsonObject.getBoolean("error")){
+                        empNum.setText("");
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
