@@ -198,7 +198,7 @@
                 card_view:layout_constraintRight_toRightOf="parent"
                 card_view:layout_constraintTop_toTopOf="parent"
                 card_view:layout_constraintWidth_default="spread"
-                card_view:layout_constraintHeight_default="wrap">
+                card_view:layout_constrainedHeight="true">
                 <TextView
                     android:id="@+id/senderdetails"
                     android:layout_width="match_parent"

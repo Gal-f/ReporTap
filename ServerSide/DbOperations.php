@@ -238,7 +238,7 @@ class DbOperations
 		     $response['users']= $users;
 		 }
 		 else{
-		     $response['error'] = false;
+		     $response['error'] = true;
 		     $response['message']="אין משתמשים הממתינים לאישור";
 		 }
 
@@ -250,32 +250,40 @@ class DbOperations
         $stmt = $this->conn->prepare('UPDATE users SET is_active=1 WHERE employee_ID ="'.$employeeNumber.'"');
         if ($stmt->execute()) {
             $response['error'] = false;
-            $response['message'] = 'Updated the record successfully';
+            $response['message'] = 'הפעולה בוצעה בהצלחה';
         } else {
             $response['error'] = true;
-            $response['message'] = 'Error while updating the record';
+            $response['message'] = 'שגיאה בביצוע הפעולה';
         }
         return $response;
     }
 
 	function deleteUser($employeeNumber){
 
-        $response = array();
+       $response = array();
 		//because the admin user enters the employee number and dosen't choose it from a list, we should validate the input.
-        $stmt = $this->conn->prepare('SELECT id FROM users WHERE employee_ID = "'.$employeeNumber.'"');
+        $stmt = $this->conn->prepare('SELECT id, is_deleted FROM users WHERE employee_ID = "'.$employeeNumber.'"');
         $stmt->execute();
         $stmt->store_result();
 
         //if there is a user with this employee number
         if ($stmt->num_rows > 0) {
-			$stmt->close();
-			$stmt1 = $this->conn->prepare('UPDATE `users` SET `is_deleted`= 1 WHERE `employee_ID` = "'.$employeeNumber.'" ');
-			 if ($stmt1->execute()) {
-				$response['error'] = false;
-				$response['message'] = 'משתמש נמחק בהצלחה';
-			} else {
+			$stmt->bind_result($id, $isDeleted);
+            $stmt->fetch();
+			if($isDeleted){
 				$response['error'] = true;
-				$response['message'] = 'שגיאה בביצוע הפעולה';
+				$response['message'] = 'המשתמש כבר נמצא במצב השעייה';
+			}
+			else{
+				$stmt->close();
+				$stmt1 = $this->conn->prepare('UPDATE `users` SET `is_deleted`= 1 WHERE `employee_ID` = "'.$employeeNumber.'" ');
+				if ($stmt1->execute()) {
+				$response['error'] = false;
+				$response['message'] = 'משתמש הושעה הצלחה';
+				} else {
+					$response['error'] = true;
+					$response['message'] = 'שגיאה בביצוע הפעולה';
+				}
 			}
 		}
 		 else {
@@ -284,30 +292,6 @@ class DbOperations
 		 }
         return $response;
 	}
-
-
-	/*
-	 function getIsActive($employeeNumber){
-		$response = array();
-		$query = $this->conn->prepare('SELECT is_active FROM users WHERE employee_ID = "'.$employeeNumber.'"');
-		if ($query->execute()) {
-			$query->store_result();
-			$query->bind_result($isActive);
-			$query->fetch();
-			$response['error'] = false;
-			if($isActive){
-				$response['isActive'] = true;
-			}
-			else{
-				$response['isActive'] = false;
-			}
-		}else {
-			$response['error'] = true;
-			$response['message'] = 'לא ניתן לבדוק אם המשתמש פעיל כעת';
-		}
-        return $response;
-    }*/
-
 
     function send_message($sender, $department, $patientId, $patientName, $testType, $componentName, $isValueBool, $testResultValue, $isUrgent, $comments)
     {
@@ -350,12 +334,12 @@ class DbOperations
             curl_close( $ch );
 
             $response['error'] = false;
-            $response['message'] = 'Message sent successfully';
+            $response['message'] = 'ההודעה נשלחה בהצלחה';
             $response['sent_message'] = $message;
             $response['notification']=$result;
         } else {
             $response['error'] = true;
-            $response['message'] = 'Error while sending the message';
+            $response['message'] = 'שגיאה בשליחת המסר';
         }
         return $response;
     }
