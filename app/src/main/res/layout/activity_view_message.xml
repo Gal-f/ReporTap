@@ -23,15 +23,15 @@
 
 
         <!-- Page title -->
-            <TextView
-                android:id="@+id/textView3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
-                android:text="דיווח תוצאת מעבדה"
-                android:textColor="@color/black"
-                android:textSize="18dp"
-                android:textStyle="bold" /><!--TODO: Replace 3 last lines with font_Title1 from class Design -->
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:text="צפייה בתוצאת מעבדה"
+            android:textColor="@color/black"
+            android:textSize="18dp"
+            android:textStyle="bold" /><!--TODO: Replace 3 last lines with font_Title1 from class Design -->
             <View
                 android:layout_width="match_parent"
                 android:layout_height="3dp"
