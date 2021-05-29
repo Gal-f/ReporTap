@@ -142,7 +142,6 @@ public class MainActivity extends NavigateUser {
 
                         //if the user has not completed the 2fa process
                         if (!obj.getBoolean("otpVerified")) {
-                            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
                             finish();
                             Intent intent1 = new Intent(MainActivity.this, TwoFactorAuth.class);
                             intent1.putExtra("user", user);
@@ -150,7 +149,6 @@ public class MainActivity extends NavigateUser {
 
                         //if the system manager has not approved the user's account
                         } else if (!obj.getBoolean("isActive")) {
-                            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
                             SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
                             finish();
                             startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
