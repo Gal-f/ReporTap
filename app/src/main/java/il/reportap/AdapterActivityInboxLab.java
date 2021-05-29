@@ -201,7 +201,7 @@ public class AdapterActivityInboxLab extends RecyclerView.Adapter<AdapterActivit
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(context.getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(context.getApplicationContext(), "שגיאה בביצוע הפעולה. עימך הסליחה.", Toast.LENGTH_LONG).show();
                     }
                 }) {
             @Nullable

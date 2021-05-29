@@ -85,8 +85,6 @@ public class SentDoctor extends ButtonsOptions {
                 startActivity(new Intent(getApplicationContext(), InboxDoctor.class));
             }
         });
-
-
     }
 
     public void myStringRequest() {
@@ -114,10 +112,6 @@ public class SentDoctor extends ButtonsOptions {
                                     jObg.getString("confirm_time"));
                             modelActivitySentDrList.add(modelActivitySentDr);
                         }
-
-
-
-
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -127,7 +121,7 @@ public class SentDoctor extends ButtonsOptions {
 
                 },
                 //lambda expression
-                error -> Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show())
+                error -> Toast.makeText(getApplicationContext(), "שגיאה בביצוע הפעולה. עימך הסליחה.", Toast.LENGTH_LONG).show())
         {
             @Nullable
             @Override

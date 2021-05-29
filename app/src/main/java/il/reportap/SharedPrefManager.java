@@ -83,8 +83,10 @@ public class SharedPrefManager {
 
     //this method will logout the user 
     public void logout() {
-        //delete the token in order to stop the FCM notifications for users that logged out
-        FirebaseMessaging.getInstance().deleteToken();
+        //unsubscribe the user in order to stop the FCM notifications for approved users that logged out
+        if(this.getUser().isActive()){
+            FirebaseMessaging.getInstance().unsubscribeFromTopic(String.valueOf(getUser().getDeptID()));
+        }
         SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear();
@@ -92,14 +94,6 @@ public class SharedPrefManager {
         Intent intent = new Intent(mCtx, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         mCtx.startActivity(intent);
-    }
-
-
-    public void updateIsActive(boolean isActive){
-        SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(KEY_ACTIVE, isActive);
-        editor.apply();
     }
 
 }

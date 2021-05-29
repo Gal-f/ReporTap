@@ -8,8 +8,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -40,7 +38,6 @@ public class  TwoFactorAuth extends NavigateUser {
         setContentView(R.layout.activity_two_factor_auth);
 
         editTextOTP = findViewById(R.id.editTextOTP);
-        Intent intent = getIntent();
         //generates random 6 digits code
         otp = new DecimalFormat("000000").format(new Random().nextInt(999999));
         //get the user data from Register Activity/Login activity
@@ -49,14 +46,13 @@ public class  TwoFactorAuth extends NavigateUser {
         dialog = (LinearLayout) findViewById(R.id.dialogPopUp);
         helloUser = findViewById(R.id.helloUser);
         helloUser.setText("שלום " + user.getFullName() +",");
-
     }
 
     public void sendOtp(View v) {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URLs.URL_SENDOTP, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                String errorMessage = "";
+                String errorMessage;
                 try {
                     JSONObject jsonObject = new JSONObject(response);
                     errorMessage = jsonObject.getString("message");
@@ -72,13 +68,12 @@ public class  TwoFactorAuth extends NavigateUser {
             },
                 new Response.ErrorListener() {
                 @Override
-                //any server error that is not handled in the php code
+                //handling with volley error
                 public void onErrorResponse(VolleyError error) {
-                    Toast.makeText(getApplicationContext(), "שגיאה בשליחת קוד האימות", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "שגיאה בשליחת קוד האימות. נא נסה את אמצעי האימות השני.", Toast.LENGTH_LONG).show();
                 }
             }) {
 
-            @Nullable
             @Override
             protected HashMap<String, String> getParams() {
                 HashMap<String, String> params = new HashMap<>();
@@ -115,7 +110,6 @@ public class  TwoFactorAuth extends NavigateUser {
                             try{
                                 //converting response to json object
                                 JSONObject obj = new JSONObject(secondRequestHandler.sendPostRequest(URLs.URL_VREIFIEDUSER, params));
-                                String responseMessage = obj.getString("message");
                                 //if the user is still waiting for the manager confirmation
                                 if (!obj.getBoolean("isActive")) {
                                     SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
@@ -123,12 +117,12 @@ public class  TwoFactorAuth extends NavigateUser {
                                     {
                                         public void run()
                                         {
-                                            Toast.makeText(getApplicationContext(), responseMessage, Toast.LENGTH_LONG).show();
+                                            Toast.makeText(getApplicationContext(), "הקוד אומת בהצלחה. כעת יש להמתין לאישור מנהל", Toast.LENGTH_LONG).show();
                                             finish();
                                             startActivity(new Intent(TwoFactorAuth.this, ProfileActivity.class));
                                         }
                                     });
-                                    //the user has been approved by the system manager
+                                //the user has been approved by the system manager
                                 } else {
                                     user.setActive(true);
                                     //storing the user in shared preferences

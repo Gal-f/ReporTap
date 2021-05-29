@@ -127,7 +127,7 @@ public class DoneDoctor extends ButtonsOptions {
 
                 },
                 //lambda expression
-                error -> Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show())
+                error -> Toast.makeText(getApplicationContext(), "שגיאה בביצוע הפעולה. עימך הסליחה.", Toast.LENGTH_LONG).show())
         {
             @Nullable
             @Override

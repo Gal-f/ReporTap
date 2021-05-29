@@ -4,10 +4,11 @@ import java.io.Serializable;
 
 public class User implements Serializable {
 
-    public boolean isActive;
+    private boolean isActive;
     private int id;
-    private String employeeNumber, fullName, email, jobTitle, phoneNumber, deptType, deptName;
-    private int deptID;
+    private final String employeeNumber;
+    private String fullName, email, jobTitle, phoneNumber, deptType, deptName;
+    private final int deptID;
 
     public User(int id, String employeeNumber, String fullName, String email, String jobTitle, String phoneNumber,
                 int department, String deptType, String deptName) {

@@ -32,43 +32,43 @@ class DbOperations
             $response['message'] = 'משתמש קיים במערכת עם אימייל, טלפון או מספר עובד זהה';
             $stmt->close();
         } else {
-			    try{
-					$stmt = $this->conn->prepare("INSERT INTO users (password, employee_ID, full_name, email, role, phone_number, works_in_dept) VALUES (?, ?, ?, ?, ?, ?, ?)");
-					$stmt->bind_param("ssssssi", $password, $employeeNumber, $fullName, $email, $jobTitle, $phoneNumber, $deptID);
+		    try{
+				$stmt = $this->conn->prepare("INSERT INTO users (password, employee_ID, full_name, email, role, phone_number, works_in_dept) VALUES (?, ?, ?, ?, ?, ?, ?)");
+				$stmt->bind_param("ssssssi", $password, $employeeNumber, $fullName, $email, $jobTitle, $phoneNumber, $deptID);
 
-					if ($stmt->execute()) {
-						$stmt = $this->conn->prepare("SELECT id, employee_ID, full_name, email, role, phone_number, works_in_dept  FROM users WHERE employee_ID = ?");
-						$stmt->bind_param("s", $employeeNumber);
-						$stmt->execute();
-						$stmt->bind_result($id, $employeeNumber, $fullName, $email, $jobTitle, $phoneNumber, $deptID);
-						$stmt->fetch();
-						$stmt->close();
+				if ($stmt->execute()) {
+					$stmt = $this->conn->prepare("SELECT id, employee_ID, full_name, email, role, phone_number, works_in_dept  FROM users WHERE employee_ID = ?");
+					$stmt->bind_param("s", $employeeNumber);
+					$stmt->execute();
+					$stmt->bind_result($id, $employeeNumber, $fullName, $email, $jobTitle, $phoneNumber, $deptID);
+					$stmt->fetch();
+					$stmt->close();
 
-						$query="SELECT `dept_type` FROM `departments` WHERE `ID` = ? ";
-                		$stmt1 = $this->conn->prepare($query);
-                		$stmt1->bind_param("i", $deptID);
-                		$stmt1->execute();
-                		$stmt1->store_result();
-                		$stmt1->bind_result($deptType);
-                		$stmt1->fetch();
+					$query="SELECT `dept_type` FROM `departments` WHERE `ID` = ? ";
+            		$stmt1 = $this->conn->prepare($query);
+            		$stmt1->bind_param("i", $deptID);
+            		$stmt1->execute();
+            		$stmt1->store_result();
+            		$stmt1->bind_result($deptType);
+            		$stmt1->fetch();
 
-						$user = array(
-							'id' => $id,
-							'employee_ID' => $employeeNumber,
-							'full_name' => $fullName,
-							'email' => $email,
-							'role' => $jobTitle,
-							'phone_number' => $phoneNumber,
-							'works_in_dept' => $deptID,
-							'dept_type' => $deptType
-						);
+					$user = array(
+						'id' => $id,
+						'employee_ID' => $employeeNumber,
+						'full_name' => $fullName,
+						'email' => $email,
+						'role' => $jobTitle,
+						'phone_number' => $phoneNumber,
+						'works_in_dept' => $deptID,
+						'dept_type' => $deptType
+					);
 
-						$stmt->close();
-						//adding the user data in response
-						$response['error'] = false;
-						$response['message'] = 'משתמש נרשם בהצלחה';
-						$response['user'] = $user;
-					}
+					$stmt->close();
+					//adding the user data in response
+					$response['error'] = false;
+					$response['message'] = 'משתמש נרשם בהצלחה';
+					$response['user'] = $user;
+				}
 			}
 			catch (Exception $e) {
 				echo 'Caught exception: '. $e->getMessage() ."\n";
@@ -80,51 +80,50 @@ class DbOperations
 
 	function sendOTP($email, $phoneNumber, $sendTo, $otp){
 
-				include 'vendor/apiKeys.php';
-				//if the user wanted us to send him code via sms
-				if($sendTo == "phone"){
-					$phoneNum = "972".substr($phoneNumber,1);
-					$basic  = new \Vonage\Client\Credentials\Basic($vonageApiKey, $vonageApiSecret);
-					$client = new \Vonage\Client($basic);
-					$res = $client->sms()->send(new \Vonage\SMS\Message\SMS($phoneNum, "ReporTap", "קוד האימות שלך הוא: ".$otp));
-					$apiRes = $res->current();
-					//if the message was sent successfully
-					if($apiRes->getStatus() == 0){
-						$response['error'] = false;
-						$response['message'] = 'קוד נשלח בהצלחה';
-					}
-					else{
-						$response['error'] = true;
-						$response['message'] = 'שגיאה בשליחת קוד האימות';
-					}
+    	include 'vendor/apiKeys.php';
+    	//if the user wanted us to send him a code via sms
+    	if($sendTo == "phone"){
+    		$phoneNum = "972".substr($phoneNumber,1);
+    		$basic  = new \Vonage\Client\Credentials\Basic($vonageApiKey, $vonageApiSecret);
+    		$client = new \Vonage\Client($basic);
+    		$res = $client->sms()->send(new \Vonage\SMS\Message\SMS($phoneNum, "ReporTap", "קוד האימות שלך הוא: ".$otp));
+    		$apiRes = $res->current();
+    		//if the message was sent successfully
+    		if($apiRes->getStatus() == 0){
+    			$response['error'] = false;
+    			$response['message'] = 'קוד נשלח בהצלחה';
+    		}
+    		else{
+    			$response['error'] = true;
+    			$response['message'] = 'שגיאה בשליחת קוד האימות';
+    		}
+    	}
+    	//the user wanted us to send him a code via email
+    	else{
+    		$mail = new \SendGrid\Mail\Mail();
+    		$mail->setFrom("edenpe@mta.ac.il", "ReporTap");
+    		$mail->setSubject("אימות חשבון חדש");
+    	    $mail->addTo($email);
+    		$mail->addContent("text/plain", "קוד האימות שלך הוא: ".$otp);
+    		$sendgrid = new \SendGrid($sendGridApiKey);
+    		try{
+				$sendGridRes = $sendgrid->send($mail);
+				if($sendGridRes->statusCode() >= 200 && $sendGridRes->statusCode() < 300){
+					$response['error'] = false;
+					$response['message'] = 'קוד נשלח בהצלחה';
 				}
-				//the user wanted us to send him code via email
 				else{
-					$mail = new \SendGrid\Mail\Mail();
-					$mail->setFrom("edenpe@mta.ac.il", "ReporTap");
-					$mail->setSubject("אימות חשבון חדש");
-				    $mail->addTo($email);
-					$mail->addContent("text/plain", "קוד האימות שלך הוא: ".$otp);
-					$sendgrid = new \SendGrid($sendGridApiKey);
-					try{
-							$sendGridRes = $sendgrid->send($mail);
-							if($sendGridRes->statusCode() >= 200 && $sendGridRes->statusCode() < 300){
-								$response['error'] = false;
-								$response['message'] = 'קוד נשלח בהצלחה';
-							}
-							else{
-								$response['error'] = true;
-								$response['message'] = 'שגיאה בשליחת קוד האימות';
-								$response['sendGridError'] = print_r($sendGridRes);
-							}
-
-					}
-					catch (Exception $e){
-						echo 'Caught exception: '. $e->getMessage() ."\n";
-					}
-
+					$response['error'] = true;
+					$response['message'] = 'שגיאה בשליחת קוד האימות';
+					$response['sendGridError'] = print_r($sendGridRes);
 				}
-		return $response;
+
+    		}
+    		catch (Exception $e){
+    			echo 'Caught exception: '. $e->getMessage() ."\n";
+    		}
+    	}
+	return $response;
 	}
 
 
@@ -143,11 +142,9 @@ class DbOperations
 		$stmt2->bind_result($isActive);
 		$stmt2->fetch();
 		if(!$isActive){
-			$response['message'] = "הקוד אומת בהצלחה, כעת יש להמתין לאישור מנהל";
 			$response['isActive'] = false;
 		}
 		else{
-			$response['message'] = 'הקוד אומת בהצלחה';
 			$response['isActive'] = true;
 		}
         return $response;
@@ -163,48 +160,50 @@ class DbOperations
 
 		//if there is a user with this employee number and password in the db
         if ($stmt->num_rows > 0) {
-			$stmt->bind_result($id, $employeeNumber, $fullName, $email, $jobTitle, $phoneNumber, $deptID, $isActive, $otp_verified, $is_deleted);
-			$stmt->fetch();
-			if($is_deleted){
-				$response['error'] = true;
-				$response['message'] = 'חשבונך הושעה, לעזרה יש לפנות למנהל המערכת';
-			}
-			else{
-				$query="SELECT `dept_type` FROM `departments` WHERE `ID` = ? ";
-				$stmt1 = $this->conn->prepare($query);
-				$stmt1->bind_param("i", $deptID);
-				$stmt1->execute();
-				$stmt1->store_result();
-				$stmt1->bind_result($deptType);
-				$stmt1->fetch();
+    		$stmt->bind_result($id, $employeeNumber, $fullName, $email, $jobTitle, $phoneNumber, $deptID, $isActive, $otp_verified, $is_deleted);
+    		$stmt->fetch();
+    		if($is_deleted){
+    			$response['error'] = true;
+    			$response['message'] = 'חשבונך הושעה, לעזרה יש לפנות למנהל המערכת';
+    		}
+    		else{
+    			$query="SELECT `dept_type` FROM `departments` WHERE `ID` = ? ";
+    			$stmt1 = $this->conn->prepare($query);
+    			$stmt1->bind_param("i", $deptID);
+    			$stmt1->execute();
+    			$stmt1->store_result();
+    			$stmt1->bind_result($deptType);
+    			$stmt1->fetch();
 
-				$user = array(
-					'id' => $id,
-					'employee_ID' => $employeeNumber,
-					'full_name' => $fullName,
-					'email' => $email,
-					'role' => $jobTitle,
-					'phone_number' => $phoneNumber,
-					'works_in_dept' => $deptID,
-					'dept_type'=>$deptType
-					);
-				$response['error'] = false;
-				$response['user'] = $user;
-				//check whether the user completed the 2fa or not
-				if($otp_verified){
-					//check whether the system administrator approved the user's account
-					if($isActive){
-						$response['message'] = 'התחברות בוצעה בהצלחה';
-						$response['isActive'] = true;
-					}
-					else{
-						$response['message'] = 'המשתמש ממתין לאישור מנהל';
-						$response['isActive'] = false;
-					}
-				}
-				else{
-					 $response['message'] = 'משתמש לא מאומת';
-				}
+    			$user = array(
+    				'id' => $id,
+    				'employee_ID' => $employeeNumber,
+    				'full_name' => $fullName,
+    				'email' => $email,
+    				'role' => $jobTitle,
+    				'phone_number' => $phoneNumber,
+    				'works_in_dept' => $deptID,
+    				'dept_type'=>$deptType
+    				);
+    			$response['error'] = false;
+    			$response['user'] = $user;
+    			//check whether the user completed the 2fa or not
+    			if($otp_verified){
+    			    $response['otpVerified'] = true;
+    				//check whether the system administrator approved the user's account
+    				if($isActive){
+    					$response['message'] = 'התחברות בוצעה בהצלחה';
+    					$response['isActive'] = true;
+    				}
+    				else{
+    					$response['message'] = 'המשתמש ממתין לאישור מנהל';
+    					$response['isActive'] = false;
+    				}
+    			}
+    			else{
+    				 $response['message'] = 'משתמש לא מאומת';
+    				 $response['otpVerified'] = false;
+    			}
 			}
         } else {
             $response['error'] = true;
@@ -219,23 +218,21 @@ class DbOperations
 		$stmt->execute();
 		$stmt->store_result();
 		$rows = $stmt->num_rows;
-
 		 if ($stmt->num_rows > 0){
-
-		      while ($rows>0){
-		        $stmt->bind_result($fullName, $employeeNumber, $jobTitle, $deptID);
+    	      while ($rows>0){
+    	        $stmt->bind_result($fullName, $employeeNumber, $jobTitle, $deptID);
                 $stmt->fetch();
 
                 $users[$stmt->num_rows-$rows] = array('full_name' => $fullName,
-				'employee_ID' => $employeeNumber,
-				'role' => $jobTitle,
-				'works_in_dept' => $deptID
+    			'employee_ID' => $employeeNumber,
+    			'role' => $jobTitle,
+    			'works_in_dept' => $deptID
                 );
                 $rows--;
-		      }
-		     $response['error'] = false;
-		     $response['message'] = "יש משתמשים הממתינים לאישור";
-		     $response['users']= $users;
+    	      }
+    	     $response['error'] = false;
+    	     $response['message'] = "יש משתמשים הממתינים לאישור";
+    	     $response['users']= $users;
 		 }
 		 else{
 		     $response['error'] = true;
@@ -246,11 +243,42 @@ class DbOperations
     }
 
     function approveUser($employeeNumber){
+        include 'vendor/apiKeys.php';
 		$response = array();
         $stmt = $this->conn->prepare('UPDATE users SET is_active=1 WHERE employee_ID ="'.$employeeNumber.'"');
         if ($stmt->execute()) {
+            $msg = array
+              (
+            'body'  => 'איזה כיף, המנהל אישר אותך! על מנת לראות את השינוי יש להתחבר מחדש',
+            'title' => 'ReporTap New Message'
+              );
+            $fields = array
+                (
+
+                    'to'        => '/topics/'.$employeeNumber,
+                    'notification'  => $msg
+                );
+
+
+             $headers = array
+                (
+                    'Authorization: key='.$firebaseKey,
+                    'Content-Type: application/json'
+                );
+
+            $ch = curl_init();
+            curl_setopt( $ch,CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send' );
+            curl_setopt( $ch,CURLOPT_POST, true );
+            curl_setopt( $ch,CURLOPT_HTTPHEADER, $headers );
+            curl_setopt( $ch,CURLOPT_RETURNTRANSFER, true );
+            curl_setopt( $ch,CURLOPT_SSL_VERIFYPEER, false );
+            curl_setopt( $ch,CURLOPT_POSTFIELDS, json_encode( $fields ) );
+            $result = curl_exec($ch );
+            curl_close( $ch );
             $response['error'] = false;
             $response['message'] = 'הפעולה בוצעה בהצלחה';
+            $response['notification']=$result;
+
         } else {
             $response['error'] = true;
             $response['message'] = 'שגיאה בביצוע הפעולה';
@@ -655,7 +683,8 @@ class DbOperations
             curl_close( $ch );
 
             $response['error'] = false;
-            $response['message'] = 'Response sent successfully';
+            $response['message'] = 'תגובה נשלחה בהצלחה';
+            $response['notification']=$result;
         } else {
             $response['error'] = true;
             $response['message'] = 'Error while sending the response';
@@ -664,6 +693,7 @@ class DbOperations
     }
 
     function forward_message($messageID, $department, $userID){
+        include 'vendor/apiKeys.php';
         $response = array();
         //TODO validate that the message wasn't approved before allowing forward
         $stmtMessages = $this->conn->prepare("UPDATE messages SET sent_time = CURRENT_TIMESTAMP, recipient_dept = ?, sender_user = ? WHERE messages.ID = ?;");
@@ -675,7 +705,7 @@ class DbOperations
             //send notifications to the users via firebase api
             $msg = array
               (
-            'body'  => 'קיבלת תגובה חדשה',
+            'body'  => 'קיבלת הודעה חדשה',
             'title' => 'ReporTap New Message'
               );
             $fields = array
