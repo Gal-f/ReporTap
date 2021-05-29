@@ -52,7 +52,7 @@ public class RegisterActivity extends AppCompatActivity {
         spinnerDepartment = findViewById(R.id.spinnerDepartment);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
-        populateHashmaps(); // This populates the departments list from the DB and then adds them as options to the form.
+        populateDeptMap(); // This populates the departments list from the DB and then adds them as options to the form.
 
         String[] roles = new String[]{"בחר תפקיד", "מנהל.ת מחלקה", "עובד.ת מעבדה", "רופא.ה", "עובד.ת אדמיניסטרציה", "אח.ות"};
         ArrayAdapter<String> adapter2 = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, roles);
@@ -190,8 +190,6 @@ public class RegisterActivity extends AppCompatActivity {
                     //if no error in response
                     if (!obj.getBoolean("error")) {
 
-                        Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
-
                         //getting the user from the response
                         JSONObject userJson = obj.getJSONObject("user");
 
@@ -207,12 +205,12 @@ public class RegisterActivity extends AppCompatActivity {
                                 userJson.getString("dept_type"),
                                 department //not a value that returns from the server response
                                 );
+
                         Intent intent = new Intent(RegisterActivity.this, TwoFactorAuth.class);
                         intent.putExtra("user", user);
                         startActivity(intent);
-                    } else {
-                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
                     }
+                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -222,7 +220,7 @@ public class RegisterActivity extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "שגיאה בביצוע הפעולה. עימך הסליחה.", Toast.LENGTH_LONG).show();
                     }
                 }) {
             protected Map<String, String> getParams() {
@@ -243,7 +241,7 @@ public class RegisterActivity extends AppCompatActivity {
         requestQueue.add(stringRequest);
     }
 
-    private void populateHashmaps(){
+    private void populateDeptMap(){
         StringRequest stringRequest = new StringRequest(Request.Method.GET, URLs.URL_GET_DEPTS_N_TESTS, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -267,8 +265,7 @@ public class RegisterActivity extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
-                        error.printStackTrace();
+                        Toast.makeText(getApplicationContext(), "קרתה שגיאה, נא נסו מאוחר יותר או פנו למנהל המערכת", Toast.LENGTH_SHORT).show();
                     }
                 });
         RequestQueue requestQueue = Volley.newRequestQueue(this);
@@ -281,7 +278,7 @@ public class RegisterActivity extends AppCompatActivity {
         ArrayList<String> departments = new ArrayList<>();
         departments.add("בחר מחלקה");
         for (String dept : this.deptMap.keySet())
-            if(!dept.equals("הנהלה")){ //for now this is a department that represents only the system administrator
+            if(!dept.equals("הנהלה")){ //for now this is a department that represents only the system administrator which is already in the db
                 departments.add(dept);
             }
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, departments);

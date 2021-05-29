@@ -11,7 +11,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,13 +31,14 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 public class ApproveUsers extends OptionsMenu  {
 
     private RecyclerView usersRecyclerView;
     private List<User> usersList;
     private LinearLayout chooseOperation;
-    private TextView greeting, choose, noMoreUsers;
+    private TextView noMoreUsers;
     private HashMap<Integer, String> deptMap;
 
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -54,9 +54,8 @@ public class ApproveUsers extends OptionsMenu  {
         usersRecyclerView.addItemDecoration(divider);
         usersList = new ArrayList<>();
         chooseOperation =  (LinearLayout) findViewById(R.id.chooseOperation);
-        greeting = findViewById(R.id.helloUser);
+        TextView greeting = findViewById(R.id.helloUser);
         greeting.setText("שלום "+SharedPrefManager.getInstance(this).getUser().getFullName()+", כיף שחזרת!");
-        choose = findViewById(R.id.choose);
         noMoreUsers = findViewById(R.id.noMoreUsers);
         deptMap = new HashMap<Integer, String>();
         populateDeptMap();
@@ -72,7 +71,6 @@ public class ApproveUsers extends OptionsMenu  {
             noMoreUsers.setVisibility(View.GONE);
         }
         chooseOperation.setVisibility(View.VISIBLE);
-        return;
     }
 
 
@@ -96,8 +94,7 @@ public class ApproveUsers extends OptionsMenu  {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
-                        error.printStackTrace();
+                        Toast.makeText(getApplicationContext(), "קרתה שגיאה, נא נסו מאוחר יותר או פנו למנהל המערכת", Toast.LENGTH_SHORT).show();
                     }
                 });
         RequestQueue requestQueue = Volley.newRequestQueue(this);
@@ -109,7 +106,7 @@ public class ApproveUsers extends OptionsMenu  {
             URLs.URL_SYSTEMMANAGER,
             //lambda expression
             response -> {
-                String errorMessage = "";
+                String errorMessage;
 
                 try {
                     JSONObject usersObj = new JSONObject(response);
@@ -137,8 +134,8 @@ public class ApproveUsers extends OptionsMenu  {
                 }
                 usersRecyclerView.setAdapter(new UsersAdapter(usersList));
             },
-            //lambda expression
-            error -> Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show()) {
+            //handling volley error
+            error -> Toast.makeText(getApplicationContext(), "עקב תקלה לא ניתן לצפות ברשימת המשתמשים הממתינים לאישור.", Toast.LENGTH_LONG).show()) {
         };
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
@@ -182,7 +179,6 @@ public class ApproveUsers extends OptionsMenu  {
             return this.users.size();
         }
 
-
     }
 
 
@@ -202,7 +198,7 @@ public class ApproveUsers extends OptionsMenu  {
                     URLs.URL_APPROVEUSER,
                     //lambda expression
                     response -> {
-                        String errorMessage = "";
+                        String errorMessage;
                         try {
                             JSONObject Obj = new JSONObject(response);
                             errorMessage = Obj.getString("message");
@@ -213,7 +209,7 @@ public class ApproveUsers extends OptionsMenu  {
                                 Toast.makeText(getApplicationContext(), "הפעולה בוצעה בהצלחה", Toast.LENGTH_LONG).show();
                                 usersList.remove(getAdapterPosition());
                                 usersRecyclerView.removeViewAt(getAdapterPosition());
-                                usersRecyclerView.getAdapter().notifyItemRemoved(getAdapterPosition());
+                                Objects.requireNonNull(usersRecyclerView.getAdapter()).notifyItemRemoved(getAdapterPosition());
                                 usersRecyclerView.getAdapter().notifyItemRangeChanged(getAdapterPosition(), usersList.size());
                                 if(usersList.size() == 0){ //the admin approved all the users
                                     noMoreUsers.setVisibility(View.VISIBLE);
@@ -223,10 +219,10 @@ public class ApproveUsers extends OptionsMenu  {
                             e.printStackTrace();
                         }
                     },
-                    //lambda expression
-                    error -> Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show())
+                    //handling volley error
+                    error -> Toast.makeText(getApplicationContext(), "שגיאה בביצוע הפעולה. עימך הסליחה.", Toast.LENGTH_LONG).show())
             {
-                @Nullable
+
                 @Override
                 protected HashMap<String, String> getParams() throws AuthFailureError {
                     //creating request parameters

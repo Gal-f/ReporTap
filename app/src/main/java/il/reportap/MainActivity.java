@@ -95,8 +95,8 @@ public class MainActivity extends NavigateUser {
 
     private void userLogin() {
         //first getting the values
-        final String EmployeeNumber = editTextEmployeeNumber.getText().toString();
-        final String password = editTextPassword.getText().toString();
+        final String EmployeeNumber = editTextEmployeeNumber.getText().toString().trim();
+        final String password = editTextPassword.getText().toString().trim();
 
         //validating inputs
         if (TextUtils.isEmpty(EmployeeNumber)) {
@@ -141,21 +141,21 @@ public class MainActivity extends NavigateUser {
                                 deptMap.get(userJson.getInt("works_in_dept")));
 
                         //if the user has not completed the 2fa process
-                        if (message.equals("משתמש לא מאומת")) {
+                        if (!obj.getBoolean("otpVerified")) {
                             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
                             finish();
                             Intent intent1 = new Intent(MainActivity.this, TwoFactorAuth.class);
                             intent1.putExtra("user", user);
                             startActivity(intent1);
 
-                            //check if the system manager has approved the user's account
+                        //if the system manager has not approved the user's account
                         } else if (!obj.getBoolean("isActive")) {
                             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
                             SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
                             finish();
                             startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
 
-                            //the user has finished the 2fa process and his account got the manager's approval
+                            //the user has finished the 2fa process and his account got the admin's approval
                         } else {
                             //subscribe the user to his department's channel in order to get relevant notifications
                             FirebaseMessaging.getInstance().subscribeToTopic(String.valueOf(user.getDeptID()))
@@ -185,7 +185,7 @@ public class MainActivity extends NavigateUser {
             }
 
         },
-                error -> Toast.makeText(getApplicationContext(), "שגיאה בביצוע הפעולה", Toast.LENGTH_LONG).show()) {
+                error -> Toast.makeText(getApplicationContext(), "שגיאה בביצוע הפעולה. עימך הסליחה.", Toast.LENGTH_LONG).show()) {
             @Nullable
             @Override
             protected HashMap<String, String> getParams() throws AuthFailureError {
@@ -222,8 +222,7 @@ public class MainActivity extends NavigateUser {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
-                        error.printStackTrace();
+                         Toast.makeText(getApplicationContext(), "קרתה שגיאה, נא נסו מאוחר יותר או פנו למנהל המערכת.", Toast.LENGTH_SHORT).show();
                     }
                 });
         RequestQueue requestQueue = Volley.newRequestQueue(this);

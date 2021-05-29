@@ -7,8 +7,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
-
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -26,24 +24,23 @@ import java.util.Map;
 
 public class SuspendUsers extends OptionsMenu {
 
-    private TextView explain;
     private EditText empNum;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_suspend_users);
-        explain = findViewById(R.id.explain);
+        TextView explain = findViewById(R.id.explain);
         empNum = findViewById(R.id.userID);
         explain.setText(Html.fromHtml(getString(R.string.managerDelete)));
     }
 
-    public void deleteUser(View view) {
+    public void suspendUser(View view) {
         String userID = empNum.getText().toString();
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URLs.URL_DELETEUSER, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                String message = "";
+                String message;
                 try {
                     JSONObject jsonObject = new JSONObject(response);
                     message = jsonObject.getString("message");
@@ -60,11 +57,10 @@ public class SuspendUsers extends OptionsMenu {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "שגיאה בביצוע הפעולה. עימך הסליחה.", Toast.LENGTH_LONG).show();
                     }
                 })
         {
-            @Nullable
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String,String> params = new HashMap<>();

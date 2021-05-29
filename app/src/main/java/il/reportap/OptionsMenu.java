@@ -1,15 +1,16 @@
 package il.reportap;
 
-import android.app.ActionBar;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
 import com.il.reportap.R;
+
+import java.util.Objects;
 
 public class OptionsMenu extends NavigateUser {
     Menu optionsMenu;
@@ -25,10 +26,11 @@ public class OptionsMenu extends NavigateUser {
                 SharedPrefManager.getInstance(this).getUser().isActive()){
             sendMessage.setVisible(true);
         }
-        getSupportActionBar().setDisplayShowTitleEnabled(false);    // Hide the app name on the action bar
+        Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);    // Hide the app name on the action bar
         return true;
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch ((item.getItemId())){
@@ -36,19 +38,14 @@ public class OptionsMenu extends NavigateUser {
                 startActivity(new Intent(this, ProfileActivity.class));
                 break;
             case R.id.sendMessage:
-                if(SharedPrefManager.getInstance(this).getUser().isActive){
                     startActivity(new Intent(getApplicationContext(), NewMessage.class));
-                }
-                else{
-                    Toast.makeText(getApplicationContext(), "יש להמתין לאישור מנהל המערכת כדי לשלוח הודעות", Toast.LENGTH_LONG).show();
-                }
                 break;
             case R.id.logout:
                 SharedPrefManager.getInstance(getApplicationContext()).logout();
                 break;
 
             case R.id.logo:
-                if(SharedPrefManager.getInstance(this).getUser().isActive) {
+                if(SharedPrefManager.getInstance(this).getUser().isActive()) {
                     try {
                         goToClass(SharedPrefManager.getInstance(this).getUser().getDeptType());
                     } catch (ClassNotFoundException e) {
