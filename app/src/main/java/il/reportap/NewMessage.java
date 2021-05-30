@@ -1,6 +1,7 @@
 package il.reportap;
 
 import android.app.ProgressDialog;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Pair;
@@ -14,6 +15,9 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
+
+import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -40,10 +44,11 @@ public class NewMessage extends ButtonsOptions {
     private RadioGroup boolResultSelection;
     private ProgressDialog progressDialog;
     private boolean success, isTestValueBool;
+    private Integer patientInDept;
 
     private HashMap<String, Integer> deptMap;                     //Translates department name to it's corresponding ID
     private HashMap<String, Pair<Integer, String>> testTypeMap;   //Translates test type ID to it's corresponding name + result type (in this form: [name, [ID, resultType]] )
-    private HashMap<String, String> patientsMap;
+    private HashMap<String, Pair<String, Integer>> patientsMap;    //Contains all patients, in order to select a valid ID and present the name and department accordingly
     //TODO add a 'measurement unit' to testTypeMap and show it next to the measuredAmount EditText field
 
     @Override
@@ -62,13 +67,31 @@ public class NewMessage extends ButtonsOptions {
         this.comments = (EditText) findViewById(R.id.editTextTextMultiLineComments);
         this.progressDialog = new ProgressDialog(this);
 
-        populateHashmaps(); // This populates the departments and test types from the DB and then adds them as options to the form.
+        populateHashmaps(); // This populates the departments, test types and patients from the DB and then adds them as autocomplete options to the form.
 
+        // Complete patient name and department according to selected patient ID from the auto-completion list
         patientId.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String selectedID = parent.getItemAtPosition(position).toString();
-                patientName.setText(patientsMap.get(selectedID));
+                patientName.setText(patientsMap.get(selectedID).first); // Setting the patient's name according to their ID (unchangeable by the user)
+                patientInDept = patientsMap.get(selectedID).second;     // Saving the patient's department for validation later
+                for (Map.Entry<String, Integer> entry : deptMap.entrySet()){
+                    if(entry.getValue() == patientInDept)
+                        recipient.setText(entry.getKey());  // Setting the default recipient department as the one the patient is hospitalized in, according to the DB patients table
+                }
+            }
+        });
+
+        // Validation - show the user a warning if they select a department different than the one associated with the patient in the DB patients table (possible legitimate scenario)
+        recipient.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (!deptMap.get(recipient.getText().toString()).equals(patientInDept)) {
+                    Drawable warningImg = ContextCompat.getDrawable(NewMessage.this, R.drawable.ic_baseline_info_24);
+                    warningImg.setBounds(0, 0, warningImg.getIntrinsicWidth(), warningImg.getIntrinsicHeight());
+                    recipient.setError("האם אתם בטוחים? המטופל משויך במערכת למחלקה אחרת.", warningImg);
+                }
             }
         });
 
@@ -109,12 +132,14 @@ public class NewMessage extends ButtonsOptions {
                         ((RadioButton)findViewById(R.id.radioButtonBoolResult_Positive)).setError("נא לבחור תוצאה לבדיקה");
                         return;
                     }
-                //Component, Measured amount and Comments are not validated, to allow the lab crew more flexibility.
+
+                //Component, Measured amount and Comments are intentionally not validated, to allow the lab crew more flexibility.
 
                 Send();
             }
         });
 
+        // Setting the 'clear' button
         findViewById(R.id.buttonClear).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -126,7 +151,6 @@ public class NewMessage extends ButtonsOptions {
                 measuredAmount.setText("");
                 isUrgent.setChecked(false);
                 comments.setText("");
-                //startActivity(new Intent(NewMessage.this, NewMessage.class)); //Another option, simply refreshing the page
             }
         });
 
@@ -150,13 +174,6 @@ public class NewMessage extends ButtonsOptions {
             }
         });
 
-        // THE FOLLOWING BUTTON IS FOR TESTING PURPOSES ONLY
-        findViewById(R.id.buttonAutofill).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                fillTestValues();
-            }
-        });
 
         findViewById(R.id.imageButtonBarcode).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -166,29 +183,7 @@ public class NewMessage extends ButtonsOptions {
             }
         });
 
-        /*
-        // Setting up the navigation buttons
-        findViewById(R.id.toDoB).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-                startActivity(new Intent(getApplicationContext(), InboxLab.class));
-            }
-        });
-        findViewById(R.id.sentB).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-                startActivity(new Intent(getApplicationContext(), SentLab.class));
-            }
-        });
-        findViewById(R.id.doneB).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-                startActivity(new Intent(getApplicationContext(), DoneLab.class));
-            }
-        }); */
+        // Changing the exclamation mark symbol when urgent checkbox is checked
         findViewById(R.id.checkBoxUrgent).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -287,7 +282,7 @@ public class NewMessage extends ButtonsOptions {
             public void onResponse(String response) {
                 deptMap = new HashMap<String, Integer>();
                 testTypeMap = new HashMap<String, Pair<Integer, String>>();
-                patientsMap = new HashMap<String, String>();
+                patientsMap = new HashMap<String, Pair<String, Integer>>();
 
                 try{
                     JSONObject entireResponse = new JSONObject(response);
@@ -308,7 +303,7 @@ public class NewMessage extends ButtonsOptions {
                     JSONArray patientsArray = entireResponse.getJSONArray("patients");
                     for (int i=0; i<patientsArray.length(); i++){
                         JSONObject patient = patientsArray.getJSONObject(i);
-                        patientsMap.put(patient.getString("ID"), patient.getString("name"));
+                        patientsMap.put(patient.getString("ID"), new Pair<>(patient.getString("name"), patient.getInt("deptID")));
                     }
                     inflateAutocompleteOptions(); //Use the freshly populated hashmaps as options to select from in the form fields.
                     // The inflate call is done here in order to make sure the response for PopulateHashmaps() returned before calling inflateAutocompleteOptions().
