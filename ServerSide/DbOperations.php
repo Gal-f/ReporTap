@@ -128,19 +128,27 @@ class DbOperations
 
 
 	function verifiedUser($employeeNumber){
-		//if this method was called we know that the user has already typed the correct code
+		$response = array();
+		//it this method was called we know that the user has already typed the correct code
 		$stmt = $this->conn->prepare('UPDATE `users` SET `otp_verified`=1 WHERE `employee_ID` = "'.$employeeNumber.'" ');
-		if ($stmt->execute()) {
-		    $response['error'] = false;
-		    $response['message'] = 'updated otp verified value successfully';
+		$stmt->execute();
+		$stmt->store_result();
+	//	$stmt->fetch();
+
+		//we would like to know if the system administrator approved the user's account
+		$stmt2 = $this->conn->prepare('SELECT is_active FROM users WHERE employee_ID = "'.$employeeNumber.'"');
+		$stmt2->execute();
+        $stmt2->store_result();
+		$stmt2->bind_result($isActive);
+		$stmt2->fetch();
+		if(!$isActive){
+			$response['isActive'] = false;
 		}
 		else{
-            $response['error'] = true;
-		    $response['message'] = 'error in updating otp verified value';
+			$response['isActive'] = true;
 		}
         return $response;
 	}
-
 
      function login($employeeNumber, $password)
     {
@@ -206,7 +214,7 @@ class DbOperations
 
       function getNotActive(){
         $response = array();
-        $stmt = $this->conn->prepare('SELECT `full_name`, `employee_ID`, `role`, `works_in_dept` FROM users WHERE `is_active`=0 AND `otp_verified`=1 order by `registration_date` DESC' );
+        $stmt = $this->conn->prepare('SELECT `full_name`, `employee_ID`, `role`, `works_in_dept` FROM users WHERE `is_active`=0 order by `registration_date` DESC' );
 		$stmt->execute();
 		$stmt->store_result();
 		$rows = $stmt->num_rows;
