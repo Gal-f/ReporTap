@@ -3,6 +3,7 @@ package il.reportap;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -18,6 +19,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.il.reportap.R;
 
 import org.json.JSONArray;
@@ -205,7 +207,16 @@ public class RegisterActivity extends AppCompatActivity {
                                 userJson.getString("dept_type"),
                                 department //not a value that returns from the server response
                                 );
-
+                        //in order to send the user a notification when the manager approves his account
+                        FirebaseMessaging.getInstance().subscribeToTopic(user.getEmployeeNumber())
+                                .addOnCompleteListener(task -> {
+                                    //msg is for our needs only, we don't show it to the user.
+                                    String msg = "Done";
+                                    if (!task.isSuccessful()) {
+                                        msg = "Failed";
+                                    }
+                                    Log.d("user's subscription", msg);
+                                });
                         Intent intent = new Intent(RegisterActivity.this, TwoFactorAuth.class);
                         intent.putExtra("user", user);
                         startActivity(intent);

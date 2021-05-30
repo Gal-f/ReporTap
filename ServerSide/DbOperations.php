@@ -128,27 +128,19 @@ class DbOperations
 
 
 	function verifiedUser($employeeNumber){
-		$response = array();
-		//it this method was called we know that the user has already typed the correct code
+		//if this method was called we know that the user has already typed the correct code
 		$stmt = $this->conn->prepare('UPDATE `users` SET `otp_verified`=1 WHERE `employee_ID` = "'.$employeeNumber.'" ');
-		$stmt->execute();
-		$stmt->store_result();
-	//	$stmt->fetch();
-
-		//we would like to know if the system administrator approved the user's account
-		$stmt2 = $this->conn->prepare('SELECT is_active FROM users WHERE employee_ID = "'.$employeeNumber.'"');
-		$stmt2->execute();
-        $stmt2->store_result();
-		$stmt2->bind_result($isActive);
-		$stmt2->fetch();
-		if(!$isActive){
-			$response['isActive'] = false;
+		if ($stmt->execute()) {
+		    $response['error'] = false;
+		    $response['message'] = 'updated otp verified value successfully';
 		}
 		else{
-			$response['isActive'] = true;
+            $response['error'] = true;
+		    $response['message'] = 'error in updating otp verified value';
 		}
         return $response;
 	}
+
 
      function login($employeeNumber, $password)
     {
@@ -214,7 +206,7 @@ class DbOperations
 
       function getNotActive(){
         $response = array();
-        $stmt = $this->conn->prepare('SELECT `full_name`, `employee_ID`, `role`, `works_in_dept` FROM users WHERE `is_active`=0 order by `registration_date` DESC' );
+        $stmt = $this->conn->prepare('SELECT `full_name`, `employee_ID`, `role`, `works_in_dept` FROM users WHERE `is_active`=0 AND `otp_verified`=1 order by `registration_date` DESC' );
 		$stmt->execute();
 		$stmt->store_result();
 		$rows = $stmt->num_rows;
@@ -586,7 +578,7 @@ class DbOperations
         }
 
         //3rd part - Get patients
-        $query = "SELECT patient_ID, full_name FROM patients";
+        $query = "SELECT patient_ID, full_name, hospitalized_in_dept FROM patients";
         $stmt3 = $this->conn->prepare($query);
         $stmt3->execute();
         $stmt3->store_result();
@@ -597,10 +589,10 @@ class DbOperations
             $response['message'] .= ', Unable to retrieve patients\' details from the server';
         } else {
             while ($rows > 0){
-                $stmt3->bind_result($patientID, $patientName);
+                $stmt3->bind_result($patientID, $patientName, $deptID);
                 $stmt3->fetch();
 
-                $patients[$stmt3->num_rows-$rows] = array('ID' => $patientID, 'name' => $patientName);
+                $patients[$stmt3->num_rows-$rows] = array('ID' => $patientID, 'name' => $patientName, 'deptID' => $deptID);
                 $rows--;
             }
             //Not setting $response['error']=false since it might have recieved 'true' for a previous query. If it remained 'false' thus far, we keep it false.

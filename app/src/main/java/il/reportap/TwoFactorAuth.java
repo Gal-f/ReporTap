@@ -70,7 +70,7 @@ public class  TwoFactorAuth extends NavigateUser {
                 @Override
                 //handling with volley error
                 public void onErrorResponse(VolleyError error) {
-                    Toast.makeText(getApplicationContext(), "שגיאה בשליחת קוד האימות. נא נסה את אמצעי האימות השני.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "שגיאה בשליחת קוד האימות. נא נסו את אמצעי האימות השני.", Toast.LENGTH_LONG).show();
                 }
             }) {
 
@@ -95,46 +95,41 @@ public class  TwoFactorAuth extends NavigateUser {
                 RequestQueue requestQueue = Volley.newRequestQueue(this);
                 requestQueue.add(stringRequest);
     }
-                public void validateOTP(View view) {
-                    String userOTP = editTextOTP.getText().toString();
-                    if(!userOTP.equals(otp)){
-                        Toast.makeText(this,
-                                "קוד שגוי, נסה שוב", Toast.LENGTH_LONG)
-                                .show();
-                    }
-                    else{
-                        Executors.newSingleThreadExecutor().submit(() -> {
-                            RequestHandler secondRequestHandler = new RequestHandler();
-                            HashMap<String, Object> params = new HashMap<>();
-                            params.put("employee_ID", user.getEmployeeNumber());
-                            try{
-                                //converting response to json object
-                                JSONObject obj = new JSONObject(secondRequestHandler.sendPostRequest(URLs.URL_VREIFIEDUSER, params));
-                                //if the user is still waiting for the manager confirmation
-                                if (!obj.getBoolean("isActive")) {
-                                    SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
-                                    runOnUiThread(new Runnable()
-                                    {
-                                        public void run()
-                                        {
-                                            Toast.makeText(getApplicationContext(), "הקוד אומת בהצלחה. כעת יש להמתין לאישור מנהל", Toast.LENGTH_LONG).show();
-                                            finish();
-                                            startActivity(new Intent(TwoFactorAuth.this, ProfileActivity.class));
-                                        }
-                                    });
-                                //the user has been approved by the system manager
-                                } else {
-                                    user.setActive(true);
-                                    //storing the user in shared preferences
-                                    SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
-                                    finish();
-                                    //navigate the user to the relevant page
-                                    goToClass(user.getDeptType());
-                                }
-                            }catch (Exception e) {
-                                e.printStackTrace();
+
+    public void validateOTP(View view) {
+        String userOTP = editTextOTP.getText().toString();
+        if(!userOTP.equals(otp)){
+            Toast.makeText(this,
+                    "קוד שגוי, נסה שוב", Toast.LENGTH_LONG)
+                    .show();
+        }
+        else{
+            Executors.newSingleThreadExecutor().submit(() -> {
+                RequestHandler secondRequestHandler = new RequestHandler();
+                HashMap<String, Object> params = new HashMap<>();
+                params.put("employee_ID", user.getEmployeeNumber());
+                try{
+                    //converting response to json object
+                    JSONObject obj = new JSONObject(secondRequestHandler.sendPostRequest(URLs.URL_VREIFIEDUSER, params));
+                    //if there was not error while updating the user's record
+                    if (!obj.getBoolean("error")) {
+                        SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
+                        runOnUiThread(new Runnable()
+                       {
+                        public void run(){
+                            Toast.makeText(getApplicationContext(), "הקוד אומת בהצלחה. כעת יש להמתין לאישור מנהל", Toast.LENGTH_LONG).show();
+                            finish();
+                            startActivity(new Intent(TwoFactorAuth.this, ProfileActivity.class));
                             }
                         });
+                    } else {
+                        Toast.makeText(getApplicationContext(), "הקוד אומת בהצלחה אך אנו חווים תקלה טכנית. נא נסה שוב מאוחר יותר.", Toast.LENGTH_LONG).show();
                     }
+                }catch (Exception e) {
+                    e.printStackTrace();
                 }
+            });
+        }
+    }
 }
+
