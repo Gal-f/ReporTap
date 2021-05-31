@@ -23,6 +23,4 @@ public class URLs {
     public static final String URL_INBOXLAB = ROOT_URL+ "inboxlab";
     public static final String URL_DONELAB = ROOT_URL+ "donelab";
     public static final String URL_SENTLAB = ROOT_URL+ "sentlab";
-    public static final String URL_ISACTIVE = ROOT_URL+ "getIsActive";
-
 }
