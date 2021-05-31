@@ -8,6 +8,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -22,7 +23,6 @@ import org.json.JSONObject;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Random;
-import java.util.concurrent.Executors;
 
 public class  TwoFactorAuth extends NavigateUser {
 
@@ -103,33 +103,46 @@ public class  TwoFactorAuth extends NavigateUser {
                     "קוד שגוי, נסה שוב", Toast.LENGTH_LONG)
                     .show();
         }
-        else{
-            Executors.newSingleThreadExecutor().submit(() -> {
-                RequestHandler secondRequestHandler = new RequestHandler();
-                HashMap<String, Object> params = new HashMap<>();
-                params.put("employee_ID", user.getEmployeeNumber());
-                try{
-                    //converting response to json object
-                    JSONObject obj = new JSONObject(secondRequestHandler.sendPostRequest(URLs.URL_VREIFIEDUSER, params));
-                    //if there was not error while updating the user's record
-                    if (!obj.getBoolean("error")) {
-                        SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
-                        runOnUiThread(new Runnable()
-                       {
-                        public void run(){
+        else {
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, URLs.URL_VREIFIEDUSER, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    String errorMessage;
+                    try {
+                        JSONObject jsonObject = new JSONObject(response);
+                        errorMessage = jsonObject.getString("message");
+                        if (jsonObject.getBoolean("error")) { // If there was any error along the way
+                            Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
+                        } else {
+                            SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
                             Toast.makeText(getApplicationContext(), "הקוד אומת בהצלחה. כעת יש להמתין לאישור מנהל", Toast.LENGTH_LONG).show();
-                            finish();
                             startActivity(new Intent(TwoFactorAuth.this, ProfileActivity.class));
-                            }
-                        });
-                    } else {
-                        Toast.makeText(getApplicationContext(), "הקוד אומת בהצלחה אך אנו חווים תקלה טכנית. נא נסה שוב מאוחר יותר.", Toast.LENGTH_LONG).show();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                }catch (Exception e) {
-                    e.printStackTrace();
                 }
-            });
+            },
+                    new Response.ErrorListener() {
+                        @Override
+                        //handling with volley error
+                        public void onErrorResponse(VolleyError error) {
+                            Toast.makeText(getApplicationContext(), "הקוד אומת בהצלחה אך אנו חווים תקלה טכנית. נא נסה שנית מאוחר יותר.", Toast.LENGTH_LONG).show();
+                        }
+                    }) {
+
+                @Override
+                protected HashMap<String, String> getParams() throws AuthFailureError {
+                    //creating request parameters
+                    HashMap<String, String> params = new HashMap<>();
+                    params.put("employee_ID", user.getEmployeeNumber());
+                    return params;
+                }
+            };
+                RequestQueue requestQueue = Volley.newRequestQueue(this);
+                requestQueue.add(stringRequest);
+            }
         }
     }
-}
+
 

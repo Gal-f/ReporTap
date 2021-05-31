@@ -243,38 +243,11 @@ class DbOperations
     }
 
     function approveUser($employeeNumber){
-        include 'vendor/apiKeys.php';
 		$response = array();
         $stmt = $this->conn->prepare('UPDATE users SET is_active=1 WHERE employee_ID ="'.$employeeNumber.'"');
         if ($stmt->execute()) {
-            $msg = array
-              (
-            'body'  => 'איזה כיף, המנהל אישר אותך! על מנת לראות את השינוי יש להתחבר מחדש',
-            'title' => 'ReporTap New Message'
-              );
-            $fields = array
-                (
-
-                    'to'        => '/topics/'.$employeeNumber,
-                    'notification'  => $msg
-                );
-
-
-             $headers = array
-                (
-                    'Authorization: key='.$firebaseKey,
-                    'Content-Type: application/json'
-                );
-
-            $ch = curl_init();
-            curl_setopt( $ch,CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send' );
-            curl_setopt( $ch,CURLOPT_POST, true );
-            curl_setopt( $ch,CURLOPT_HTTPHEADER, $headers );
-            curl_setopt( $ch,CURLOPT_RETURNTRANSFER, true );
-            curl_setopt( $ch,CURLOPT_SSL_VERIFYPEER, false );
-            curl_setopt( $ch,CURLOPT_POSTFIELDS, json_encode( $fields ) );
-            $result = curl_exec($ch );
-            curl_close( $ch );
+            $textToUser = "איזה כיף, המנהל אישר אותך! על מנת לראות את השינוי יש להתחבר מחדש";
+            $result = sendNotification($employeeNumber, $textToUser);
             $response['error'] = false;
             $response['message'] = 'הפעולה בוצעה בהצלחה';
             $response['notification']=$result;
@@ -323,7 +296,6 @@ class DbOperations
 
     function send_message($sender, $department, $patientId, $patientName, $testType, $componentName, $isValueBool, $testResultValue, $isUrgent, $comments)
     {
-        include 'vendor/apiKeys.php';
         $response = array();
         $message = array($department, $patientId, $patientName, $testType, $componentName, $isValueBool, $testResultValue, $isUrgent, $comments);
         $stmt = $this->conn->prepare("INSERT INTO `messages`(`patient_ID`, `test_type`, `component`, `is_value_boolean`, `test_result_value`, `text`, `is_urgent`, `sender_user`, `recipient_dept`) VALUES (?,?,?,?,?,?,?,?,?);");
@@ -331,36 +303,8 @@ class DbOperations
         $stmt->bind_param("sisidsiii", $patientId, $testType, $componentName, $isValueBool, $testResultValue, $comments, $isUrgent, $sender, $department); //If there's a problem with sqli query, try changing boolean columns to tinyint and use 'i' instead of 's' in the first parameter for bind_param.
         if ($stmt->execute()) {
             //send notifications to the users via firebase api
-
-            $msg = array
-              (
-            'body'  => 'קיבלת הודעה חדשה ',
-            'title' => 'ReporTap New Message'
-              );
-            $fields = array
-                (
-
-                    'to'        => '/topics/'.$department,
-                    'notification'  => $msg
-                );
-
-
-             $headers = array
-                (
-                    'Authorization: key='.$firebaseKey,
-                    'Content-Type: application/json'
-                );
-
-            $ch = curl_init();
-            curl_setopt( $ch,CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send' );
-            curl_setopt( $ch,CURLOPT_POST, true );
-            curl_setopt( $ch,CURLOPT_HTTPHEADER, $headers );
-            curl_setopt( $ch,CURLOPT_RETURNTRANSFER, true );
-            curl_setopt( $ch,CURLOPT_SSL_VERIFYPEER, false );
-            curl_setopt( $ch,CURLOPT_POSTFIELDS, json_encode( $fields ) );
-            $result = curl_exec($ch );
-            curl_close( $ch );
-
+            $textToUser = 'קיבלת הודעה חדשה';
+            $result = sendNotification($department, $textToUser);
             $response['error'] = false;
             $response['message'] = 'ההודעה נשלחה בהצלחה';
             $response['sent_message'] = $message;
@@ -647,41 +591,13 @@ class DbOperations
     }
 
      function send_reply($sender, $department, $messageID, $text){
-		include 'vendor/apiKeys.php';
         $response = array();
         $stmt = $this->conn->prepare("INSERT INTO responses(response_to_messageID, responses.text, sender_user, recipient_dept) VALUES (?,?,?,?);");
         $stmt->bind_param("ssss", $messageID, $text, $sender, $department);
         if ($stmt->execute()) {
 			//send notifications to the users via firebase api
-            $msg = array
-              (
-            'body'  => 'קיבלת תגובה חדשה',
-            'title' => 'ReporTap New Message'
-              );
-            $fields = array
-                (
-
-                    'to'        => '/topics/'.$department,
-                    'notification'  => $msg
-                );
-
-
-             $headers = array
-                (
-                    'Authorization: key='.$firebaseKey,
-                    'Content-Type: application/json'
-                );
-
-            $ch = curl_init();
-            curl_setopt( $ch,CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send' );
-            curl_setopt( $ch,CURLOPT_POST, true );
-            curl_setopt( $ch,CURLOPT_HTTPHEADER, $headers );
-            curl_setopt( $ch,CURLOPT_RETURNTRANSFER, true );
-            curl_setopt( $ch,CURLOPT_SSL_VERIFYPEER, false );
-            curl_setopt( $ch,CURLOPT_POSTFIELDS, json_encode( $fields ) );
-            $result = curl_exec($ch );
-            curl_close( $ch );
-
+			$textToUser = 'קיבלת תגובה חדשה';
+            $result = sendNotification($department, $textToUser);
             $response['error'] = false;
             $response['message'] = 'תגובה נשלחה בהצלחה';
             $response['notification']=$result;
@@ -693,7 +609,6 @@ class DbOperations
     }
 
     function forward_message($messageID, $department, $userID){
-        include 'vendor/apiKeys.php';
         $response = array();
         //TODO validate that the message wasn't approved before allowing forward
         $stmtMessages = $this->conn->prepare("UPDATE messages SET sent_time = CURRENT_TIMESTAMP, recipient_dept = ?, sender_user = ? WHERE messages.ID = ?;");
@@ -701,37 +616,13 @@ class DbOperations
 
         $stmtMessages->bind_param("sss", $department, $userID, $messageID);
         if ($stmtMessages->execute()) {
-
             //send notifications to the users via firebase api
-            $msg = array
-              (
-            'body'  => 'קיבלת הודעה חדשה',
-            'title' => 'ReporTap New Message'
-              );
-            $fields = array
-                (
-                    'to'        => '/topics/'.$department,
-                    'notification'  => $msg
-                );
-
-             $headers = array
-                (
-                    'Authorization: key='.$firebaseKey,
-                    'Content-Type: application/json'
-                );
-
-            $ch = curl_init();
-            curl_setopt( $ch,CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send' );
-            curl_setopt( $ch,CURLOPT_POST, true );
-            curl_setopt( $ch,CURLOPT_HTTPHEADER, $headers );
-            curl_setopt( $ch,CURLOPT_RETURNTRANSFER, true );
-            curl_setopt( $ch,CURLOPT_SSL_VERIFYPEER, false );
-            curl_setopt( $ch,CURLOPT_POSTFIELDS, json_encode( $fields ) );
-            $result = curl_exec($ch );
-            curl_close( $ch );
-
+            $textToUser = 'קיבלת הודעה חדשה';
+            $result = sendNotification($department, $textToUser);
             $response['error'] = false;
             $response['message'] = 'Message forwarded successfully';
+            $response['notification']=$result;
+
         } else {
             $response['error'] = true;
             $response['message'] = 'Error while trying to forward message';
@@ -876,3 +767,32 @@ class DbOperations
 
     }
 }
+
+function sendNotification($sendTo, $textToUser){
+             include 'vendor/apiKeys.php';
+            $msg = array (
+            'body'  => $textToUser,
+            'title' => 'ReporTap New Message'
+            );
+            $fields = array(
+            'to'        => '/topics/'.$sendTo,
+            'notification'  => $msg
+            );
+
+            $headers = array (
+            'Authorization: key='.$firebaseKey,
+            'Content-Type: application/json'
+            );
+
+            $ch = curl_init();
+            curl_setopt( $ch,CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send' );
+            curl_setopt( $ch,CURLOPT_POST, true );
+            curl_setopt( $ch,CURLOPT_HTTPHEADER, $headers );
+            curl_setopt( $ch,CURLOPT_RETURNTRANSFER, true );
+            curl_setopt( $ch,CURLOPT_SSL_VERIFYPEER, false );
+            curl_setopt( $ch,CURLOPT_POSTFIELDS, json_encode( $fields ) );
+            $result = curl_exec($ch );
+            curl_close( $ch );
+            return $result;
+
+    }
