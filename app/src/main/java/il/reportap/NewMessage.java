@@ -99,14 +99,6 @@ public class NewMessage extends ButtonsOptions {
             @Override
             public void onClick(View v) {
             // Input validations
-                if (TextUtils.isEmpty(recipient.getText().toString())) {
-                    recipient.setError("יש לבחור מחלקה נמענת");
-                    return;
-                }
-                if (!deptMap.containsKey(recipient.getText().toString())){
-                    recipient.setError("נא לבחור אחת מהמחלקות הקיימות");
-                    return;
-                }
                 if (patientId.length() != 9){
                     patientId.setError("מספר זהות צריך לכלול 9 ספרות בדיוק");
                     return;
@@ -117,6 +109,14 @@ public class NewMessage extends ButtonsOptions {
                 }
                 if (!patientsMap.containsKey(patientId.getText().toString())){
                     patientId.setError("המטופל לא קיים במערכת");
+                    return;
+                }
+                if (TextUtils.isEmpty(recipient.getText().toString())) {
+                    recipient.setError("יש לבחור מחלקה נמענת");
+                    return;
+                }
+                if (!deptMap.containsKey(recipient.getText().toString())){
+                    recipient.setError("נא לבחור אחת מהמחלקות הקיימות");
                     return;
                 }
                 if (TextUtils.isEmpty(testName.getText().toString())){
@@ -149,8 +149,15 @@ public class NewMessage extends ButtonsOptions {
                 testName.setText("");
                 componentName.setText("");
                 measuredAmount.setText("");
+                boolResultSelection.check(-1);
                 isUrgent.setChecked(false);
+                ((ImageView)findViewById(R.id.imageViewUrgent)).setImageResource(R.drawable.greyexclamation_trans);
                 comments.setText("");
+
+                patientId.setError(null);
+                recipient.setError(null);
+                testName.setError(null);
+                ((RadioButton)findViewById(R.id.radioButtonBoolResult_Positive)).setError(null);
             }
         });
 

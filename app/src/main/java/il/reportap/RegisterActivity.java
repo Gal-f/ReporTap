@@ -11,6 +11,7 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.Request;
@@ -70,7 +71,15 @@ public class RegisterActivity extends AppCompatActivity {
             startActivity(new Intent(RegisterActivity.this, MainActivity.class));
         });
 
-
+        // Handling back-button action
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                finish();
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+            }
+        };
+        this.getOnBackPressedDispatcher().addCallback(this, callback);
     }
 
     private void registerUser() {

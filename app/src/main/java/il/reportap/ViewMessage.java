@@ -50,7 +50,6 @@ public class ViewMessage extends ButtonsOptions {
     private Spinner spinnerForwardTo;
 
     private HashMap<String, Integer> deptMap;                     //Translates department name to it's corresponding ID
-    private HashMap<String, Pair<Integer, String>> testTypeMap;   //Translates test type ID to it's corresponding name + result type (in this form: [name, [ID, resultType]] )
     private ProgressDialog progressDialog;
 
     @Override
@@ -88,10 +87,6 @@ public class ViewMessage extends ButtonsOptions {
         else {
             Toast.makeText(getApplicationContext(), "שגיאה בקבלת מספר הדיווח.\nאנא נסו שוב מאוחר יותר.", Toast.LENGTH_LONG).show();
         }
-
-        //TODO add other test results for the same patient (nice to have for version #1)
-
-        // this.isTestValueBool = ((Pair)testTypeMap.get(this.testName.getText())).second.equals("boolean"); //TODO skip this hashmap? isTestValueBool gets value in getMessage() already
 
         // Setting up the navigation buttons
         findViewById(R.id.toDoB).setOnClickListener(new View.OnClickListener() {
@@ -134,8 +129,6 @@ public class ViewMessage extends ButtonsOptions {
             @Override
             public void onResponse(String response) {
                 deptMap = new HashMap<String, Integer>();
-                testTypeMap = new HashMap<String, Pair<Integer, String>>();
-
                 try{
                     JSONObject entireResponse = new JSONObject(response);
                     JSONArray deptsArray = entireResponse.getJSONArray("departments");
@@ -144,10 +137,6 @@ public class ViewMessage extends ButtonsOptions {
                         JSONObject dept = deptsArray.getJSONObject(i);
                         if (dept.getString("deptType").equals(getString(R.string.medical_departments_type)))    // Only get the medical departments as options to forward to
                             deptMap.put(dept.getString("deptName"), dept.getInt("deptID"));
-                    }
-                    for (int i=0; i<testTypesArray.length(); i++){
-                        JSONObject testType = testTypesArray.getJSONObject(i);
-                        testTypeMap.put(testType.getString("testName"), new Pair<>(testType.getInt("testID"), testType.getString("resultType")));
                     }
                     inflateForwardList();
                 }
