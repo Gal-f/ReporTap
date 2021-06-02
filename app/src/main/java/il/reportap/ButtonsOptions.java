@@ -29,13 +29,13 @@ public class ButtonsOptions extends OptionsMenu {
             btnD.setText("מסרים שטופלו");
         }
 
-        if (deptName.equals("InboxLab") || deptName.equals("InboxDoctor")) {
+        if (deptName.equals("InboxDoctor") || deptName.equals("InboxLab")) {
                 temp = btnI;
             }
         else if (deptName.equals("SentLab") || deptName.equals("SentDoctor")) {
                 temp = btnS;
             }
-        else if (deptName.equals("DoneLab") || deptName.equals("DoneDoctor")) {
+        else if (deptName.equals("DoneDoctor") || deptName.equals("DoneLab")) {
                 temp = btnD;
             }
         else

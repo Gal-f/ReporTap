@@ -62,13 +62,13 @@ public class InboxLab extends ButtonsOptions {
         recyclerView.addItemDecoration(divider);
 
         modelActivityInboxLabList = new ArrayList<>();
-        myStringRequest();
+        getInboxResponses();
         SwipeRefreshLayout mySwipeToRefresh= (SwipeRefreshLayout)findViewById(R.id.swipeToRefresh);
         mySwipeToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 modelActivityInboxLabList.clear();
-                myStringRequest();
+                getInboxResponses();
                 mySwipeToRefresh.setRefreshing(false);
             }
         });
@@ -91,7 +91,7 @@ public class InboxLab extends ButtonsOptions {
     }
 
 
-    public void myStringRequest (){
+    public void getInboxResponses(){
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
                 URLs.URL_INBOXLAB,
                 //lambda expression

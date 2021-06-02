@@ -7,7 +7,7 @@ public class ModelActivitySentDr {
     public ModelActivitySentDr(Integer id, String sent_time,String patient_name, String text,String sender_name, String patient_id,  String test_name, String confirm_time) {
         this.id = id;
         this.patientId = patient_id;
-        this.sentTime = sent_time;
+        this.sentTime = sent_time.substring(0,sent_time.length()-3);
         this.text = text;
         this.senderName = sender_name;
         this.testName = test_name;

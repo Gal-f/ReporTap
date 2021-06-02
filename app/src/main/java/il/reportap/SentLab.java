@@ -57,14 +57,14 @@ public class SentLab extends ButtonsOptions {
         divider.setDrawable(getDrawable(R.drawable.dividerbig));
         recyclerView.addItemDecoration(divider);
         modelActivitySentLabList = new ArrayList<>();
-        myStringRequest();
+        getSentMessages();
 
         SwipeRefreshLayout mySwipeToRefresh= (SwipeRefreshLayout)findViewById(R.id.swipeToRefresh);
         mySwipeToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 modelActivitySentLabList.clear();
-                myStringRequest();
+                getSentMessages();
                 mySwipeToRefresh.setRefreshing(false);
             }
         });
@@ -86,7 +86,7 @@ public class SentLab extends ButtonsOptions {
         });
     }
 
-    public void myStringRequest (){
+    public void getSentMessages(){
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
                 URLs.URL_SENTLAB,
                 //lambda expression

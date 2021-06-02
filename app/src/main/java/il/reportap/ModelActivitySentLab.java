@@ -9,7 +9,7 @@ public class ModelActivitySentLab {
                                 String fullName) {
         this.id = id;
         this.patientId = patient_id;
-        this.sentTime = sent_time;
+        this.sentTime = sent_time.substring(0,sent_time.length()-3);
         this.isUrgent=isUrgent;
         this.deptName=dept_name;
         this.testName = test_name;

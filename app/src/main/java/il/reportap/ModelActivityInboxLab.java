@@ -10,7 +10,7 @@ public class ModelActivityInboxLab {
                                  String fullName, String dept, Boolean wasRead) {
         this.id = id;
         this.messageId=messageId;
-        this.sentTime = sentTime;
+        this.sentTime = sentTime.substring(0,sentTime.length()-3);
         this.patientId = patientId;
         this.testName = testName;
         this.text=text;

@@ -58,14 +58,14 @@ public class DoneDoctor extends ButtonsOptions {
         recyclerView.addItemDecoration(divider);
 
         modelActivityDoneDrList = new ArrayList<>();
-        myStringRequest();
+        getDoneMessages();
 
         SwipeRefreshLayout mySwipeToRefresh= (SwipeRefreshLayout)findViewById(R.id.swipeToRefresh);
         mySwipeToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 modelActivityDoneDrList.clear();
-                myStringRequest();
+                getDoneMessages();
                 mySwipeToRefresh.setRefreshing(false);
             }
         });
@@ -91,7 +91,7 @@ public class DoneDoctor extends ButtonsOptions {
     }
 
 
-    public void myStringRequest (){
+    public void getDoneMessages(){
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
                 URLs.URL_DONE,
                 //lambda expression

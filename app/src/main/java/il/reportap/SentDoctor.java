@@ -57,14 +57,14 @@ public class SentDoctor extends ButtonsOptions {
         divider.setDrawable(getDrawable(R.drawable.dividerbig));
         recyclerView.addItemDecoration(divider);
         modelActivitySentDrList = new ArrayList<>();
-        myStringRequest();
+        getSentResponses();
 
         SwipeRefreshLayout mySwipeToRefresh= (SwipeRefreshLayout)findViewById(R.id.swipeToRefresh);
         mySwipeToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 modelActivitySentDrList.clear();
-                myStringRequest();
+                getSentResponses();
                 mySwipeToRefresh.setRefreshing(false);
             }
         });
@@ -87,7 +87,7 @@ public class SentDoctor extends ButtonsOptions {
         });
     }
 
-    public void myStringRequest() {
+    public void getSentResponses() {
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
                 URLs.URL_SENTDR,
                 //lambda expression
