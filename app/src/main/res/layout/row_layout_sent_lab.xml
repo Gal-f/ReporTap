@@ -79,7 +79,7 @@
                         android:layout_height="wrap_content"
                         android:text="date"
                         android:textColor="#0A7280"
-                        android:textSize="17sp"
+                        android:textSize="15sp"
                         card_view:layout_constraintBottom_toBottomOf="parent"
                         card_view:layout_constraintEnd_toEndOf="parent"
                         card_view:layout_constraintTop_toTopOf="parent" />
@@ -171,7 +171,7 @@
         </LinearLayout>
 
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/background"
@@ -182,17 +182,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="נשלח אל:"
-                android:paddingLeft="5dp"
                 android:textColor="@color/stroke"
-                card_view:layout_constraintBottom_toBottomOf="parent"
-                card_view:layout_constraintEnd_toEndOf="parent"
-                card_view:layout_constraintTop_toTopOf="parent" />
+                android:layout_alignParentEnd="true"
+                />
 
             <TextView
                 android:id="@+id/deptNameSL"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="5dp"
+                android:layout_toLeftOf="@id/to"
                 android:paddingRight="5dp"
                 android:text="DeptName"
                 android:textColor="@color/stroke"
@@ -204,24 +202,21 @@
                 android:id="@+id/sentBy"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/senderUserSL"
                 android:paddingLeft="5dp"
                 android:text="נשלח ע'י:"
-                android:textColor="@color/stroke"
-                card_view:layout_constraintBottom_toBottomOf="parent"
-                card_view:layout_constraintStart_toEndOf="@+id/senderUserSL"
-                card_view:layout_constraintTop_toTopOf="parent" />
+                android:textColor="@color/stroke" />
 
             <TextView
                 android:id="@+id/senderUserSL"
-                android:layout_width="wrap_content"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:text="senderUser"
+                android:layout_alignParentLeft="true"
+                android:scrollHorizontally="false"
                 android:paddingLeft="5dp"
-                android:textColor="@color/stroke"
-                card_view:layout_constraintBottom_toBottomOf="parent"
-                card_view:layout_constraintStart_toStartOf="parent"
-                card_view:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                android:textColor="@color/stroke" />
+        </RelativeLayout>
 
     </LinearLayout>
 

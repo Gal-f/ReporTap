@@ -55,7 +55,7 @@ public class InboxDoctor extends ButtonsOptions {
         recyclerView.addItemDecoration(divider);
 
         modelActivityInboxDrList = new ArrayList<>();
-        myStringRequest();
+        getInboxMessages();
         CheckBox chkBx = (CheckBox)findViewById(R.id.checkBox);
         chkBx.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -89,7 +89,7 @@ public class InboxDoctor extends ButtonsOptions {
             @Override
             public void onRefresh() {
                 modelActivityInboxDrList.clear();
-                myStringRequest();
+                getInboxMessages();
                 mySwipeToRefresh.setRefreshing(false);
             }
         });
@@ -111,7 +111,7 @@ public class InboxDoctor extends ButtonsOptions {
     }
 
 
-    public void myStringRequest (){
+    public void getInboxMessages(){
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
                 URLs.URL_INBOXDR,
                 //lambda expression

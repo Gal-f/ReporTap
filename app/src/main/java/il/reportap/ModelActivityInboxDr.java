@@ -7,7 +7,7 @@ public class ModelActivityInboxDr {
     public ModelActivityInboxDr(Integer id, Integer isUrgent, String sentTime, String patientId, String testName) {
         this.id = id;
         this.isUrgent = isUrgent;
-        this.sentTime = sentTime;
+        this.sentTime = sentTime.substring(0,sentTime.length()-3);
         this.patientId = patientId;
         this.testName = testName;
     }

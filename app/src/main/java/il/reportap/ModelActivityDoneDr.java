@@ -8,7 +8,7 @@ public class ModelActivityDoneDr {
         this.id = id;
         this.text=text;
         this.confirmUser=confirmUser;
-        this.sentTime = sentTime;
+        this.sentTime = sentTime.substring(0,sentTime.length()-3);
         this.patientId = patientId;
         this.testName = testName;
     }

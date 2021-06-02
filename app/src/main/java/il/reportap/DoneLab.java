@@ -58,13 +58,13 @@ public class DoneLab extends ButtonsOptions {
         recyclerView.addItemDecoration(divider);
 
         modelActivityInboxLabList = new ArrayList<>();
-        myStringRequest();
+        getDoneResponses();
         SwipeRefreshLayout mySwipeToRefresh= (SwipeRefreshLayout)findViewById(R.id.swipeToRefresh);
         mySwipeToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 modelActivityInboxLabList.clear();
-                myStringRequest();
+                getDoneResponses();
                 mySwipeToRefresh.setRefreshing(false);
             }
         });
@@ -88,7 +88,7 @@ public class DoneLab extends ButtonsOptions {
     }
 
 
-    public void myStringRequest (){
+    public void getDoneResponses(){
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
                 URLs.URL_DONELAB,
                 //lambda expression

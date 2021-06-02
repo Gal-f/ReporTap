@@ -69,4 +69,11 @@
     <!-- View Message -->
     <string name="medical_departments_type">medical_dept</string>
     <string name="labs_department_type">lab</string>
+    <string name="inbox_doctor_class">InboxDoctor</string>
+    <string name="inbox_lab_class">InboxLab</string>
+    <string name="done_lab_class">DoneLab</string>
+    <string name="sent_doctor_class">SentDoctor</string>
+    <string name="done_doctor_class">DoneDoctor</string>
+    <string name="sent_lab_class">SentLab</string>
+
 </resources>
