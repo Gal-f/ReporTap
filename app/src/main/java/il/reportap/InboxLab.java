@@ -90,6 +90,13 @@ public class InboxLab extends ButtonsOptions {
 
     }
 
+    @Override
+    public void onBackPressed()
+    {
+        //do nothing
+    }
+
+
 
     public void getInboxResponses(){
         StringRequest stringRequest = new StringRequest(Request.Method.POST,

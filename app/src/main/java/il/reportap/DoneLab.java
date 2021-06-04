@@ -87,6 +87,12 @@ public class DoneLab extends ButtonsOptions {
 
     }
 
+    @Override
+    public void onBackPressed()
+    {
+        //do nothing
+    }
+
 
     public void getDoneResponses(){
         StringRequest stringRequest = new StringRequest(Request.Method.POST,

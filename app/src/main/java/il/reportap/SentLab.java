@@ -86,6 +86,13 @@ public class SentLab extends ButtonsOptions {
         });
     }
 
+    @Override
+    public void onBackPressed()
+    {
+        //do nothing
+    }
+
+
     public void getSentMessages(){
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
                 URLs.URL_SENTLAB,

@@ -69,11 +69,13 @@ public class ApproveUsers extends OptionsMenu  {
         final int visibility = noMoreUsers.getVisibility();
         if(visibility == 0){ //this is visible
             noMoreUsers.setVisibility(View.GONE);
+            //so the admin would see the Linear layout with the options (approve users/suspend users)
+            chooseOperation.setVisibility(View.VISIBLE);
         }
-        chooseOperation.setVisibility(View.VISIBLE);
     }
 
 
+    //in order to get the departments of the not active users (every user has his department id as a foreign key, we want the name)
     private void populateDeptMap() {
         StringRequest stringRequest = new StringRequest(Request.Method.GET, URLs.URL_GET_DEPTS_N_TESTS, new Response.Listener<String>() {
             @Override
@@ -150,7 +152,7 @@ public class ApproveUsers extends OptionsMenu  {
         getUsersList();
     }
 
-    public void deleteUsers(View view) {
+    public void suspendUsers(View view) {
         startActivity(new Intent(getApplicationContext(), SuspendUsers.class));
     }
 

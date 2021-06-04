@@ -110,6 +110,12 @@ public class InboxDoctor extends ButtonsOptions {
 
     }
 
+    @Override
+    public void onBackPressed()
+    {
+       //do nothing
+    }
+
 
     public void getInboxMessages(){
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
