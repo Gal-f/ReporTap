@@ -9,7 +9,7 @@ public class URLs {
     public static final String URL_LOGIN = ROOT_URL + "login";
     public static final String URL_SYSTEMMANAGER = ROOT_URL + "notActiveUsers";
     public static final String URL_APPROVEUSER = ROOT_URL +  "approveUser";
-    public static final String URL_DELETEUSER = ROOT_URL +  "deleteUser";
+    public static final String URL_DELETEUSER = ROOT_URL +  "suspendUser";
     public static final String URL_NEWMESSAGE = ROOT_URL + "newMessage";
     public static final String URL_GETMESSAGE = ROOT_URL + "getMessage";
     public static final String URL_GET_DEPTS_N_TESTS = ROOT_URL + "getDeptsAndTests";

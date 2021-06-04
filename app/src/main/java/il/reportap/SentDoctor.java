@@ -87,6 +87,13 @@ public class SentDoctor extends ButtonsOptions {
         });
     }
 
+    @Override
+    public void onBackPressed()
+    {
+        //do nothing
+    }
+
+
     public void getSentResponses() {
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
                 URLs.URL_SENTDR,

@@ -41,6 +41,7 @@ if (isset($_GET['apicall'])) {
             }
 		break;
 
+
 		case 'verifiedUser':
 			$response = isTheseParametersAvailable(array('employee_ID'));
 			if (!$response['error']) {
@@ -71,10 +72,10 @@ if (isset($_GET['apicall'])) {
             }
             break;
 
-		case 'deleteUser':
+		case 'suspendUser':
 		    if (isset($_POST['employee_ID'])){
                  $employeeNumber = $_POST['employee_ID'];
-                 $response = $oper->deleteUser($employeeNumber);
+                 $response = $oper->suspendUser($employeeNumber);
             }
             break;
 

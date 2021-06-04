@@ -50,8 +50,8 @@ public class MainActivity extends NavigateUser {
         populateDeptMap();
 
         if (SharedPrefManager.getInstance(this).isLoggedIn()) {
-            //check if the user's account has been approved by the system manager
             User user = SharedPrefManager.getInstance(this).getUser();
+            //check if the user's account has been approved by the system manager
             if (user.isActive()) {
                 try {
                     goToClass(user.getDeptType());
@@ -64,8 +64,7 @@ public class MainActivity extends NavigateUser {
             }
         }
 
-        //if user presses on login
-        //calling the login method
+        //if user presses on login calling the login method
         findViewById(R.id.buttonLogin).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -128,7 +127,7 @@ public class MainActivity extends NavigateUser {
                         //getting the user from the response
                         JSONObject userJson = obj.getJSONObject("user");
 
-                        //creating a new user object - names are identical to the columns in the php code
+                        //creating a new user object
                         User user = new User(
                                 userJson.getInt("id"),
                                 userJson.getString("employee_ID"),
@@ -153,7 +152,7 @@ public class MainActivity extends NavigateUser {
                             finish();
                             startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
 
-                            //the user has finished the 2fa process and his account got the admin's approval
+                        //the user has finished the 2fa process and his account got the admin's approval
                         } else {
                             //subscribe the user to his department's channel in order to get relevant notifications
                             FirebaseMessaging.getInstance().subscribeToTopic(String.valueOf(user.getDeptID()))

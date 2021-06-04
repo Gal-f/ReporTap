@@ -48,6 +48,18 @@ public class  TwoFactorAuth extends NavigateUser {
         helloUser.setText("שלום " + user.getFullName() +",");
     }
 
+    @Override
+    public void onBackPressed()
+    {
+        final int visibility = dialog.getVisibility();
+        if(visibility == 0){ //this is visible
+            dialog.setVisibility(View.GONE);
+        }
+        else{
+            SharedPrefManager.getInstance(getApplicationContext()).logout();
+        }
+    }
+
     public void sendOtp(View v) {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URLs.URL_SENDOTP, new Response.Listener<String>() {
             @Override
@@ -68,7 +80,7 @@ public class  TwoFactorAuth extends NavigateUser {
             },
                 new Response.ErrorListener() {
                 @Override
-                //handling with volley error
+                //handling volley error
                 public void onErrorResponse(VolleyError error) {
                     Toast.makeText(getApplicationContext(), "שגיאה בשליחת קוד האימות. נא נסו את אמצעי האימות השני.", Toast.LENGTH_LONG).show();
                 }

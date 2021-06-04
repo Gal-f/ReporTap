@@ -90,6 +90,12 @@ public class DoneDoctor extends ButtonsOptions {
 
     }
 
+    @Override
+    public void onBackPressed()
+    {
+        //do nothing
+    }
+
 
     public void getDoneMessages(){
         StringRequest stringRequest = new StringRequest(Request.Method.POST,

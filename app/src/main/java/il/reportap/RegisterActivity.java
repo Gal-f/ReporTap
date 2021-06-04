@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -38,7 +39,7 @@ public class RegisterActivity extends AppCompatActivity {
             editTextFullName, editTextPhoneNumber, editTextEmail;
     private Spinner spinnerDepartment, spinnerJobTitle;
     private ProgressBar progressBar;
-
+    private String[] labRoles, deptRoles, initialList;
     private HashMap<String, Integer> deptMap;                     //Translates department name to it's corresponding ID
 
     @Override
@@ -57,9 +58,10 @@ public class RegisterActivity extends AppCompatActivity {
 
         populateDeptMap(); // This populates the departments list from the DB and then adds them as options to the form.
 
-        String[] roles = new String[]{"בחר תפקיד", "מנהל.ת מחלקה", "עובד.ת מעבדה", "רופא.ה", "עובד.ת אדמיניסטרציה", "אח.ות"};
-        ArrayAdapter<String> adapter2 = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, roles);
-        spinnerJobTitle.setAdapter(adapter2);
+        initialList = new String[]{"בחר תפקיד"};
+        labRoles = new String[]{ "בחר תפקיד", "מנהל.ת מחלקה","עובד.ת אדמיניסטרציה","עובד.ת מעבדה"};
+        deptRoles =  new String[]{"בחר תפקיד", "מנהל.ת מחלקה","עובד.ת אדמיניסטרציה","רופא.ה", "אח.ות"};
+
 
         findViewById(R.id.buttonRegister).setOnClickListener(view -> {
             registerUser();
@@ -69,6 +71,31 @@ public class RegisterActivity extends AppCompatActivity {
             //if the user pressed on login button we will open the login screen
             finish();
             startActivity(new Intent(RegisterActivity.this, MainActivity.class));
+        });
+
+        ArrayAdapter<String> initialAdapter = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, initialList);
+        ArrayAdapter<String> rolesAdapterLab = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, labRoles);
+        ArrayAdapter<String> rolesAdapterDept = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, deptRoles);
+
+        spinnerDepartment.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                    //if the user is working in a lab
+                    if (spinnerDepartment.getSelectedItem().toString().trim().startsWith("מעבד")) {
+                        spinnerJobTitle.setAdapter(rolesAdapterLab);
+                    }
+                    else if (spinnerDepartment.getSelectedItem().toString().trim().startsWith("בחר")) {
+                        spinnerJobTitle.setAdapter(initialAdapter);
+                    }
+                    else{
+                        spinnerJobTitle.setAdapter(rolesAdapterDept);
+                    }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+
         });
 
         // Handling back-button action
@@ -87,9 +114,9 @@ public class RegisterActivity extends AppCompatActivity {
         final String employeeNumber = editTextEmployeeNumber.getText().toString().trim();
         final String fullName = editTextFullName.getText().toString().trim();
         final String email = editTextEmail.getText().toString().trim();
-        final String jobTitle = spinnerJobTitle.getSelectedItem().toString().trim();
         final String phoneNumber = editTextPhoneNumber.getText().toString().trim();
         final String department = spinnerDepartment.getSelectedItem().toString().trim();
+        final String jobTitle = spinnerJobTitle.getSelectedItem().toString().trim();
 
         //validations
 
