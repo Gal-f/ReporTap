@@ -217,4 +217,14 @@ public class AdapterActivityInboxLab extends RecyclerView.Adapter<AdapterActivit
         RequestQueue requestQueue = Volley.newRequestQueue(context.getApplicationContext());
         requestQueue.add(stringRequest);
     }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
 }

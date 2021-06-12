@@ -69,9 +69,10 @@ public class ApproveUsers extends OptionsMenu  {
         final int visibility = noMoreUsers.getVisibility();
         if(visibility == 0){ //this is visible
             noMoreUsers.setVisibility(View.GONE);
-            //so the admin would see the Linear layout with the options (approve users/suspend users)
-            chooseOperation.setVisibility(View.VISIBLE);
         }
+        //so the admin would see the Linear layout with the options (approve users/suspend users)
+        chooseOperation.setVisibility(View.VISIBLE);
+        usersList.clear();
     }
 
 

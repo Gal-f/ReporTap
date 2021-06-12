@@ -89,16 +89,17 @@
                     android:layout_weight="0.2"
                     android:text="שם:"
                     android:textSize="16dp" />
+
                 <EditText
                     android:id="@+id/editTextPatientName"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.6"
                     android:ems="10"
-                    android:inputType="textPersonName"
+                    android:enabled="false"
                     android:hint="שם המטופל יופיע לאחר הקלדת ת.ז."
-                    android:textSize="12sp"
-                    android:enabled="false" />
+                    android:inputType="textPersonName"
+                    android:textSize="14sp" />
             </LinearLayout>
 
             <LinearLayout

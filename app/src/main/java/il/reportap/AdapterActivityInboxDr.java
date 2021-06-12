@@ -3,7 +3,6 @@ package il.reportap;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.PorterDuff;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.cardview.widget.CardView;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.il.reportap.R;
@@ -78,5 +76,15 @@ public class AdapterActivityInboxDr extends RecyclerView.Adapter<AdapterActivity
             testName = (TextView)itemView.findViewById(R.id.testName);
             isUrgent = (ImageView) itemView.findViewById(R.id.isUrgent);
         }
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
     }
 }

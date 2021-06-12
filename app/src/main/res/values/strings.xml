@@ -11,6 +11,7 @@
      רק דחופים?
      </p>]]>
     </string>
+    <string name="inboxEmergLand">להציג רק דחופים?</string>
     <string name="done">מסרים שטופלו</string>
     <string name="toDo">מסרים לטיפולי</string>
     <string name="sent">מסרים שנשלחו</string>
@@ -65,6 +66,7 @@
                 לתשומת ליבך, העובד לא יורשה להכנס למערכת כל עוד הוא מושעה.
         </p>]]>
    </string>
+
 
     <!-- View Message -->
     <string name="medical_departments_type">medical_dept</string>
