@@ -78,4 +78,14 @@ public class AdapterActivityDoneDr extends RecyclerView.Adapter<AdapterActivityD
             confirmUser=(TextView)itemView.findViewById(R.id.confirmUser);
         }
     }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
 }

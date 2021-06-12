@@ -68,4 +68,14 @@ public class AdapterActivitySentDr extends RecyclerView.Adapter<AdapterActivityS
             patientName=itemView.findViewById(R.id.patientName);
         }
     }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
 }
