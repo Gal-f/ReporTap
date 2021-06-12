@@ -44,6 +44,7 @@ public class AdapterActivitySentLab extends RecyclerView.Adapter<AdapterActivity
             holder.testName.setText(modelActivitySentLab.getTestName());
             holder.deptName.setText(modelActivitySentLab.getDeptName());
             holder.senderUser.setText(modelActivitySentLab.getFullName());
+            holder.resultType.setText(modelActivitySentLab.getMeasurementUnit());
             if (!modelActivitySentLab.getConfirmTime().equals("0"))
             {
                 holder.confirmTime.setImageResource(R.drawable.eyecheck2_bmp);
@@ -65,10 +66,9 @@ public class AdapterActivitySentLab extends RecyclerView.Adapter<AdapterActivity
             {
             holder.resultType.setVisibility(View.GONE);
             }
-           else holder.resultType.setText(modelActivitySentLab.getMeasurementUnit());
            if(modelActivitySentLab.getIsValueBool()==1)
            {
-               holder.resultType.setVisibility(View.GONE);
+
                if(Float.valueOf(modelActivitySentLab.getTestResult())==1)
                {
                    holder.resultValue.setText("חיובי");
@@ -80,6 +80,7 @@ public class AdapterActivitySentLab extends RecyclerView.Adapter<AdapterActivity
                if(!modelActivitySentLab.getTestResult().equals("0")) {
                    DecimalFormat df = new DecimalFormat("###.###");
                    holder.resultValue.setText(df.format(Float.valueOf(modelActivitySentLab.getTestResult())));
+
                }
                else holder.resultValue.setVisibility(View.GONE);
            }
