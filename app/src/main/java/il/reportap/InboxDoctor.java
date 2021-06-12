@@ -122,14 +122,10 @@ public class InboxDoctor extends ButtonsOptions {
                 URLs.URL_INBOXDR,
                 //lambda expression
                 response -> {
-
-
                     try {
                         JSONObject repObj = new JSONObject(response);
                         JSONArray repArray = repObj.getJSONArray("report");
-
                         for(int i=0; i<repArray.length(); i++){
-
                             JSONObject jObg = new JSONObject();
                             jObg= repArray.getJSONObject(i);
                             ModelActivityInboxDr modelActivityInboxDr = new ModelActivityInboxDr(jObg.getInt("id"),
@@ -137,20 +133,14 @@ public class InboxDoctor extends ButtonsOptions {
                                     jObg.getString("sent_time"),
                                     jObg.getString("patient_id"),
                                     jObg.getString("name")
-                                    );
+                            );
                             modelActivityInboxDrList.add(modelActivityInboxDr);
                         }
-
-
-
-
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-
                     adapter = new AdapterActivityInboxDr(modelActivityInboxDrList,getApplicationContext());
                     recyclerView.setAdapter(adapter);
-
                 },
                 //lambda expression
                 error -> Toast.makeText(getApplicationContext(), "שגיאה בביצוע הפעולה. עימך הסליחה.", Toast.LENGTH_LONG).show())

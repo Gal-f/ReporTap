@@ -11,13 +11,11 @@ class DbConnect
     function connect()
     {
         $servername = "localhost";
-       // $username = "edenpe_eden";              //old server
-        $username = "edenpeis_eden";          //new server
+        $username = "edenpeis_eden";
         $password = "edengalyael";
-      //  $database = "edenpe_ReporTapDB";        //old server
-        $database = "edenpeis_ReporTapDB";    //new server
+        $database = "edenpeis_ReporTapDB";
 
-        /*
+        /* When testing on local server
         $servername = "localhost";
         $username = "root";
         $password = "";
