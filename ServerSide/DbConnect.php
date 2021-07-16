@@ -11,16 +11,9 @@ class DbConnect
     function connect()
     {
         $servername = "localhost";
-        $username = "edenpeis_eden";
+        $username = "edenpeis_eden";          //new server
         $password = "edengalyael";
-        $database = "edenpeis_ReporTapDB";
-
-        /* When testing on local server
-        $servername = "localhost";
-        $username = "root";
-        $password = "";
-        $database = "android";
-        */
+        $database = "edenpeis_ReporTapDB";    //new server
 
         //creating a new connection object using mysqli 
         mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT); //This configures PHP and MySQLi to send full MySQL errors

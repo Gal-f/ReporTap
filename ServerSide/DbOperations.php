@@ -182,7 +182,7 @@ class DbOperations
     			//check whether the user completed the 2fa or not
     			if($otp_verified){
     			    $response['otpVerified'] = true;
-    				//check whether the system administrator approved the user's account
+    				//check if the system administrator approved the user's account
     				if($isActive){
     					$response['message'] = 'התחברות בוצעה בהצלחה';
     					$response['isActive'] = true;
@@ -272,7 +272,7 @@ class DbOperations
 				$stmt1 = $this->conn->prepare('UPDATE `users` SET `is_deleted`= 1 WHERE `employee_ID` = "'.$employeeNumber.'" ');
 				if ($stmt1->execute()) {
 				$response['error'] = false;
-				$response['message'] = 'משתמש הושעה הצלחה';
+				$response['message'] = 'משתמש הושעה בהצלחה';
 				} else {
 					$response['error'] = true;
 					$response['message'] = 'שגיאה בביצוע הפעולה';
