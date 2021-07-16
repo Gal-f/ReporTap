@@ -40,7 +40,6 @@ public class  TwoFactorAuth extends NavigateUser {
         editTextOTP = findViewById(R.id.editTextOTP);
         //generates random 6 digits code
         otp = new DecimalFormat("000000").format(new Random().nextInt(999999));
-        //get the user data from Register Activity/Login activity
         //get the user's data from Register Activity/Login activity
         user = (User) getIntent().getSerializableExtra("user");
         dialog = (LinearLayout) findViewById(R.id.dialogPopUp);

@@ -291,7 +291,6 @@ class DbOperations
         $response = array();
         $message = array($department, $patientId, $patientName, $testType, $componentName, $isValueBool, $testResultValue, $isUrgent, $comments);
         $stmt = $this->conn->prepare("INSERT INTO `messages`(`patient_ID`, `test_type`, `component`, `is_value_boolean`, `test_result_value`, `text`, `is_urgent`, `sender_user`, `recipient_dept`) VALUES (?,?,?,?,?,?,?,?,?);");
-        //TODO Change test_type from simple string to relation with test_types table
         $stmt->bind_param("sisidsiii", $patientId, $testType, $componentName, $isValueBool, $testResultValue, $comments, $isUrgent, $sender, $department); //If there's a problem with sqli query, try changing boolean columns to tinyint and use 'i' instead of 's' in the first parameter for bind_param.
         if ($stmt->execute()) {
             //send notifications to the users via firebase api
@@ -333,7 +332,7 @@ class DbOperations
                     'is_urgent' => $isUrgent,
                 );
                 $rows--;
-                //TODO add a 'recieve_time' to each message only the first time it is presented in the inboxdr
+                //TODO V2 add a 'recieve_time' to each message only the first time it is presented in the inboxdr
             }
             $response['error'] = false;
             $response['message'] = 'new report for you';
@@ -409,7 +408,7 @@ class DbOperations
                     'full_name' => $fullNameU
                 );
                 $rows--;
-                //TODO add a 'recieve_time' to each message only the first time it is presented in the inboxdr
+                //TODO V2 add a 'recieve_time' to each message only the first time it is presented in the inboxdr
             }
             $response['error'] = false;
             $response['message'] = 'new report for you';
@@ -423,12 +422,8 @@ class DbOperations
     }
 
     function getMessage($messageID){
-        //TODO Join Messages & Test-types tables on testType field, in order to get boolean or numeric value.
-        // If this works, remove field is_value_bool from table Messages and change function send_message accordingly.
         $response = array();
         $stmt = $this->conn->prepare("SELECT M.ID, M.sent_time, M.patient_ID, P.full_name, T.ID, T.name, T.measurement_unit, M.is_value_boolean, M.test_result_value, M.text, M.component, M.is_urgent, M.sender_user, U.full_name, U.works_in_dept, D.name, M.confirm_time FROM messages as M JOIN test_types as T ON M.test_type=T.ID JOIN users as U ON M.sender_user=U.employee_ID JOIN departments as D ON U.works_in_dept=D.ID JOIN patients as P ON M.patient_ID=P.patient_ID WHERE M.ID = ?");
-        //TODO Join users on message.sender_user=users.ID and add to SELECT the user name and department, to be displayed in the message screen
-        //TODO perform the last TODO again for patient name
         $stmt->bind_param("s", $messageID);
         $stmt->execute();
         $stmt->store_result();
@@ -746,7 +741,7 @@ class DbOperations
                     'full_name' => $fullNameU
                 );
                 $rows--;
-                //TODO add a 'recieve_time' to each message only the first time it is presented in the inboxdr
+                //TODO V2.0 Add a 'recieve_time' to each message only the first time it is presented in the inboxdr
             }
             $response['error'] = false;
             $response['message'] = 'new report for you';
